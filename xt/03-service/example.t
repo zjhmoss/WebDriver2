@@ -16,6 +16,7 @@ use WebDriver2::Until::Command;
 
 
 
+# TODO: document
 class Root-Content does WebDriver2::SUT::Service {
 	my IO::Path $html-file =
 			.add: 'example.html' with $*PROGRAM.parent.parent.add: 'content';
