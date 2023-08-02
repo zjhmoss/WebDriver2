@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Raku Automation Project</title>
+	<style type="text/css">
+		body { font-family : sans-serif }
+		table, th, td { border : solid #000000 1px }
+		tr.os { position : sticky; top : 1px; background-color : #ffffff }
+		tr.header { position : sticky; top : 32px; background-color : #ffffff }
+		th { padding : 4px }
+		th.browser { width : 64px }
+		td.complete, td.partial, td.not-started { text-align : center }
+		td.complete { background-color : #ccffcc }
+		td.partial { background-color : #ffffcc; font-weight : bold }
+		td.not-started { background-color : #ffcccc }
+		div#nav {
+			left : 0px;
+			top : 0px;
+			width : 256px;
+			position : fixed;
+		}
+		div#content {
+			left : 258px;
+			width : 540px;
+			position : absolute;
+		}
+	</style>
+</head>
+<body>
+<div id="nav">
+	<ul>
+		<li><a href="#intro">introduction</a></li>
+		<li><a href="#driver-status">driver status</a></li>
+		<li><a href="#page">page representation</a></li>
+		<li><a href="#service">service definition</a></li>
+		<li><a href="#script">scripting</a></li>
+	</ul>
+</div>
+<div id="content">
+	<h3 id="intro">introduction</h3>
+	<p>This automation project consists of WebDriver level 2 language bindings
+		and a simple way to represent pages.  It is implemented in Raku,
+		formerly known as Perl 6.
+	</p>
+	<br/><br/>
+	<h3 id="driver-status">driver status</h3>
+	<p>The status of the language bindings for the
+		<a href="https://www.w3.org/TR/webdriver/">WebDriver level 2</a>
+		specification is summarized in the table below.
+	</p>
+	<table><tbody>
+		<tr class="os">
+			<th>&nbsp;</th>
+			<th class="browser" colspan="3">Windows</th>
+			<th class="browser">MacOS</th>
+		</tr>
+		<tr class="header">
+			<th>feature</th>
+			<th class="browser">chrome</th>
+			<th class="browser">edge</th>
+			<th class="browser">firefox</th>
+			<th class="browser">safari</th>
+		</tr>
+		<tr><td>new session</td><td class="complete">X</td>
+			<td class="complete">X</td>
+			<td class="complete">X</td>
+			<td class="complete">X</td>
+		</tr>
+		<tr><td>delete session</td><td class="complete">X</td>
+			<td class="complete">X</td>
+			<td class="complete">X</td>
+			<td class="complete">X</td>
+		</tr>
+		<tr><td>status</td><td class="complete">X</td>
+			<td class="complete">X</td>
+			<td class="complete">X</td>
+			<td class="complete">X</td>
+		</tr>
+		<tr><td>get timeouts</td><td class="not-started">&nbsp;</td>
+			<td class="not-started">&nbsp;</td>
+			<td class="not-started">&nbsp;</td>
+			<td class="not-started">&nbsp;</td>
+		</tr>
+		<tr><td>set timeouts</td><td class="complete">X</td>
+			<td class="complete">X</td>
+			<td class="complete">X</td>
+			<td class="complete">X</td>
+		</tr>
+		<tr><td>navigate to</td><td class="complete">X</td>
+			<td class="complete">X</td>
+			<td class="complete">X</td>
+			<td class="complete">X</td>
+		</tr>
+		<tr><td>get current url</td><td class="not-started">&nbsp;</td>
+			<td class="not-started">&nbsp;</td>
+			<td class="not-started">&nbsp;</td>
+			<td class="not-started">&nbsp;</td>
+		</tr>
+		<tr><td>back</td><td class="not-started">&nbsp;</td>
+			<td class="not-started">&nbsp;</td>
+			<td class="not-started">&nbsp;</td>
+			<td class="not-started">&nbsp;</td>
+		</tr>
+		<tr><td>forward</td><td class="not-started">&nbsp;</td>
+			<td class="not-started">&nbsp;</td>
+			<td class="not-started">&nbsp;</td>
+			<td class="not-started">&nbsp;</td>
+		</tr>
+		<tr><td>refresh</td><td class="not-started">&nbsp;</td>
+			<td class="not-started">&nbsp;</td>
+			<td class="not-started">&nbsp;</td>
+			<td class="not-started">&nbsp;</td>
+		</tr>
+		<tr><td>get title</td><td class="complete">X</td>
+			<td class="complete">X</td>
+			<td class="complete">X</td>
+			<td class="complete">X</td>
+		</tr>
+		<tr><td>get window handle</td><td class="not-started">&nbsp;</td>
+			<td class="not-started">&nbsp;</td>
+			<td class="not-started">&nbsp;</td>
+			<td class="not-started">&nbsp;</td>
+		</tr>
+		<tr><td>close window</td><td class="complete">X</td>
+			<td class="not-started">&nbsp;</td>
+			<td class="not-started">&nbsp;</td>
+			<td class="not-started">&nbsp;</td>
+		</tr>
+		<tr><td>switch to window</td><td class="not-started">&nbsp;</td>
+			<td class="not-started">&nbsp;</td>
+			<td class="not-started">&nbsp;</td>
+			<td class="not-started">&nbsp;</td>
+		</tr>
+		<tr><td>get window handles</td><td class="complete">X</td>
+			<td class="not-started">&nbsp;</td>
+			<td class="not-started">&nbsp;</td>
+			<td class="not-started">&nbsp;</td>
+		</tr>
+		<tr><td>new window</td><td class="not-started">&nbsp;</td>
+			<td class="not-started">&nbsp;</td>
+			<td class="not-started">&nbsp;</td>
+			<td class="not-started">&nbsp;</td>
+		</tr>
+		<tr><td>switch to frame</td><td class="complete">X</td>
+			<td class="complete">X</td>
+			<td class="complete">X</td>
+			<td class="complete">X</td>
+		</tr>
+		<tr><td>switch to parent frame</td><td class="complete">X</td>
+			<td class="complete">X</td>
+			<td class="complete">X</td>
+			<td class="complete">X</td>
+		</tr>
+		<tr><td>get window rect</td><td class="not-started">&nbsp;</td>
+			<td class="not-started">&nbsp;</td>
+			<td class="not-started">&nbsp;</td>
+			<td class="not-started">&nbsp;</td>
+		</tr>
+		<tr><td>set window rect</td><td class="complete">X</td>
+			<td class="complete">X</td>
+			<td class="complete">X</td>
+			<td class="complete">X</td>
+		</tr>
+		<tr><td>maximize window</td><td class="not-started">&nbsp;</td>
+			<td class="not-started">&nbsp;</td>
+			<td class="not-started">&nbsp;</td>
+			<td class="not-started">&nbsp;</td>
+		</tr>
+		<tr><td>minimize window</td><td class="not-started">&nbsp;</td>
+			<td class="not-started">&nbsp;</td>
+			<td class="not-started">&nbsp;</td>
+			<td class="not-started">&nbsp;</td>
+		</tr>
+		<tr><td>fullscreen window</td><td class="not-started">&nbsp;</td>
+			<td class="not-started">&nbsp;</td>
+			<td class="not-started">&nbsp;</td>
+			<td class="not-started">&nbsp;</td>
+		</tr>
+		<tr><td>get active element</td><td class="complete">X</td>
+			<td class="complete">X</td>
+			<td class="complete">X</td>
+			<td class="complete">X</td>
+		</tr>
+		<tr><td>find element</td><td class="complete">X</td>
+			<td class="complete">X</td>
+			<td class="complete">X</td>
+			<td class="complete">X</td>
+		</tr>
+		<tr><td>find elements</td><td class="complete">X</td>
+			<td class="complete">X</td>
+			<td class="complete">X</td>
+			<td class="complete">X</td>
+		</tr>
+		<tr><td>find element from element</td><td class="complete">X</td>
+			<td class="complete">X</td>
+			<td class="complete">X</td>
+			<td class="complete">X</td>
+		</tr>
+		<tr><td>find elements from element</td><td class="complete">X</td>
+			<td class="complete">X</td>
+			<td class="complete">X</td>
+			<td class="complete">X</td>
+		</tr>
+		<tr><td>is element selected</td><td class="complete">X</td>
+			<td class="complete">X</td>
+			<td class="complete">X</td>
+			<td class="complete">X</td>
+		</tr>
+		<tr><td>get element attribute</td><td class="complete">X</td>
+			<td class="complete">X</td>
+			<td class="complete">X</td>
+			<td class="complete">X</td>
+		</tr>
+		<tr><td>get element property</td><td class="complete">X</td>
+			<td class="complete">X</td>
+			<td class="complete">X</td>
+			<td class="complete">X</td>
+		</tr>
+		<tr><td>get element css value</td><td class="complete">X</td>
+			<td class="complete">X</td>
+			<td class="complete">X</td>
+			<td class="complete">X</td>
+		</tr>
+		<tr><td>get element text</td><td class="complete">X</td>
+			<td class="complete">X</td>
+			<td class="complete">X</td>
+			<td class="complete">X</td>
+		</tr>
+		<tr><td>get element tag name</td><td class="complete">X</td>
+			<td class="complete">X</td>
+			<td class="complete">X</td>
+			<td class="complete">X</td>
+		</tr>
+		<tr><td>get element rect</td><td class="not-started">&nbsp;</td>
+			<td class="not-started">&nbsp;</td>
+			<td class="not-started">&nbsp;</td>
+			<td class="not-started">&nbsp;</td>
+		</tr>
+		<tr><td>is element enabled</td><td class="complete">X</td>
+			<td class="complete">X</td>
+			<td class="complete">X</td>
+			<td class="complete">X</td>
+		</tr>
+		<tr><td>get computed role</td><td class="not-started">&nbsp;</td>
+			<td class="not-started">&nbsp;</td>
+			<td class="not-started">&nbsp;</td>
+			<td class="not-started">&nbsp;</td>
+		</tr>
+		<tr><td>get computed label</td><td class="not-started">&nbsp;</td>
+			<td class="not-started">&nbsp;</td>
+			<td class="not-started">&nbsp;</td>
+			<td class="not-started">&nbsp;</td>
+		</tr>
+		<tr><td>element click</td><td class="complete">X</td>
+			<td class="complete">X</td>
+			<td class="complete">X</td>
+			<td class="complete">X</td>
+		</tr>
+		<tr><td>element clear</td><td class="complete">X</td>
+			<td class="complete">X</td>
+			<td class="complete">X</td>
+			<td class="complete">X</td>
+		</tr>
+		<tr><td>element send keys</td><td class="partial">/</td>
+			<td class="partial">/</td>
+			<td class="partial">/</td>
+			<td class="partial">/</td>
+		</tr>
+		<tr><td>get page source</td><td class="not-started">&nbsp;</td>
+			<td class="not-started">&nbsp;</td>
+			<td class="not-started">&nbsp;</td>
+			<td class="not-started">&nbsp;</td>
+		</tr>
+		<tr><td>execute script</td><td class="complete">X</td>
+			<td class="complete">X</td>
+			<td class="complete">X</td>
+			<td class="complete">X</td>
+		</tr>
+		<tr><td>execute async script</td><td class="not-started">&nbsp;</td>
+			<td class="not-started">&nbsp;</td>
+			<td class="not-started">&nbsp;</td>
+			<td class="not-started">&nbsp;</td>
+		</tr>
+		<tr><td>get all cookies</td><td class="not-started">&nbsp;</td>
+			<td class="not-started">&nbsp;</td>
+			<td class="not-started">&nbsp;</td>
+			<td class="not-started">&nbsp;</td>
+		</tr>
+		<tr><td>get named cookie</td><td class="not-started">&nbsp;</td>
+			<td class="not-started">&nbsp;</td>
+			<td class="not-started">&nbsp;</td>
+			<td class="not-started">&nbsp;</td>
+		</tr>
+		<tr><td>add cookie</td><td class="not-started">&nbsp;</td>
+			<td class="not-started">&nbsp;</td>
+			<td class="not-started">&nbsp;</td>
+			<td class="not-started">&nbsp;</td>
+		</tr>
+		<tr><td>delete cookie</td><td class="not-started">&nbsp;</td>
+			<td class="not-started">&nbsp;</td>
+			<td class="not-started">&nbsp;</td>
+			<td class="not-started">&nbsp;</td>
+		</tr>
+		<tr><td>delete all cookies</td><td class="not-started">&nbsp;</td>
+			<td class="not-started">&nbsp;</td>
+			<td class="not-started">&nbsp;</td>
+			<td class="not-started">&nbsp;</td>
+		</tr>
+		<tr><td>perform actions</td><td class="not-started">&nbsp;</td>
+			<td class="not-started">&nbsp;</td>
+			<td class="not-started">&nbsp;</td>
+			<td class="not-started">&nbsp;</td>
+		</tr>
+		<tr><td>release actions</td><td class="not-started">&nbsp;</td>
+			<td class="not-started">&nbsp;</td>
+			<td class="not-started">&nbsp;</td>
+			<td class="not-started">&nbsp;</td>
+		</tr>
+		<tr><td>dismiss alert</td><td class="complete">X</td>
+			<td class="complete">X</td>
+			<td class="complete">X</td>
+			<td class="complete">X</td>
+		</tr>
+		<tr><td>accept alert</td><td class="complete">X</td>
+			<td class="complete">X</td>
+			<td class="complete">X</td>
+			<td class="complete">X</td>
+		</tr>
+		<tr><td>get alert text</td><td class="complete">X</td>
+			<td class="complete">X</td>
+			<td class="complete">X</td>
+			<td class="complete">X</td>
+		</tr>
+		<tr><td>send alert text</td><td class="complete">X</td>
+			<td class="complete">X</td>
+			<td class="complete">X</td>
+			<td class="complete">X</td>
+		</tr>
+		<tr><td>take screenshot</td><td class="complete">X</td>
+			<td class="complete">X</td>
+			<td class="complete">X</td>
+			<td class="complete">X</td>
+		</tr>
+		<tr><td>take element screenshot</td><td class="complete">X</td>
+			<td class="complete">X</td>
+			<td class="complete">X</td>
+			<td class="complete">X</td>
+		</tr>
+		<tr><td>print page</td><td class="not-started">&nbsp;</td>
+			<td class="not-started">&nbsp;</td>
+			<td class="not-started">&nbsp;</td>
+			<td class="not-started">&nbsp;</td>
+		</tr>
+	</tbody></table>
+	<br/><br/>
+	<h3 id="page">page representation</h3>
+	<p>Pages are outlined using a simple language.  The outline is then
+		transformed into a tree of objects that services can use to provide
+		actions a user would be able to take on that page.  The language is
+		defined using the Raku grammar in <code>PO/Build/Page.rakumod</code>.
+	</p>
+	<br/><br/>
+	<h3 id="service">services</h3>
+	<p>Services, which expose actions that can be taken for a given page or
+		component within a page, have access to the page representation.
+		Test scripts, which have no knowledge of the underlying page structure, then
+		use the services to test the page ( component ) functionality.
+	</p>
+	<br/><br/>
+	<h3 id="script">scripting</h3>
+	<p>Tests are written as Raku scripts using the standard Test module.
+		Scripts specify the page outline and services they will be using and
+		the project builds the page representation for them.
+	</p>
+	<br/><br/>
+</div>
+</body>
+</html>

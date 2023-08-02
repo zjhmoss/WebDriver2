@@ -1,0 +1,71 @@
+# TODO : copied from python
+unit class WebDriver2::Command::Keys;
+
+our $NULL = "\xe000";
+our $CANCEL = "\xe001";  # ^break
+our $HELP = "\xe002";
+our $BACKSPACE = "\xe003";
+our $BACK_SPACE = $BACKSPACE;
+our $TAB = "\xe004";
+our $CLEAR = "\xe005";
+our $RETURN = "\xe006";
+our $ENTER = "\xe007";
+our $SHIFT = "\xe008";
+our $LEFT_SHIFT = $SHIFT;
+our $CONTROL = "\xe009";
+our $LEFT_CONTROL = $CONTROL;
+our $ALT = "\xe00a";
+our $LEFT_ALT = $ALT;
+our $PAUSE = "\xe00b";
+our $ESCAPE = "\xe00c";
+our $SPACE = "\xe00d";
+our $PAGE_UP = "\xe00e";
+our $PAGE_DOWN = "\xe00f";
+our $END = "\xe010";
+our $HOME = "\xe011";
+our $LEFT = "\xe012";
+our $ARROW_LEFT = $LEFT;
+our $UP = "\xe013";
+our $ARROW_UP = $UP;
+our $RIGHT = "\xe014";
+our $ARROW_RIGHT = $RIGHT;
+our $DOWN = "\xe015";
+our $ARROW_DOWN = $DOWN;
+our $INSERT = "\xe016";
+our $DELETE = "\xe017";
+our $SEMICOLON = "\xe018";
+our $EQUALS = "\xe019";
+
+our $NUMPAD0 = "\xe01a";  # number pad keys
+our $NUMPAD1 = "\xe01b";
+our $NUMPAD2 = "\xe01c";
+our $NUMPAD3 = "\xe01d";
+our $NUMPAD4 = "\xe01e";
+our $NUMPAD5 = "\xe01f";
+our $NUMPAD6 = "\xe020";
+our $NUMPAD7 = "\xe021";
+our $NUMPAD8 = "\xe022";
+our $NUMPAD9 = "\xe023";
+our $MULTIPLY = "\xe024";
+our $ADD = "\xe025";
+our $SEPARATOR = "\xe026";
+our $SUBTRACT = "\xe027";
+our $DECIMAL = "\xe028";
+our $DIVIDE = "\xe029";
+
+our $F1 = "\xe031";  # function  keys
+our $F2 = "\xe032";
+our $F3 = "\xe033";
+our $F4 = "\xe034";
+our $F5 = "\xe035";
+our $F6 = "\xe036";
+our $F7 = "\xe037";
+our $F8 = "\xe038";
+our $F9 = "\xe039";
+our $F10 = "\xe03a";
+our $F11 = "\xe03b";
+our $F12 = "\xe03c";
+
+our $META = "\xe03d";
+our $COMMAND = "\xe03d";
+our $ZENKAKU_HANKAKU = "\xE040";

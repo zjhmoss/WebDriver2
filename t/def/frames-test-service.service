@@ -1,0 +1,8 @@
+#page: frames
+
+h2-page: /h2
+h2-frame: /frame/frame-h2
+h2-inner: /frame/iframe/inner-frame-h2
+
+repeated-content: /frame/iframe/frame-item
+repeated-item: /frame/iframe/frame-item/p

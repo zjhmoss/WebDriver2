@@ -1,0 +1,4 @@
+page page-from 'file://t/content/page-from.html' {
+    elemt h2 tag-name 'h2';
+    elemt link tag-name 'a';
+}

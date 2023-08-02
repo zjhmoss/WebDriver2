@@ -1,0 +1,21 @@
+page multi-service 'file://t/content/test.html' {
+	elemt h2 tag-name 'h2';
+	elgrp outer id 'outer' {
+		elemt li1 id 'li1';
+		elemt li2 id 'li2';
+		elgrp li3 id 'li3' {
+			elgrp inner id 'inner' {
+				elemt li3-1 id 'li3-1';
+				elemt li3-2 id 'li3-2';
+			}
+		}
+	}
+	elgrp form id 'form' {
+		elemt text id 'text';
+		elemt cb id 'cb';
+		elemt toggle id 'toggle';
+		elemt disabled id 'disabled';
+		elemt button id 'button';
+#include 'iframe.page'
+	}
+}

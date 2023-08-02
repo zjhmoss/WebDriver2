@@ -1,0 +1,36 @@
+<html>
+<head>
+	<title>test keydown safari</title>
+	<script type="text/javascript">
+		function NumericDecOnly(o, evt, max) {
+		    // allow decimal point or period
+			var charCode = (evt.which) ? evt.which : event.keyCode
+
+			if (o.value.length >= max)
+				if (!(charCode == 37 || charCode == 39 || charCode == 8 || charCode == 9 || charCode == 46))
+					return false;
+
+			if (charCode > 47 && charCode < 58)
+				return true;
+			else if (charCode == 190 || charCode == 110) {
+				if (o.value.indexOf(".") >= 0)
+					return false;
+				else
+					return true;
+			}
+			else if (charCode > 95 && charCode < 106)
+				return true;
+			else if (charCode == 37 || charCode == 39 || charCode == 8 || charCode == 9 || charCode == 46)
+				return true;
+			else
+				return false;
+		}
+	</script>
+</head>
+<body>
+	<form>
+		<input type="text" id="text" name="text"
+			   onkeydown="var b=NumericDecOnly(this, event, 10); event.returnValue=b; return b;"/>
+	</form>
+</body>
+</html>

@@ -1,0 +1,22 @@
+#page: example
+
+# main page
+the-h2: /example-header
+a-mli: /main-list/main-item
+the-button: /container-form/switch-button
+the-original-frame: /container-form/switchable-frame-original
+the-replacement-frame: /container-form/switchable-frame-replacement
+
+# original frame
+orig-h2: /container-form/switchable-frame-original/original-content
+# the-ul: /container-form/switchable-frame-original/original-list
+a-fli: /container-form/switchable-frame-original/original-list/original-item
+
+# replacement frame
+rep-h2: /container-form/switchable-frame-replacement/rep-h2
+# - nested frame
+nested-frame: /container-form/switchable-frame-replacement/nested-frame
+nested-h2: /container-form/switchable-frame-replacement/nested-frame/nested-h2
+nested-li: /container-form/switchable-frame-replacement/nested-frame/nested-list/nested-item
+# replacement frame
+rep-li: /container-form/switchable-frame-replacement/replacement-list/replacement-item

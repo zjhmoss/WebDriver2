@@ -1,0 +1,40 @@
+<html>
+<head>
+	<title>test keydown</title>
+	<script type="text/javascript">
+		function NumericDecOnly(o, evt, max) {
+			/*
+			console.log( evt.key );
+			console.log( evt.which );
+			console.log( evt.keyCode );
+			*/
+
+			var charCode = evt.key;
+
+			if (
+					charCode == "Backspace" || charCode == "Delete"
+					|| charCode == "ArrowLeft" || charCode == "ArrowRight"
+					|| charCode == "ArrowUp" || charCode == "ArrowDown"
+					|| charCode == "Home" || charCode == "End"
+			)
+				return true;
+
+			if (o.value.length >= max)
+				return false;
+
+			if ( charCode >= 0 && charCode <= 9 )
+				return true;
+			if ( (charCode == "." || charCode == "Decimal" ) && o.value.indexOf(".") < 0 )
+				return true;
+
+			return false;
+		}
+	</script>
+</head>
+<body>
+	<form>
+		<input type="text" id="text" name="text"
+			   onkeydown="var b=NumericDecOnly(this, event, 10); event.returnValue=b; return b;"/>
+	</form>
+</body>
+</html>

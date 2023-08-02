@@ -1,0 +1,7 @@
+	frame switchable-frame-replacement id 'frame' {
+		elemt rep-h2 tag-name 'h2';
+#include 'example-nested-frame.page'
+		elgrp replacement-list tag-name 'ul' {
+			list of elemt replacement-item tag-name 'li';
+		}
+	}

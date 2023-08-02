@@ -1,0 +1,49 @@
+<html>
+	<head>
+		<title>test</title>
+		<style>
+			#li3 { font-weight : 700 }
+		</style>
+	</head>
+	<body>
+		<h2>test</h2>
+		<ul id="outer" onclick="this.remove();">
+			<li id="li1">one</li>
+			<li id="li2">two</li>
+			<li id="li3">three
+				<ul id="inner">
+					<li id="li3-1">three - one</li>
+					<li id="li3-2">three - two</li>
+				</ul>
+			</li>
+		</ul>
+		<form id="form" name="form" action="https://www.google.com"
+			onsubmit="javascript:return _onsubmit();">
+			<script type="text/javascript">
+				var form = ( document.forms['form'] || document.form );
+				function _submit() {
+					alert('submit');
+					form.submit();
+				}
+				function _onsubmit() {
+					alert('onsubmit');
+					return true;
+				}
+			</script>
+			<script type="text/javascript" src="test.js"></script>
+
+			<input type="text" id="text" />
+			<input type="checkbox" id="cb" checked />
+			<input type="checkbox" id="toggle" />
+			<input type="checkbox" id="disabled" disabled />
+			<input id="button" name="button" type="submit" value="hello"
+				   onclick="javascript:hello();" />
+			<iframe id="iframe" src="iframe.html"></iframe>
+		</form>
+		<p><a href="page-to.html" id="link-to-page">another page</a></p>
+		<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+		<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+		<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+	</body>
+</html>
+

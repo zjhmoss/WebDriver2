@@ -1,0 +1,15 @@
+#page: mixed
+
+h2: /h2
+container: /container
+table: /container/table
+header: /container/table/header
+header-text: /container/table/header/text
+button1: /container/table/header/button1
+button2: /container/table/header/button2
+main-content: /container/table/main-content
+content1: /container/table/main-content/content1
+content2: /container/table/main-content/content2
+content3: /container/table/main-content/content3
+attached-content: /container/table/attached-content
+attached: /container/table/attached-content/attached

@@ -1,0 +1,21 @@
+page frames 'file://t/content/lists.html' {
+	elemt h2 tag-name 'h2';
+	elgrp basic id 'basic' {
+	    list of elemt basic-item tag-name 'li';
+	}
+	elgrp nesting id 'nesting' {
+		list of elgrp outer-item xpath './li' {
+			list of elemt inner-item tag-name 'li';
+		}
+	}
+	frame frame id 'frame' {
+	    elemt frame-h2 tag-name 'h2';
+		frame iframe tag-name 'iframe' {
+		    elemt inner-frame-h2 tag-name 'h2';
+			list of elgrp frame-item tag-name 'div' {
+				elemt h tag-name 'h2';
+				elemt p tag-name 'p';
+			}
+		}
+	}
+}

@@ -1,0 +1,11 @@
+page fragile 'file://t/content/fragile.html' {
+	elgrp container id 'container' {
+		fragile elgrp outer id 'outer' {
+			elgrp inner id 'inner' {
+				elgrp twig id 'twig' {
+					elemt leaf id 'leaf';
+				}
+			}
+		}
+	}
+}

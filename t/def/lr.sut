@@ -1,0 +1,12 @@
+page ml 'file://t/content/ml.html' {
+    elemt button tag-name 'input';
+}
+
+page main 'file://t/content/lr-root.html' {
+    frame l id 'l' {
+        elemt i tag-name 'input';
+    }
+    frame r id 'r' {
+        elemt i tag-name 'input';
+    }
+}

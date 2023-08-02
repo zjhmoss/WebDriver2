@@ -1,0 +1,30 @@
+<html>
+	<head>
+		<title>iframe test</title>
+		<script>
+			async function nav() {
+				await new Promise ( r => setTimeout ( r, 3000 ) );
+				window.location.href = 'page-to.html';
+				preventDefault();
+			}
+		</script>
+	</head>
+	<body>
+		<h2>iframe test</h2>
+		<ul id="outer">
+			<li id="li1">uno</li>
+			<li id="li2">due</li>
+			<li id="li3">tre
+				<ul id="inner">
+					<li id="li3-1">tre - uno</li>
+					<li id="li3-2">tre - due</li>
+				</ul>
+			</li>
+		</ul>
+		<form>
+			<input type="text" id="text" />
+			<input type="checkbox" id="iframe-cb" />
+		</form>
+		<p><a href="#" id="link-to-page" onclick="nav();">to page</a></p>
+	</body>
+</html>

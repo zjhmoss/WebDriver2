@@ -1,0 +1,21 @@
+<html>
+<head>
+	<title>ml test</title>
+	<script>
+		function s() {
+			document.getElementById( "frame" ).src = "example-navigated-frame.html";
+		}
+	</script>
+</head>
+<body>
+<h2>example</h2>
+<ul><li>main - uno</li>
+	<li>main - due</li>
+	<li>main - tre</li>
+</ul>
+<form>
+	<input type="button" onclick="s();" value="switch"/>
+	<iframe id="frame" src="example-frame.html"></iframe>
+</form>
+</body>
+</html>

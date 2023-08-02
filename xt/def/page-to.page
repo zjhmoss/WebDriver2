@@ -1,0 +1,8 @@
+page page-to 'file://t/content/page-to.html' {
+    elgrp content tag-name 'div' {
+        list of elemt h2 tag-name 'h2';
+    }
+    frame iframe tag-name 'iframe' {
+        elemt h2 tag-name 'h2';
+    }
+}

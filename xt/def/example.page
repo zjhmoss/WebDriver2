@@ -1,0 +1,11 @@
+page example 'file://xt/content/example.html' {
+	elemt example-header tag-name 'h2';
+	elgrp main-list tag-name 'ul' {
+		list of elemt main-item tag-name 'li';
+	}
+	elgrp container-form tag-name 'form' {
+		elemt switch-button tag-name 'input';
+#include 'example-original-frame.page'
+#include 'example-replacement-frame.page'
+	}
+}

@@ -1,0 +1,20 @@
+page mixed 'file://t/content/mixed.html' {
+	elemt h2 tag-name 'h2';
+	elgrp container tag-name 'div' {
+		elgrp table xpath 'table/tbody' {
+			elgrp header xpath 'tr[count(td)=1]' {
+				elemt text xpath 'td[text()]';
+				elemt button1 xpath 'td/input[1]';
+				elemt button2 xpath 'td/input[2]';
+			}
+			list of elgrp main-content xpath 'tr[count(td)=3]' {
+				elemt content1 xpath 'td[1]';
+				elemt content2 xpath 'td[2]';
+				elemt content3 xpath 'td[3]';
+			}
+			list of elgrp attached-content xpath 'tr[count(td)=2]' {
+				elemt attached xpath 'td[2]';
+			}
+		}
+	}
+}

@@ -1,0 +1,18 @@
+frame iframe id 'iframe' {
+	elemt h2 tag-name 'h2';
+	elgrp outer id 'outer' {
+		elemt li1 id 'li1';
+		elemt li2 id 'li2';
+		elgrp li3 id 'li3' {
+			elgrp inner id 'inner' {
+				elemt li3-1 id 'li3-1';
+				elemt li3-2 id 'li3-2';
+			}
+		}
+	}
+	elgrp form tag-name 'form' {
+		elemt text id 'text';
+		elemt cb id 'iframe-cb';
+	}
+	elemt link id 'link-to-page';
+}
