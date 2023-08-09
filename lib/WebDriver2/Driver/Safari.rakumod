@@ -28,6 +28,7 @@ method param-factory( --> WebDriver2::Command::Param::Factory ) {
 
 method factory( --> WebDriver2::Command::Result::Factory ) {
 	$.result // WebDriver2::Command::Result::Factory::Safari.new
+#	$.result // WebDriver2::Command::Result::Factory.new
 }
 
 method displayed ( WebDriver2::Model::Element:D $element --> Bool ) {

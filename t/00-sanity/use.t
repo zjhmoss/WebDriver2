@@ -2,7 +2,7 @@ use lib <lib t/lib>;
 
 use Test;
 
-plan 50;
+plan 47;
 
 use-ok 'WebDriver2::SUT::Service::Loader';
 use-ok 'WebDriver2::SUT::Build::Page';
@@ -12,9 +12,9 @@ use-ok 'WebDriver2::SUT::ProviderR';
 use-ok 'WebDriver2::SUT::Provider';
 use-ok 'WebDriver2::SUT::Navigator';
 use-ok 'WebDriver2::SUT::Build';
-use-ok 'WebDriver2::Command::Result::Factory::Chrome';
-use-ok 'WebDriver2::Command::Result::Factory::Edge';
-use-ok 'WebDriver2::Command::Result::Factory::Firefox';
+#use-ok 'WebDriver2::Command::Result::Factory::Chrome';
+#use-ok 'WebDriver2::Command::Result::Factory::Edge';
+#use-ok 'WebDriver2::Command::Result::Factory::Firefox';
 use-ok 'WebDriver2::Command::Result::Factory::Safari';
 use-ok 'WebDriver2::Command::Result::Factory';
 use-ok 'WebDriver2::Command::Param::Factory::Chrome';

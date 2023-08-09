@@ -47,6 +47,7 @@ class WebDriver2::Command::Result::Element-Rect does WebDriver2::Command::Result
 	has Int $.y;
 	has Int $.width;
 	has Int $.height;
+
 }
 class WebDriver2::Command::Result::Enabled is WebDriver2::Command::Result::Bool-Value { }
 class WebDriver2::Command::Result::Execute-Script is WebDriver2::Command::Result::Single-Value { }

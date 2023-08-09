@@ -8,7 +8,7 @@ use WebDriver2::Driver;
 use WebDriver2::Command::Param::Factory;
 use WebDriver2::Command::Param::Factory::Edge;
 use WebDriver2::Command::Result::Factory;
-use WebDriver2::Command::Result::Factory::Edge;
+#use WebDriver2::Command::Result::Factory::Edge;
 
 unit class WebDriver2::Driver::Edge is WebDriver2::Driver;
 
@@ -27,5 +27,6 @@ method param-factory( --> WebDriver2::Command::Param::Factory ) {
 }
 
 method factory( --> WebDriver2::Command::Result::Factory ) {
-	$.result // WebDriver2::Command::Result::Factory::Edge.new
+#	$.result // WebDriver2::Command::Result::Factory::Edge.new
+	$.result // WebDriver2::Command::Result::Factory.new
 }

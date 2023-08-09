@@ -4,6 +4,8 @@ use WebDriver2::HTTP::Response;
 
 use WebDriver2::Command::Result;
 
+use WebDriver2::Command::Execution-Status;
+
 unit role WebDriver2::Command::Result::Factory;
 
 #method .execution-status-args( $data, $type ) { # PRIVATE OKAY

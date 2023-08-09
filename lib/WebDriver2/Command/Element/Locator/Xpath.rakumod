@@ -1,5 +1,3 @@
-use v6;
-
 use WebDriver2::Command::Element::Locator;
 
 unit class WebDriver2::Command::Element::Locator::Xpath is WebDriver2::Command::Element::Locator;

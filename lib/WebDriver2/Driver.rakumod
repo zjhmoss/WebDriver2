@@ -14,8 +14,8 @@ use WebDriver2::Command::Result::Factory;
 
 use WebDriver2::Constants;
 
-class WebDriver2::Internal-Element does WebDriver2::Model::Element { ... }
-class WebDriver2::Internal-Frame does WebDriver2::Model::Frame { ... }
+my class WebDriver2::Internal-Element does WebDriver2::Model::Element { ... }
+my class WebDriver2::Internal-Frame does WebDriver2::Model::Frame { ... }
 
 class WebDriver2::Driver does WebDriver2 {
 	
@@ -552,7 +552,7 @@ class WebDriver2::Driver does WebDriver2 {
 	}
 }
 
-class WebDriver2::Internal-Element does WebDriver2::Model::Element {
+my class WebDriver2::Internal-Element does WebDriver2::Model::Element {
 	
 	trusts WebDriver2::Internal-Frame;
 
@@ -674,7 +674,7 @@ class WebDriver2::Internal-Element does WebDriver2::Model::Element {
 	}
 }
 
-class WebDriver2::Internal-Frame
+my class WebDriver2::Internal-Frame
 		is WebDriver2::Internal-Element
 		does WebDriver2::Model::Frame
 {

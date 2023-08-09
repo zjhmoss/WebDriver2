@@ -10,4 +10,3 @@ method new( $selector ) {
 
 # vim: set sw=4:
 # vim: set ts=4:
-

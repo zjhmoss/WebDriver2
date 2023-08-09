@@ -16,7 +16,6 @@ use WebDriver2::Until::Command;
 
 
 
-# TODO: add pod
 class Root-Content does WebDriver2::SUT::Service {
 	my IO::Path $html-file =
 			.add: 'example.html' with $*PROGRAM.parent.parent.add: 'content';
@@ -24,10 +23,6 @@ class Root-Content does WebDriver2::SUT::Service {
 	method name (--> Str:D) {
 		'example';
 	}
-
-#	method title ( --> Str:D ) {
-#		$!driver.title;
-#	}
 
 	method heading ( --> Str:D ) {
 		.resolve.text with self.get: 'the-h2';
@@ -44,7 +39,9 @@ class Root-Content does WebDriver2::SUT::Service {
 	}
 
 	method open {
-			my $url = WebDriver2::SUT::Tree::URL.new: 'file://' ~ $html-file;
+			my $url =
+					WebDriver2::SUT::Tree::URL.new:
+							'file://' ~ $html-file;
 			$!driver.navigate: $url.Str;
 	}
 
@@ -59,6 +56,8 @@ class Root-Content does WebDriver2::SUT::Service {
 #		$stale.retry;
 	}
 }
+
+
 
 class Original-Frame does WebDriver2::SUT::Service {
 	method name (--> Str:D) {
@@ -146,7 +145,7 @@ class Example-Test
 					sut-name => 'example',
 					name => 'example test name',
 					description => 'example test description',
-					plan => 18;
+					plan => 19;
 	}
 
 	method services ( WebDriver2::SUT::Service::Loader $loader ) {
@@ -207,4 +206,3 @@ sub MAIN(
 ) {
 	.execute with Example-Test.new: $browser, :$debug;
 }
-
