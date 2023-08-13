@@ -40,7 +40,9 @@ role WebDriver2::Driver-Actions {
 	method switch-to-parent { ... }
 	method top { ... }
 	method curr-frame( --> WebDriver2::Command::Param::ID-or-Index ) { ... }
-	
+
+	method active( --> WebDriver2::Model::Element:D ) { ... }
+
 	method url ( --> Str ) { ... }
 	
 	method delete-session { ... }
@@ -69,16 +71,15 @@ role WebDriver2::Element-Actions {
 			WebDriver2::Command::Element::Locator:D $locator
 			--> Array of WebDriver2::Model::Element
 	) { ... }
-	method active( --> WebDriver2::Model::Element:D ) { ... }
 	method tag-name( WebDriver2::Model::Element:D $element --> Str:D ) { ... }
 	method frame( WebDriver2::Model::Element:D $element --> WebDriver2::Model::Frame:D ) { ... }
 	method property(
-			WebDriver2::Model::Element:D $element,
+#			WebDriver2::Model::Element:D $element,
 			Str:D $property
 			--> Str
 	) { ... }
 	method attribute(
-			WebDriver2::Model::Element:D $element,
+#			WebDriver2::Model::Element:D $element,
 			Str:D $attribute
 			--> Str
 	) { ... }
@@ -89,7 +90,7 @@ role WebDriver2::Element-Actions {
 	method selected( WebDriver2::Model::Element:D $element --> Bool:D ) { ... }
 	method displayed( WebDriver2::Model::Element:D $element --> Bool:D ) { ... }
 	method css-value(
-			WebDriver2::Model::Element:D $element,
+#			WebDriver2::Model::Element:D $element,
 			Str:D $property
 			--> Str
 	) { ... }

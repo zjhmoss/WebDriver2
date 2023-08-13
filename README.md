@@ -2,28 +2,19 @@
 
 WebDriver level 2 bindings implementing
 [W3C's specification](https://www.w3.org/TR/webdriver/).
-Current implementation status is documented in
-[doc/doc.html](doc/doc.html).
+Current implementation status is
+[documented below](#implementation-status).
 
 ## Usage
 
-### Defining a site's pages and the services they provide
-
-A simple page description language is defined in the
-[page grammar file](lib/WebDriver2/SUT/Build/Page.rakumod).
-Examples can be seen in the `xt/03-sut` subdirectory, which
-use resources from `xt/content` and `xt/def`.
-
-
-
 ### Using a driver directly
 
-To use a driver directly for all endpoint commands, create a
+To use a driver directly for all [endpoint commands](#implementation-status), create a
 test class that extends `WebDriver2::Test`.  The test class
 will need to specify the browser and debug level upon
 instantiation:
 
-```
+```perl6
 use Test;
 use WebDriver2::Test;
 
@@ -59,6 +50,142 @@ test code has completed.  These two calls are made
 automatically during `init` and `close` when extending the
 provided `WebDriver2::Test`.
 
+### Defining a site's pages and the services they provide
+
+A simple page description language is defined in the
+[page grammar file](lib/WebDriver2/SUT/Build/Page.rakumod).
+
+For a multi-page site, e.g., with a login page and a
+main page with an iframe, in addition to the html
+files, would need a "system under test" definition,
+which could optionally be split into multiple .page
+files, and service definitions.
+
+For example, for
+
+`site.sut`
+```
+#include 'login.page'
+#include 'main.page'
+```
+\
+\
+`login.html`
+```html
+<html>
+	<head><title>start page</title></head>
+	<body>
+		<form>
+			<input type="text" id="user" name="user"/>
+			<input type="text" id="pass" name="pass"/>
+			<button name="k" value="v">log in</button>
+		</form>
+	</body>
+</html>
+```
+\
+`login.page`
+```
+page login 'file://relative/path/to/login.html' {
+	elemt username id 'user';
+	elemt password id 'pass';
+	elemt login-button tag-name 'button';
+}
+```
+\
+`login.service`
+```
+#page: login
+
+username: /username
+password: /password
+login-button: /login-button
+```
+\
+\
+`main.html`
+```html
+<html>
+	<head><title>simple example</title></head>
+	<body>
+		<h1>simple example</h1>
+		<p id="before">text</p>
+		<iframe src="frame.html"/>
+		<p>other content</p>
+		<p id="after">more text</p>
+	</body>
+</html>
+```
+\
+`main.page`
+```
+page main 'file://relative/path/to/main.html' {
+	elemt heading tag-name 'h1';
+	elemt first-para id 'before';
+#include 'frame.page'
+	elemt last-para id 'after';
+}
+```
+\
+`main.service`
+```
+#page: main
+
+heading: /heading
+pf: /first-para
+iframe: /iframe
+pl: /last-para
+```
+\
+\
+`frame.html`
+```html
+<html>
+	<head><title>iframe</title></head>
+	<body>
+		<form><input type="text"/></form>
+		<ul>
+			<li>
+				<ol>
+					<li>Mirzakhani</li>
+					<li>Noether</li>
+					<li>Oh</li>
+				</ol>
+			</li>
+			<li>
+				<ol>
+					<li>Delta</li>
+					<li>Echo</li>
+					<li>Foxtrot</li>
+				</ol>
+			</li>
+			<li>
+				<ol>
+					<li>apple</li>
+					<li>banana</li>
+					<li>cantaloupe</li>
+				</ol>
+			</li>
+		</ul>
+	</body>
+</html>
+```
+\
+`frame.page`
+```
+frame iframe tag-name 'iframe' {
+	elgrp form tag-name 'form' {
+		elemt input tag-name 'input';
+	}
+	list of elgrp outer xpath '*/ul/li' {
+		list of elemt inner xpath 'ol/li';
+	}
+}
+```
+
+Extended examples can be seen in the `xt/03-service` subdirectory, which
+use resources from `xt/content` and `xt/def`.
+
 
 
 ## HTTP::UserAgent
@@ -85,3 +212,462 @@ characters per entry)
 
 Suggestions, design recommendations, and feature requests
 welcome.
+
+### Implementation Status
+
+<table><tbody>
+	<tr class="os">
+		<th>&nbsp;</th>
+		<th class="browser" colspan="3">Windows</th>
+		<th class="browser">MacOS</th>
+		<th>&nbsp;</th>
+	</tr>
+	<tr class="header">
+		<th>endpoint</th>
+		<th class="browser">chrome</th>
+		<th class="browser">edge</th>
+		<th class="browser">firefox</th>
+		<th class="browser">safari</th>
+		<th>method</th>
+	</tr>
+	<tr><td >new session</td>
+		<td align="center" class="complete">X</td>
+		<td align="center" class="complete">X</td>
+		<td align="center" class="complete">X</td>
+		<td align="center" class="complete">X</td>
+		<td><code>$driver.session</code></td>
+	</tr>
+	<tr><td>delete session</td>
+		<td align="center" class="complete">X</td>
+		<td align="center" class="complete">X</td>
+		<td align="center" class="complete">X</td>
+		<td align="center" class="complete">X</td>
+		<td><code>$driver.delete-session</code></td>
+	</tr>
+	<tr><td>status</td>
+		<td align="center" class="complete">X</td>
+		<td align="center" class="complete">X</td>
+		<td align="center" class="complete">X</td>
+		<td align="center" class="complete">X</td>
+		<td><code>$driver.status</code></td>
+	</tr>
+	<tr><td>get timeouts</td>
+		<td align="center" class="not-started">&nbsp;</td>
+		<td align="center" class="not-started">&nbsp;</td>
+		<td align="center" class="not-started">&nbsp;</td>
+		<td align="center" class="not-started">&nbsp;</td>
+		<td><code></code></td>
+	</tr>
+	<tr><td>set timeouts</td>
+		<td align="center" class="complete">X</td>
+		<td align="center" class="complete">X</td>
+		<td align="center" class="complete">X</td>
+		<td align="center" class="complete">X</td>
+		<td><code>$driver.timeouts ( Int $script, Int $page-load, Int $implicit )</code></td>
+	</tr>
+	<tr><td>navigate to</td>
+		<td align="center" class="complete">X</td>
+		<td align="center" class="complete">X</td>
+		<td align="center" class="complete">X</td>
+		<td align="center" class="complete">X</td>
+		<td><code>$driver.navigate ( Str $url )</code></td>
+	</tr>
+	<tr><td>get current url</td>
+		<td align="center" class="not-started">&nbsp;</td>
+		<td align="center" class="not-started">&nbsp;</td>
+		<td align="center" class="not-started">&nbsp;</td>
+		<td align="center" class="not-started">&nbsp;</td>
+		<td><code>$driver.url</code></td>
+	</tr>
+	<tr><td>back</td>
+		<td align="center" class="not-started">&nbsp;</td>
+		<td align="center" class="not-started">&nbsp;</td>
+		<td align="center" class="not-started">&nbsp;</td>
+		<td align="center" class="not-started">&nbsp;</td>
+		<td><code></code></td>
+	</tr>
+	<tr><td>forward</td>
+		<td align="center" class="not-started">&nbsp;</td>
+		<td align="center" class="not-started">&nbsp;</td>
+		<td align="center" class="not-started">&nbsp;</td>
+		<td align="center" class="not-started">&nbsp;</td>
+		<td><code></code></td>
+	</tr>
+	<tr><td>refresh</td>
+		<td align="center" class="not-started">&nbsp;</td>
+		<td align="center" class="not-started">&nbsp;</td>
+		<td align="center" class="not-started">&nbsp;</td>
+		<td align="center" class="not-started">&nbsp;</td>
+		<td><code></code></td>
+	</tr>
+	<tr><td>get title</td>
+		<td align="center" class="complete">X</td>
+		<td align="center" class="complete">X</td>
+		<td align="center" class="complete">X</td>
+		<td align="center" class="complete">X</td>
+		<td><code>$driver.title</code></td>
+	</tr>
+	<tr><td>get window handle</td>
+		<td align="center" class="not-started">&nbsp;</td>
+		<td align="center" class="not-started">&nbsp;</td>
+		<td align="center" class="not-started">&nbsp;</td>
+		<td align="center" class="not-started">&nbsp;</td>
+		<td><code>$driver.window-handle</code></td>
+	</tr>
+	<tr><td>close window</td>
+		<td align="center" class="complete">X</td>
+		<td align="center" class="not-started">&nbsp;</td>
+		<td align="center" class="not-started">&nbsp;</td>
+		<td align="center" class="not-started">&nbsp;</td>
+		<td><code>$driver.close-window</code></td>
+	</tr>
+	<tr><td>switch to window</td>
+		<td align="center" class="not-started">&nbsp;</td>
+		<td align="center" class="not-started">&nbsp;</td>
+		<td align="center" class="not-started">&nbsp;</td>
+		<td align="center" class="not-started">&nbsp;</td>
+		<td><code>$driver.switch-to-window ( $handle )</code></td>
+	</tr>
+	<tr><td>get window handles</td>
+		<td align="center" class="complete">X</td>
+		<td align="center" class="not-started">&nbsp;</td>
+		<td align="center" class="not-started">&nbsp;</td>
+		<td align="center" class="not-started">&nbsp;</td>
+		<td><code>$driver.window-handles</code></td>
+	</tr>
+	<tr><td>new window</td>
+		<td align="center" class="not-started">&nbsp;</td>
+		<td align="center" class="not-started">&nbsp;</td>
+		<td align="center" class="not-started">&nbsp;</td>
+		<td align="center" class="not-started">&nbsp;</td>
+		<td><code>$driver.new-window</code></td>
+	</tr>
+	<tr><td>switch to frame</td>
+		<td align="center" class="complete">X</td>
+		<td align="center" class="complete">X</td>
+		<td align="center" class="complete">X</td>
+		<td align="center" class="complete">X</td>
+		<td><code>$driver.switch-to ( Int $frame-id )</code>
+			<code>$frame-element.switch-to</code>
+		</td>
+	</tr>
+	<tr><td>switch to parent frame</td>
+		<td align="center" class="complete">X</td>
+		<td align="center" class="complete">X</td>
+		<td align="center" class="complete">X</td>
+		<td align="center" class="complete">X</td>
+		<td><code>$driver.switch-to-parent</code>
+			<code>$element.switch-to-parent</code>
+		</td>
+	</tr>
+	<tr><td>get window rect</td>
+		<td align="center" class="not-started">&nbsp;</td>
+		<td align="center" class="not-started">&nbsp;</td>
+		<td align="center" class="not-started">&nbsp;</td>
+		<td align="center" class="not-started">&nbsp;</td>
+		<td><code></code></td>
+	</tr>
+	<tr><td>set window rect</td>
+		<td align="center" class="complete">X</td>
+		<td align="center" class="complete">X</td>
+		<td align="center" class="complete">X</td>
+		<td align="center" class="complete">X</td>
+		<td><code>$driver.set-window-rect (
+			Int $width, Int $height, Int $x, Int $y
+		)</code></td>
+	</tr>
+	<tr><td>maximize window</td>
+		<td align="center" class="not-started">&nbsp;</td>
+		<td align="center" class="not-started">&nbsp;</td>
+		<td align="center" class="not-started">&nbsp;</td>
+		<td align="center" class="not-started">&nbsp;</td>
+		<td><code>$driver.maximize-window</code></td>
+	</tr>
+	<tr><td>minimize window</td>
+		<td align="center" class="not-started">&nbsp;</td>
+		<td align="center" class="not-started">&nbsp;</td>
+		<td align="center" class="not-started">&nbsp;</td>
+		<td align="center" class="not-started">&nbsp;</td>
+		<td><code></code></td>
+	</tr>
+	<tr><td>fullscreen window</td>
+		<td align="center" class="not-started">&nbsp;</td>
+		<td align="center" class="not-started">&nbsp;</td>
+		<td align="center" class="not-started">&nbsp;</td>
+		<td align="center" class="not-started">&nbsp;</td>
+		<td><code></code></td>
+	</tr>
+	<tr><td>get active element</td>
+		<td align="center" class="complete">X</td>
+		<td align="center" class="complete">X</td>
+		<td align="center" class="complete">X</td>
+		<td align="center" class="complete">X</td>
+		<td><code>$driver.active</code></td>
+	</tr>
+	<tr><td>get element shadow root</td>
+		<td class="not-started">&nbsp;</td>
+		<td class="not-started">&nbsp;</td>
+		<td class="not-started">&nbsp;</td>
+		<td class="not-started">&nbsp;</td>
+		<td><code></code></td>
+	</tr>
+	<tr><td>find element</td>
+		<td align="center" class="complete">X</td>
+		<td align="center" class="complete">X</td>
+		<td align="center" class="complete">X</td>
+		<td align="center" class="complete">X</td>
+		<td><code>$driver.element ( Locator $loc )</code></td>
+	</tr>
+	<tr><td>find elements</td>
+		<td align="center" class="complete">X</td>
+		<td align="center" class="complete">X</td>
+		<td align="center" class="complete">X</td>
+		<td align="center" class="complete">X</td>
+		<td><code>$driver.elements ( Locator $loc )</code></td>
+	</tr>
+	<tr><td>find element from element</td>
+		<td align="center" class="complete">X</td>
+		<td align="center" class="complete">X</td>
+		<td align="center" class="complete">X</td>
+		<td align="center" class="complete">X</td>
+		<td><code>$element.element ( Locator $loc )</code></td>
+	</tr>
+	<tr><td>find elements from element</td>
+		<td align="center" class="complete">X</td>
+		<td align="center" class="complete">X</td>
+		<td align="center" class="complete">X</td>
+		<td align="center" class="complete">X</td>
+		<td><code>$element.elements ( Locator $loc )</code></td>
+	</tr>
+	<tr><td>find element from shadow root</td>
+		<td class="not-started">&nbsp;</td>
+		<td class="not-started">&nbsp;</td>
+		<td class="not-started">&nbsp;</td>
+		<td class="not-started">&nbsp;</td>
+		<td><code></code></td>
+	</tr>
+	<tr><td>find elements from shadow root</td>
+		<td class="not-started">&nbsp;</td>
+		<td class="not-started">&nbsp;</td>
+		<td class="not-started">&nbsp;</td>
+		<td class="not-started">&nbsp;</td>
+		<td><code></code></td>
+	</tr>
+	<tr><td>is element selected</td>
+		<td align="center" class="complete">X</td>
+		<td align="center" class="complete">X</td>
+		<td align="center" class="complete">X</td>
+		<td align="center" class="complete">X</td>
+		<td><code>$element.selected</code></td>
+	</tr>
+	<tr><td>get element attribute</td>
+		<td align="center" class="complete">X</td>
+		<td align="center" class="complete">X</td>
+		<td align="center" class="complete">X</td>
+		<td align="center" class="complete">X</td>
+		<td><code>$element.attribute</code></td>
+	</tr>
+	<tr><td>get element property</td>
+		<td align="center" class="complete">X</td>
+		<td align="center" class="complete">X</td>
+		<td align="center" class="complete">X</td>
+		<td align="center" class="complete">X</td>
+		<td><code>$element.property</code></td>
+	</tr>
+	<tr><td>get element css value</td>
+		<td align="center" class="complete">X</td>
+		<td align="center" class="complete">X</td>
+		<td align="center" class="complete">X</td>
+		<td align="center" class="complete">X</td>
+		<td><code>$element.css-value ( Str $css-prop )</code></td>
+	</tr>
+	<tr><td>get element text</td>
+		<td align="center" class="complete">X</td>
+		<td align="center" class="complete">X</td>
+		<td align="center" class="complete">X</td>
+		<td align="center" class="complete">X</td>
+		<td><code>$element.text</code></td>
+	</tr>
+	<tr><td>get element tag name</td>
+		<td align="center" class="complete">X</td>
+		<td align="center" class="complete">X</td>
+		<td align="center" class="complete">X</td>
+		<td align="center" class="complete">X</td>
+		<td><code>$element.tag-name</code></td>
+	</tr>
+	<tr><td>get element rect</td>
+		<td align="center" class="not-started">&nbsp;</td>
+		<td align="center" class="not-started">&nbsp;</td>
+		<td align="center" class="not-started">&nbsp;</td>
+		<td align="center" class="not-started">&nbsp;</td>
+		<td><code></code></td>
+	</tr>
+	<tr><td>is element enabled</td>
+		<td align="center" class="complete">X</td>
+		<td align="center" class="complete">X</td>
+		<td align="center" class="complete">X</td>
+		<td align="center" class="complete">X</td>
+		<td><code>$element.$enabled</code></td>
+	</tr>
+	<tr><td>get computed role</td>
+		<td align="center" class="not-started">&nbsp;</td>
+		<td align="center" class="not-started">&nbsp;</td>
+		<td align="center" class="not-started">&nbsp;</td>
+		<td align="center" class="not-started">&nbsp;</td>
+		<td><code></code></td>
+	</tr>
+	<tr><td>get computed label</td>
+		<td align="center" class="not-started">&nbsp;</td>
+		<td align="center" class="not-started">&nbsp;</td>
+		<td align="center" class="not-started">&nbsp;</td>
+		<td align="center" class="not-started">&nbsp;</td>
+		<td><code></code></td>
+	</tr>
+	<tr><td>element click</td>
+		<td align="center" class="complete">X</td>
+		<td align="center" class="complete">X</td>
+		<td align="center" class="complete">X</td>
+		<td align="center" class="complete">X</td>
+		<td><code>$element.click</code></td>
+	</tr>
+	<tr><td>element clear</td>
+		<td align="center" class="complete">X</td>
+		<td align="center" class="complete">X</td>
+		<td align="center" class="complete">X</td>
+		<td align="center" class="complete">X</td>
+		<td><code>$element.clear</code></td>
+	</tr>
+	<tr><td>element send keys</td>
+		<td align="center" class="partial">/</td>
+		<td align="center" class="partial">/</td>
+		<td align="center" class="partial">/</td>
+		<td align="center" class="partial">/</td>
+		<td><code>$element.send-keys ( $text )</code></td>
+	</tr>
+	<tr><td>get page source</td>
+		<td align="center" class="not-started">&nbsp;</td>
+		<td align="center" class="not-started">&nbsp;</td>
+		<td align="center" class="not-started">&nbsp;</td>
+		<td align="center" class="not-started">&nbsp;</td>
+		<td><code></code></td>
+	</tr>
+	<tr><td>execute script</td>
+		<td align="center" class="complete">X</td>
+		<td align="center" class="complete">X</td>
+		<td align="center" class="complete">X</td>
+		<td align="center" class="complete">X</td>
+		<td><code>$driver.execute-script ( Str $scr, @args )</code></td>
+	</tr>
+	<tr><td>execute async script</td>
+		<td align="center" class="not-started">&nbsp;</td>
+		<td align="center" class="not-started">&nbsp;</td>
+		<td align="center" class="not-started">&nbsp;</td>
+		<td align="center" class="not-started">&nbsp;</td>
+		<td><code></code></td>
+	</tr>
+	<tr><td>get all cookies</td>
+		<td align="center" class="not-started">&nbsp;</td>
+		<td align="center" class="not-started">&nbsp;</td>
+		<td align="center" class="not-started">&nbsp;</td>
+		<td align="center" class="not-started">&nbsp;</td>
+		<td><code></code></td>
+	</tr>
+	<tr><td>get named cookie</td>
+		<td align="center" class="not-started">&nbsp;</td>
+		<td align="center" class="not-started">&nbsp;</td>
+		<td align="center" class="not-started">&nbsp;</td>
+		<td align="center" class="not-started">&nbsp;</td>
+		<td><code></code></td>
+	</tr>
+	<tr><td>add cookie</td>
+		<td align="center" class="not-started">&nbsp;</td>
+		<td align="center" class="not-started">&nbsp;</td>
+		<td align="center" class="not-started">&nbsp;</td>
+		<td align="center" class="not-started">&nbsp;</td>
+		<td><code></code></td>
+	</tr>
+	<tr><td>delete cookie</td>
+		<td align="center" class="not-started">&nbsp;</td>
+		<td align="center" class="not-started">&nbsp;</td>
+		<td align="center" class="not-started">&nbsp;</td>
+		<td align="center" class="not-started">&nbsp;</td>
+		<td><code></code></td>
+	</tr>
+	<tr><td>delete all cookies</td>
+		<td align="center" class="not-started">&nbsp;</td>
+		<td align="center" class="not-started">&nbsp;</td>
+		<td align="center" class="not-started">&nbsp;</td>
+		<td align="center" class="not-started">&nbsp;</td>
+		<td><code></code></td>
+	</tr>
+	<tr><td>perform actions</td>
+		<td align="center" class="not-started">&nbsp;</td>
+		<td align="center" class="not-started">&nbsp;</td>
+		<td align="center" class="not-started">&nbsp;</td>
+		<td align="center" class="not-started">&nbsp;</td>
+		<td><code></code></td>
+	</tr>
+	<tr><td>release actions</td>
+		<td align="center" class="not-started">&nbsp;</td>
+		<td align="center" class="not-started">&nbsp;</td>
+		<td align="center" class="not-started">&nbsp;</td>
+		<td align="center" class="not-started">&nbsp;</td>
+		<td><code></code></td>
+	</tr>
+	<tr><td>dismiss alert</td>
+		<td align="center" class="complete">X</td>
+		<td align="center" class="complete">X</td>
+		<td align="center" class="complete">X</td>
+		<td align="center" class="complete">X</td>
+		<td><code>$driver.dismiss-alert</code></td>
+	</tr>
+	<tr><td>accept alert</td>
+		<td align="center" class="complete">X</td>
+		<td align="center" class="complete">X</td>
+		<td align="center" class="complete">X</td>
+		<td align="center" class="complete">X</td>
+		<td><code>$driver.accept-alert</code></td>
+	</tr>
+	<tr><td>get alert text</td>
+		<td align="center" class="complete">X</td>
+		<td align="center" class="complete">X</td>
+		<td align="center" class="complete">X</td>
+		<td align="center" class="complete">X</td>
+		<td><code>$driver.alert-text</code></td>
+	</tr>
+	<tr><td>send alert text</td>
+		<td align="center" class="complete">X</td>
+		<td align="center" class="complete">X</td>
+		<td align="center" class="complete">X</td>
+		<td align="center" class="complete">X</td>
+		<td><code>$driver.send-alert-text ( Str $text )</code></td>
+	</tr>
+	<tr><td>take screenshot</td>
+		<td align="center" class="complete">X</td>
+		<td align="center" class="complete">X</td>
+		<td align="center" class="complete">X</td>
+		<td align="center" class="complete">X</td>
+		<td><code>$driver.screenshot</code></td>
+	</tr>
+	<tr><td>take element screenshot</td>
+		<td align="center" class="complete">X</td>
+		<td align="center" class="complete">X</td>
+		<td align="center" class="complete">X</td>
+		<td align="center" class="complete">X</td>
+		<td><code>$element.screenshot</code></td>
+	</tr>
+	<tr><td>print page</td>
+		<td align="center" class="not-started">&nbsp;</td>
+		<td align="center" class="not-started">&nbsp;</td>
+		<td align="center" class="not-started">&nbsp;</td>
+		<td align="center" class="not-started">&nbsp;</td>
+		<td><code></code></td>
+	</tr>
+	<tr><td>displayed ( optional endpoint )</td>
+		<td align="center" class="not-started">&nbsp;</td>
+		<td align="center" class="not-started">&nbsp;</td>
+		<td align="center" class="not-started">&nbsp;</td>
+		<td align="center" class="not-started">&nbsp;</td>
+		<td><code>$element.displayed</code></td>
+	</tr>
+</tbody></table>
