@@ -1,0 +1,6 @@
+#page: doc-main
+
+iframe: /iframe
+
+outer: /iframe/outer-lc/outer
+inner: /iframe/outer-lc/outer/inner

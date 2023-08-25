@@ -18,10 +18,10 @@ use WebDriver2::Until::Command;
 
 class Root-Content does WebDriver2::SUT::Service {
 	my IO::Path $html-file =
-			.add: 'example.html' with $*PROGRAM.parent.parent.add: 'content';
+			.add: 'doc-example.html' with $*PROGRAM.parent.parent.add: 'content';
 
 	method name (--> Str:D) {
-		'example';
+		'doc-example';
 	}
 
 	method heading ( --> Str:D ) {

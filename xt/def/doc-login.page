@@ -1,0 +1,5 @@
+page doc-login 'file://xt/content/doc-login.html' {
+	elemt username id 'user';
+	elemt password id 'pass';
+	elemt login-button tag-name 'button';
+}

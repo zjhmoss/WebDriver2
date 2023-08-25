@@ -50,13 +50,13 @@ method load-elements ( Str:D $sn, Str:D $key-prefix, Str:D $prefix ) {
 	my WebDriver2::SUT::Tree::APage $page;
 	my WebDriver2::SUT::Navigator $nav;
 	my WebDriver2::SUT::Tree::ANode %elements;
-	my WebDriver2::SUT::Tree::URL $url;
+#	my WebDriver2::SUT::Tree::URL $url;
 	my Str $svc-fn = .[*- 1] with $sn.lc.split: '::';
 	say 'LOADING ', $svc-fn if $!debug;
 	for $!def-dir.add("$svc-fn.service").IO.lines -> Str $line {
 		if $line ~~ /^\s*\#page\:\s*\S+/ {
 			$page = $!sut.get: $line.split(/\:/, 2)[1].trim;
-			$url = $page.url;
+#			$url = $page.url;
 			$nav = WebDriver2::SUT::Navigator.new: tree => $page;
 			next;
 		}
@@ -65,7 +65,7 @@ method load-elements ( Str:D $sn, Str:D $key-prefix, Str:D $prefix ) {
 		($k, $v) = $line.split(/\:/, 2)>>.trim;
 		$k = $key-prefix ~ '-' ~ $k if $key-prefix;
 		die "element named $k already set" if %elements{$k}:exists;
-		%elements{$k} = $nav.traverse: "{ $prefix }$v";
+		%elements{$k} = $nav.traverse: "$prefix$v";
 	}
 	%elements;
 }

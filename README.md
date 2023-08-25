@@ -57,25 +57,25 @@ A simple page description language is defined in the
 
 For a multi-page site, e.g., with a login page and a
 main page with an iframe, in addition to the html
-files, would need a "system under test" definition,
-which could optionally be split into multiple .page
-files, and service definitions.
+files, a "system under test" definition,
+which could optionally be split into multiple `.page`
+files, and `.service` definitions are needed.
 
 For example, for
 
-`site.sut`
+`doc-site.sut`
 ```
-#include 'login.page'
-#include 'main.page'
+#include 'doc-login.page'
+#include 'doc-main.page'
 ```
 \
 \
-`login.html`
+`doc-login.html`
 ```html
 <html>
 	<head><title>start page</title></head>
 	<body>
-		<form>
+		<form action="doc-main.html">
 			<input type="text" id="user" name="user"/>
 			<input type="text" id="pass" name="pass"/>
 			<button name="k" value="v">log in</button>
@@ -84,18 +84,18 @@ For example, for
 </html>
 ```
 \
-`login.page`
+`doc-login.page`
 ```
-page login 'file://relative/path/to/login.html' {
+page doc-login 'file://relative/path/to/doc-login.html' {
 	elemt username id 'user';
 	elemt password id 'pass';
 	elemt login-button tag-name 'button';
 }
 ```
 \
-`login.service`
+`doc-login.service`
 ```
-#page: login
+#page: doc-login
 
 username: /username
 password: /password
@@ -103,47 +103,54 @@ login-button: /login-button
 ```
 \
 \
-`main.html`
+`doc-main.html`
 ```html
 <html>
 	<head><title>simple example</title></head>
 	<body>
 		<h1>simple example</h1>
 		<p id="before">text</p>
-		<iframe src="frame.html"/>
+		<form><input type="text" value="main-1"/></form>
+		<iframe src="doc-frame.html"></iframe>
+		<form><input type="text" value="main-2"/></form>
 		<p>other content</p>
+		<form><input type="text" value="main-3"/></form>
+		<form><input type="text" value="main-4"/></form>
 		<p id="after">more text</p>
 	</body>
 </html>
 ```
 \
-`main.page`
+`doc-main.page` - with only content we're interested in outlined
 ```
-page main 'file://relative/path/to/main.html' {
+page doc-main 'file://relative/path/to/doc-main.html' {
 	elemt heading tag-name 'h1';
 	elemt first-para id 'before';
-#include 'frame.page'
+#include 'doc-frame.page'
+list of
+#include 'doc-form.page'
 	elemt last-para id 'after';
 }
 ```
 \
-`main.service`
+`doc-main.service`
 ```
-#page: main
+#page: doc-main
 
 heading: /heading
 pf: /first-para
 iframe: /iframe
+form: /form
 pl: /last-para
 ```
 \
 \
-`frame.html`
+`doc-frame.html`
 ```html
 <html>
 	<head><title>iframe</title></head>
 	<body>
-		<form><input type="text"/></form>
+		<form><input type="text" value="head"/></form>
 		<ul>
 			<li>
 				<ol>
@@ -167,21 +174,155 @@ pl: /last-para
 				</ol>
 			</li>
 		</ul>
+		<div><form><input type="text" value="foot"/></form></div>
 	</body>
 </html>
 ```
 \
-`frame.page`
+`doc-frame.page` - again, only content we're interested in is outlined
 ```
 frame iframe tag-name 'iframe' {
-	elgrp form tag-name 'form' {
-		elemt input tag-name 'input';
-	}
+#include 'doc-form.page'
 	list of elgrp outer xpath '*/ul/li' {
 		list of elemt inner xpath 'ol/li';
 	}
+	elgrp div tag-name 'div' {
+#include 'doc-form.page'
+	}
 }
 ```
+\
+`doc-frame.service`
+```
+#page: doc-main
+
+iframe: /iframe
+
+outer: /iframe/outer
+inner: /iframe/outer/inner
+```
+\
+\
+if identical content exists in multiple parts of the SUT ( e.g.,
+widgets ), it can be defined once and included in those parts by
+specifying a prefix
+
+`doc-form.page`
+```
+elgrp form xpath 'form' {
+	elemt input tag-name 'input';
+}
+```
+\
+`doc-form.service`
+```
+#page: doc-main
+
+form: /form
+input: /form/input
+```
+\
+\
+script with supporting code:
+
+```perl6
+use Test;
+
+use lib <lib t/lib>;
+
+use WebDriver2::Test::Service-Test;
+use WebDriver2::SUT::Service::Loader;
+use WebDriver2::SUT::Service;
+
+class Login-Service does WebDriver2::SUT::Service {
+	has Str:D $.name = 'doc-login';
+	
+	my IO::Path $html-file =
+			.add: 'doc-login.html'
+			with $*PROGRAM.parent.parent.add: 'content';
+	
+	method log-in ( Str:D $username, Str:D $password ) {
+		.resolve.send-keys: $username with self.get: 'username';
+		.resolve.send-keys: $password with self.get: 'password';
+		.resolve.click with self.get: 'login-button';
+	}
+}
+
+class Main-Service does WebDriver2::SUT::Service {
+	has Str:D $.name = 'doc-main';
+	
+	method interesting-text ( --> Str:D ) {
+		my Str @text;
+		@text.push: .resolve.text with self.get: 'heading';
+        @text.push: .resolve.text with self.get: 'pf';
+        @text.push: .resolve.text with self.get: 'pl';
+		@text.join: "\n";
+	}
+}
+
+class Form-Service does WebDriver2::SUT::Service {
+	has Str:D $.name = 'doc-form';
+	
+	method value ( --> Str:D ) {
+		.resolve.value with self.get: 'input';
+	}
+}
+
+class Readme-Test is WebDriver2::Test::Service-Test {
+	has Login-Service $!ls;
+	has Main-Service $!ms;
+	has Form-Service $!fs-main;
+	has Form-Service $!fs-div;
+	has Form-Service $!fs-frame;
+	
+	method new ( Str $browser = 'chrome', Int $debug = 0 ) {
+		callwith
+				:$browser,
+				:$debug,
+				sut-name => 'readme',
+				name => 'readme example',
+				description => 'service / page object example',
+				plan => 10;
+	}
+	
+	method services ( WebDriver2::SUT::Service::Loader $loader ) {
+		$!ls = Login-Service.new: $loader;
+		$!ms = Main-Service.new: $loader;
+		$!fs-main = Form-Service.new: $loader, '/iframe', 'iframe';
+		$!fs-div = Form-Service.new: $loader, '/iframe/div', 'ifd';
+	}
+	
+	method test {
+		$!ls.log-in: 'user', 'pass';
+		
+		self.is:
+				'interesting text',
+				q:to /END/,
+				simple example
+				text
+				more text
+				END
+				$!ms.interesting-text;
+		
+		
+		
+		my Str:D @results =
+                'Mirzakhani',
+                'Noether',
+                'Oh',
+                'Delta',
+                'Echo',
+                'Foxtrot',
+                'apple',
+                'banana',
+                'cantaloupe',
+				;
+		
+	}
+}
+```
+
+
 
 Extended examples can be seen in the `xt/03-service` subdirectory, which
 use resources from `xt/content` and `xt/def`.
@@ -191,9 +332,7 @@ use resources from `xt/content` and `xt/def`.
 ## HTTP::UserAgent
 
 A minor fork of HTTP::UserAgent is provided under the
-WebDriver2 directory so as to not collide with the original
-and to avoid having to `use` an author-specific package.
-Please see its license:
+WebDriver2 directory.  Please see its license:
 [LICENSE-HTTP-UserAgent](LICENSE-HTTP-UserAgent).
 
 The changes are:
@@ -316,9 +455,9 @@ welcome.
 	</tr>
 	<tr><td>close window</td>
 		<td align="center" class="complete">X</td>
-		<td align="center" class="not-started">&nbsp;</td>
-		<td align="center" class="not-started">&nbsp;</td>
-		<td align="center" class="not-started">&nbsp;</td>
+		<td align="center" class="complete">X</td>
+		<td align="center" class="complete">X</td>
+		<td align="center" class="complete">X</td>
 		<td><code>$driver.close-window</code></td>
 	</tr>
 	<tr><td>switch to window</td>
@@ -330,9 +469,9 @@ welcome.
 	</tr>
 	<tr><td>get window handles</td>
 		<td align="center" class="complete">X</td>
-		<td align="center" class="not-started">&nbsp;</td>
-		<td align="center" class="not-started">&nbsp;</td>
-		<td align="center" class="not-started">&nbsp;</td>
+		<td align="center" class="complete">X</td>
+		<td align="center" class="complete">X</td>
+		<td align="center" class="complete">X</td>
 		<td><code>$driver.window-handles</code></td>
 	</tr>
 	<tr><td>new window</td>
@@ -507,7 +646,7 @@ welcome.
 		<td align="center" class="complete">X</td>
 		<td align="center" class="complete">X</td>
 		<td align="center" class="complete">X</td>
-		<td><code>$element.$enabled</code></td>
+		<td><code>$element.enabled</code></td>
 	</tr>
 	<tr><td>get computed role</td>
 		<td align="center" class="not-started">&nbsp;</td>
@@ -664,10 +803,10 @@ welcome.
 		<td><code></code></td>
 	</tr>
 	<tr><td>displayed ( optional endpoint )</td>
-		<td align="center" class="not-started">&nbsp;</td>
-		<td align="center" class="not-started">&nbsp;</td>
-		<td align="center" class="not-started">&nbsp;</td>
-		<td align="center" class="not-started">&nbsp;</td>
+		<td align="center" class="complete">X</td>
+		<td align="center" class="complete">X</td>
+		<td align="center" class="complete">X</td>
+		<td align="center" class="not-started">! apple does not implement</td>
 		<td><code>$element.displayed</code></td>
 	</tr>
 </tbody></table>

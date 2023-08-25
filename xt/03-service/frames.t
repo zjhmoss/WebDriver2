@@ -137,7 +137,7 @@ class Frames-Test
 		self.is:
 				'basic content parent frame is page',
 				$!service.page,
-			$!service.basic-item.parent-frame.resolve;
+				$!service.basic-item.parent-frame.resolve;
 		self.is:
 				'internal node parent frame is page',
 				$!service.page,
