@@ -13,17 +13,20 @@ use WebDriver2::Test::Config-From-File;
 my IO::Path $html-file =
 		.add: 'test.html' with $*PROGRAM.parent.parent.add: 'content';
 
-class Local is WebDriver2::Test does WebDriver2::Test::Config-From-File {
+class Local does WebDriver2::Test does WebDriver2::Test::Config-From-File {
 	has Bool $!screenshot;
 
-	method new ( Str $browser? is copy, Int :$debug is copy ) {
-		self.set-from-file: $browser, $debug;
-		self.bless:
-				:$browser,
-				:$debug,
-				plan => 39,
-				name => 'local',
-				description => 'local test';
+	method new ( Str $browser? is copy, Int:D :$debug = 0 ) {
+		self.set-from-file: $browser; #, $debug;
+		my Local:D $self =
+				self.bless:
+						:$browser,
+						:$debug,
+						plan => 39,
+						name => 'local',
+						description => 'local test';
+		$self.init;
+		$self;
 	}
 
 	method test {
@@ -191,7 +194,7 @@ class Local is WebDriver2::Test does WebDriver2::Test::Config-From-File {
 
 sub MAIN(
 		Str $browser?,
-		Int :$debug
+		Int:D :$debug = 0
 ) {
 	.execute with Local.new: $browser, :$debug;
 }

@@ -21,6 +21,8 @@ my IO::Path $html-file =
 
 class Mixed does WebDriver2::SUT::Service {
 	has Mixed-Content @!content;
+	
+	submethod BUILD ( WebDriver2::Driver:D :$!driver ) { }
 
 	method name ( --> Str:D ) { 'mixed' }
 
@@ -67,25 +69,56 @@ class Mixed does WebDriver2::SUT::Service {
 }
 
 class Mixed-Test
-		is WebDriver2::Test::Service-Test
+		does WebDriver2::Test::Service-Test
 		does WebDriver2::Test::Config-From-File
 {
 	
 	has Mixed $!mixed;
-
-	method services ( WebDriver2::SUT::Service::Loader $loader ) {
-		$!mixed = Mixed.new: $loader;
+	
+	submethod BUILD (
+			Str   :$!browser,
+			Str:D :$!name,
+			Str:D :$!description,
+			Str:D :$!sut-name,
+			Int   :$!plan,
+			Int   :$!debug = 0
+	) { }
+	
+	submethod TWEAK (
+#			Str   :$browser is copy,
+			Str:D :$name,
+			Str:D :$description,
+			Str:D :$sut-name,
+			Int   :$plan,
+			Int   :$debug
+	) {
+		$!sut = WebDriver2::SUT::Build.page: { self.driver.top }, $!sut-name, debug => self.debug;
+		$!loader =
+				WebDriver2::SUT::Service::Loader.new:
+						driver => self.driver,
+						:$!browser,
+						:$sut-name,
+						:$debug;
+	}
+	
+	
+	method services {
+		$!loader.load-elements: $!mixed = Mixed.new: :$.driver;
 	}
 
 	method new ( Str $browser? is copy, Int :$debug is copy ) {
-		self.set-from-file: $browser, $debug;
-		callwith
-				:$browser,
-				:$debug,
-				sut-name => 'mixed',
-				name => 'mixed',
-				description => 'tests for various feature levels',
-				plan => 23;
+		self.set-from-file: $browser; # , $debug;
+		my Mixed-Test:D $self =
+				callwith
+						:$browser,
+						:$debug,
+						sut-name => 'mixed',
+						name => 'mixed',
+						description => 'tests for various feature levels',
+						plan => 23;
+		$self.init;
+		$self.services;
+		$self;
 	}
 	
 	method test {
@@ -121,7 +154,7 @@ class Mixed-Test
 
 sub MAIN(
 		Str $browser?,
-		Int :$debug
+		Int:D :$debug = 0
 ) {
 	.execute with Mixed-Test.new: $browser, :$debug;
 }

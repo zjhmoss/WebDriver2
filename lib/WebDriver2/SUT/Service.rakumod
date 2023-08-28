@@ -1,7 +1,9 @@
 use WebDriver2;
 use WebDriver2::SUT::Tree;
+#use WebDriver2::Test::Adapter;
+use WebDriver2::Test::Debugging;
 use WebDriver2::SUT::Navigator;
-use WebDriver2::SUT::Service::Loader;
+#use WebDriver2::SUT::Service::Loader;
 
 unit role WebDriver2::SUT::Service; # does WebDriver2;
 
@@ -19,27 +21,29 @@ has WebDriver2::SUT::Tree::ANode %.elements is rw;
 has Str:D $.prefix = '';
 has Str:D $.key-prefix = '';
 
-submethod BUILD ( WebDriver2:D :$!driver, Str:D :$!key-prefix, Str:D :$!prefix ) { }
+#submethod BUILD ( WebDriver2:D :$!driver, Str:D :$!key-prefix, Str:D :$!prefix ) { }
 
 method name ( --> Str:D ) { ... }
 
-method new (
-		WebDriver2::SUT::Service::Loader:D $loader,
-		Str $prefix = '',
-		Str $key-prefix = ''
-) {
-	my WebDriver2::SUT::Service $self =
-			self.bless: driver => $loader.driver,
-					:$key-prefix,
-					:$prefix;
-	
-	$self.elements = $loader.load-elements: $self.name, $key-prefix, $prefix;
-	$self;
-}
+#method new (
+##		WebDriver2::SUT::Service::Loader:D $loader,
+#		WebDriver2:D $driver,
+#		Str $prefix = '',
+#		Str $key-prefix = ''
+#) {
+#	my WebDriver2::SUT::Service $self =
+#			self.bless:
+#					:$driver,
+#					:$key-prefix,
+#					:$prefix;
+#	
+##	$self.elements = $loader.load-elements: $self.name, $prefix, $key-prefix;
+#	$self;
+#}
 
 method add-element ( Str $k, WebDriver2::SUT::Tree::ANode $v ) {
 	warn "overwriting $k" if %!elements{ $k }:exists;
-	%!elements{ $k } = $v;
+	%!elements{ $k } = "$!prefix$v";
 }
 
 method get ( Str:D $name --> WebDriver2::SUT::Tree::ANode:D ) {

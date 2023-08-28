@@ -13,17 +13,20 @@ use WebDriver2::Command::Element::Locator::Tag-Name;
 my $file = .add: 'lists.html' with $*PROGRAM.parent.parent.add: 'content';
 
 class Test-Nav-To-Frame
-		is WebDriver2::Test
+		does WebDriver2::Test
 		does WebDriver2::Test::Config-From-File
 {
-	method new ( Str $browser? is copy, Int :$debug is copy ) {
-		self.set-from-file: $browser, $debug;
-		self.bless:
-				:$browser,
-				:$debug,
-				plan => 4,
-				name => 'nesting frames',
-				description => 'nesting frames tests';
+	method new ( Str $browser? is copy, Int:D :$debug = 0 ) {
+		self.set-from-file: $browser; #, $debug;
+		my Test-Nav-To-Frame:D $self=
+				self.bless:
+						:$browser,
+						:$debug,
+						plan => 4,
+						name => 'nesting frames',
+						description => 'nesting frames tests';
+		$self.init;
+		$self;
 	}
 	method test {
 		$.driver.navigate: 'file://' ~ $file.absolute;
@@ -66,7 +69,7 @@ class Test-Nav-To-Frame
 
 sub MAIN(
 		Str $browser?,
-		Int :$debug
+		Int:D :$debug = 0
 ) {
 	.execute with Test-Nav-To-Frame.new: $browser, :$debug;
 }

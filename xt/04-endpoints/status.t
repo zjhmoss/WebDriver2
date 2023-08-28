@@ -9,16 +9,19 @@ use WebDriver2::Test;
 use WebDriver2::Command::Result;
 use WebDriver2::Command::Execution-Status;
 
-class Status-Test is WebDriver2::Test does WebDriver2::Test::Config-From-File {
+class Status-Test does WebDriver2::Test does WebDriver2::Test::Config-From-File {
 	
-	method new ( Str $browser? is copy, Int :$debug is copy ) {
-		self.set-from-file: $browser, $debug;
-		self.bless:
-				:$browser,
-				:$debug,
-				plan => 7,
-				name => 'status',
-				description => 'status test';
+	method new ( Str $browser? is copy, Int:D :$debug = 0 ) {
+		self.set-from-file: $browser; # , $debug;
+		my Status-Test:D $self =
+				self.bless:
+						:$browser,
+						:$debug,
+						plan => 7,
+						name => 'status',
+						description => 'status test';
+		$self.init;
+		$self;
 	}
 	
 	method test {
@@ -39,7 +42,7 @@ class Status-Test is WebDriver2::Test does WebDriver2::Test::Config-From-File {
 
 sub MAIN(
 		Str $browser?,
-		Int :$debug
+		Int:D :$debug = 0
 ) {
 	.execute with Status-Test.new: $browser, :$debug;
 }

@@ -18,10 +18,12 @@ use WebDriver2::Until::Command;
 
 class Root-Content does WebDriver2::SUT::Service {
 	my IO::Path $html-file =
-			.add: 'doc-example.html' with $*PROGRAM.parent.parent.add: 'content';
-
+			.add: 'example.html' with $*PROGRAM.parent.parent.add: 'content';
+	
+	submethod BUILD ( WebDriver2::Driver:D :$!driver ) { }
+	
 	method name (--> Str:D) {
-		'doc-example';
+		'example';
 	}
 
 	method heading ( --> Str:D ) {
@@ -60,8 +62,11 @@ class Root-Content does WebDriver2::SUT::Service {
 
 
 class Original-Frame does WebDriver2::SUT::Service {
+	
+	submethod BUILD ( WebDriver2::Driver:D :$!driver ) { }
+	
 	method name (--> Str:D) {
-			'example'
+			'example-original-frame'
 	}
 
 	method heading ( --> Str:D ) {
@@ -80,9 +85,11 @@ class Original-Frame does WebDriver2::SUT::Service {
 }
 
 class Replacement-Frame does WebDriver2::SUT::Service {
-
+	
+	submethod BUILD ( WebDriver2::Driver:D :$!driver ) { }
+	
 	method name (--> Str:D) {
-			'example'
+			'example-replacement-frame'
 	}
 
 	method heading ( --> Str:D ) {
@@ -109,8 +116,11 @@ class Replacement-Frame does WebDriver2::SUT::Service {
 }
 
 class Nested-Frame does WebDriver2::SUT::Service {
+	
+	submethod BUILD ( WebDriver2::Driver:D :$!driver ) { }
+	
 	method name ( --> Str:D ) {
-		'example'
+		'example-nested-frame'
 	}
 
 	method heading ( --> Str:D ) {
@@ -129,30 +139,60 @@ class Nested-Frame does WebDriver2::SUT::Service {
 }
 
 class Example-Test
-	is WebDriver2::Test::Service-Test
+	does WebDriver2::Test::Service-Test
 	does WebDriver2::Test::Config-From-File
 {
 	has Root-Content $!mls;
 	has Original-Frame $!of;
 	has Replacement-Frame $!rf;
 	has Nested-Frame $!nf;
-
-	method new ( Str $browser? is copy, Int :$debug is copy ) {
-			self.set-from-file: $browser, $debug;
-			callwith
-					:$browser,
-					:$debug,
-					sut-name => 'example',
-					name => 'example test name',
-					description => 'example test description',
-					plan => 19;
+	
+	submethod BUILD (
+			Str   :$!browser,
+			Str:D :$!name,
+			Str:D :$!description,
+			Str:D :$!sut-name,
+			Int   :$!plan,
+			Int   :$!debug = 0
+	) { }
+	
+	submethod TWEAK (
+#			Str   :$browser is copy,
+			Str:D :$name,
+			Str:D :$description,
+			Str:D :$sut-name,
+			Int   :$plan,
+			Int   :$debug
+	) {
+		$!sut = WebDriver2::SUT::Build.page: { self.driver.top }, $!sut-name, debug => self.debug;
+		$!loader =
+				WebDriver2::SUT::Service::Loader.new:
+						driver => self.driver,
+						:$!browser,
+						:$sut-name,
+						:$debug;
 	}
 
-	method services ( WebDriver2::SUT::Service::Loader $loader ) {
-		$!mls = Root-Content.new: $loader;
-		$!of = Original-Frame.new: $loader;
-		$!rf = Replacement-Frame.new: $loader;
-		$!nf = Nested-Frame.new: $loader;
+	method new ( Str $browser? is copy, Int:D :$debug = 0 ) {
+			self.set-from-file: $browser; # , $debug;
+			my Example-Test:D $self =
+					callwith
+							:$browser,
+							:$debug,
+							sut-name => 'example',
+							name => 'example test name',
+							description => 'example test description',
+							plan => 19;
+		$self.init;
+		$self.services;
+		$self;
+	}
+
+	method services {
+		$!loader.load-elements: $!mls = Root-Content.new: :$.driver;
+		$!loader.load-elements: $!of = Original-Frame.new: :$.driver;
+		$!loader.load-elements: $!rf = Replacement-Frame.new: :$.driver;
+		$!loader.load-elements: $!nf = Nested-Frame.new: :$.driver;
 	}
 
 	method test {
@@ -202,7 +242,7 @@ class Example-Test
 
 sub MAIN(
 	Str $browser?,
-	Int :$debug
+	Int:D :$debug = 0
 ) {
 	.execute with Example-Test.new: $browser, :$debug;
 }

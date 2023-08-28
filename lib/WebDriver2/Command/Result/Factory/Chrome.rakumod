@@ -92,6 +92,7 @@ method value( $value ) {
 }
 
 method basic( WebDriver2::HTTP::Response $response ) {
+	$response.content.raku.say;
 #	my $data = from-json( $response.content );
 	\(
 			str => $response.content,

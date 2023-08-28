@@ -46,7 +46,7 @@ sub MAIN( Int :$debug = 0 ) {
 	my Str @frames = <frames frame iframe>;
 	my WebDriver2 $driver =  WebDriver2::Mock-Driver.new;
 	my WebDriver2::SUT::Tree::SUT $sut =
-			WebDriver2::SUT::Build.page: -> { $driver }, 'frames'; #  't/def/frames.sut'.IO;
+			WebDriver2::SUT::Build.page: { $driver }, 'frames'; #  't/def/frames.sut'.IO;
 
 	my Frame-Recorder $frames = Frame-Recorder.new;
 	.accept: $frames with $sut.get: 'frames';

@@ -1,0 +1,10 @@
+#page: example
+
+# replacement frame
+rep-h2: /container-form/switchable-frame-replacement/rep-h2
+# - nested frame
+nested-frame: /container-form/switchable-frame-replacement/nested-frame
+nested-h2: /container-form/switchable-frame-replacement/nested-frame/nested-h2
+nested-li: /container-form/switchable-frame-replacement/nested-frame/nested-list/nested-item
+# replacement frame
+rep-li: /container-form/switchable-frame-replacement/replacement-list/replacement-item

@@ -1,8 +1,11 @@
 page doc-main 'file://relative/path/to/doc-main.html' {
+	elgrp div tag-name 'div' {
+		elemt p xpath 'p';
+	}
 	elemt heading tag-name 'h1';
 	elemt first-para id 'before';
-#include 'doc-frame.page'
 list of 
 #include 'doc-form.page'
+#include 'doc-frame.page'
 	elemt last-para id 'after';
 }

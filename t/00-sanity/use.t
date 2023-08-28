@@ -2,7 +2,7 @@ use lib <lib t/lib>;
 
 use Test;
 
-plan 47;
+plan 45;
 
 use-ok 'WebDriver2::SUT::Service::Loader';
 use-ok 'WebDriver2::SUT::Build::Page';
@@ -42,9 +42,9 @@ use-ok 'WebDriver2::Driver::Chrome';
 use-ok 'WebDriver2::Test::Config-From-File';
 use-ok 'WebDriver2::Test::Locating-Test';
 use-ok 'WebDriver2::Test::PO-Test';
-use-ok 'WebDriver2::Test::PO-TestR';
+#use-ok 'WebDriver2::Test::PO-TestR';
 use-ok 'WebDriver2::Test::Service-Test';
-use-ok 'WebDriver2::Test::Service-TestR';
+#use-ok 'WebDriver2::Test::Service-TestR';
 use-ok 'WebDriver2::Test::Template';
 use-ok 'WebDriver2::Test::TestR';
 

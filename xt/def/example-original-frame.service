@@ -1,0 +1,6 @@
+#page: example
+
+# original frame
+orig-h2: /container-form/switchable-frame-original/original-content
+# the-ul: /container-form/switchable-frame-original/original-list
+a-fli: /container-form/switchable-frame-original/original-list/original-item

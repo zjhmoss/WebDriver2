@@ -20,6 +20,8 @@ class ML does WebDriver2::SUT::Service {
     my IO::Path $html-file =
             .add: 'ml.html' with $*PROGRAM.parent.parent.add: 'content';
 
+    submethod BUILD ( WebDriver2::Driver:D :$!driver ) { }
+
     method name (--> Str:D) {
         'ml'
     }
@@ -38,6 +40,9 @@ class ML does WebDriver2::SUT::Service {
 }
 
 class L does WebDriver2::SUT::Service {
+    
+    submethod BUILD ( WebDriver2::Driver:D :$!driver ) { }
+    
     method name (--> Str:D) {
         'l'
     }
@@ -59,6 +64,8 @@ class L does WebDriver2::SUT::Service {
 }
 
 class R does WebDriver2::SUT::Service {
+    
+    submethod BUILD ( WebDriver2::Driver:D :$!driver ) { }
 
     method name (--> Str:D) {
         'r'
@@ -89,7 +96,7 @@ class R does WebDriver2::SUT::Service {
 }
 
 class LR
-        is WebDriver2::Test::Service-Test
+        does WebDriver2::Test::Service-Test
         does WebDriver2::Test::Config-From-File
 {
 
@@ -97,21 +104,51 @@ class LR
     has L $!ls;
     has R $!rs;
 
-    method new ( Str $browser? is copy, Int :$debug is copy ) {
-        self.set-from-file: $browser, $debug;
-        callwith
-                :$browser,
-                :$debug,
-                sut-name => 'lr',
-                name => 'lr',
-                description => 'lr service and frames test',
-                plan => 4;
+    submethod BUILD (
+            Str   :$!browser,
+            Str:D :$!name,
+            Str:D :$!description,
+            Str:D :$!sut-name,
+            Int   :$!plan,
+            Int   :$!debug = 0
+    ) { }
+
+    submethod TWEAK (
+#			Str   :$browser is copy,
+            Str:D :$name,
+            Str:D :$description,
+            Str:D :$sut-name,
+            Int   :$plan,
+            Int   :$debug
+    ) {
+        $!sut = WebDriver2::SUT::Build.page: { self.driver.top }, $!sut-name, debug => self.debug;
+        $!loader =
+                WebDriver2::SUT::Service::Loader.new:
+                        driver => self.driver,
+                        :$!browser,
+                        :$sut-name,
+                        :$debug;
     }
 
-    method services ( WebDriver2::SUT::Service::Loader $loader ) {
-        $!mls = ML.new: $loader;
-        $!ls = L.new: $loader;
-        $!rs = R.new: $loader;
+    method new ( Str $browser? is copy, Int :$debug is copy ) {
+        self.set-from-file: $browser; # , $debug;
+        my LR:D $self =
+                callwith
+                        :$browser,
+                        :$debug,
+                        sut-name => 'lr',
+                        name => 'lr',
+                        description => 'lr service and frames test',
+                        plan => 4;
+        $self.init;
+        $self.services;
+        $self;
+    }
+
+    method services {
+        $!loader.load-elements: $!mls = ML.new: :$.driver;
+        $!loader.load-elements: $!ls = L.new: :$.driver;
+        $!loader.load-elements: $!rs = R.new: :$.driver;
     }
 
     method test {
@@ -129,7 +166,7 @@ class LR
 
 sub MAIN(
         Str $browser?,
-        Int :$debug
+        Int:D :$debug = 0
 ) {
     .execute with LR.new: $browser, :$debug;
 }

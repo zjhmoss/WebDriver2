@@ -14,6 +14,7 @@ has Str $!selector is required;
 submethod BUILD( :$!strategy, :$!selector ) { }
 
 method as-data() {
+say "using => $!strategy, value => $!selector";
 	{ using => $!strategy.Str, value => $!selector }
 }
 

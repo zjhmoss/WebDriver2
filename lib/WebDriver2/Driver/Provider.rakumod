@@ -6,6 +6,8 @@ use WebDriver2::Driver::Chrome;
 use WebDriver2::Driver::Edge;
 use WebDriver2::Driver::Firefox;
 use WebDriver2::Driver::Safari;
+use WebDriver2::Test::Debugging;
+use WebDriver2::Test::Config-From-File;
 
 my WebDriver2 %driver = (
 		chrome => WebDriver2::Driver::Chrome,
@@ -16,12 +18,18 @@ my WebDriver2 %driver = (
 
 my WebDriver2 $driver;
 
-unit role WebDriver2::Driver::Provider;
+unit role WebDriver2::Driver::Provider
+		does WebDriver2::Test::Debugging
+		does WebDriver2::Test::Config-From-File;
+
+has Str $.browser;
+
+has Int $.close-delay is rw = 3;
 
 #method os ( --> Str:D ) { ... }
 method browser ( --> Str:D ) { ... }
-method debug ( --> Int ) { ... }
 
 method driver ( --> WebDriver2:D ) {
-	$driver //= %driver{ $.browser }.new: :$.debug;
+	self.set-from-file: $!browser, #`[ $.debug ] unless $driver;
+	$driver ||= %driver{ self.browser }.new: :$.debug;
 }

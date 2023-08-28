@@ -33,7 +33,7 @@ class WebDriver2::Driver does WebDriver2 {
 
 	submethod BUILD(
 			:$!server,
-			Int :$!debug = 0
+			Int :$!debug = 2
 	) {
 		my Bool $throw-exceptions = ( $!debug >= 4 );
 		$!ua = (
@@ -69,6 +69,11 @@ class WebDriver2::Driver does WebDriver2 {
 	
 	method curr-frame( --> WebDriver2::Command::Param::ID-or-Index ) {
 		@!frames ?? @!frames[ * - 1 ] !! WebDriver2::Command::Param::ID-or-Index
+	}
+	
+	method push-frame ( WebDriver2::Command::Param::ID-or-Index:D $frame ) {
+		say "pushing $frame onto", @!frames.join: '\n' if $!debug;
+		@!frames.push: $frame;
 	}
 
 	method session {
@@ -292,8 +297,11 @@ class WebDriver2::Driver does WebDriver2 {
 	}
 	
 	method frame( WebDriver2::Model::Element $element --> WebDriver2::Model::Frame ) {
-		return WebDriver2::Internal-Frame.new: $element, $!debug
-			if $element.tag-name.lc eq 'frame' | 'iframe';
+		if $element.tag-name.lc eq 'frame' | 'iframe' {
+#			self.push-frame: $element.internal-id;
+.say for @!frames;
+			return WebDriver2::Internal-Frame.new: $element, $!debug;
+		}
 		note 'no conversion to frame';
 		# TODO : raise exception
 	}
@@ -462,7 +470,7 @@ class WebDriver2::Driver does WebDriver2 {
 		my WebDriver2::Command::Result::Switch-To $switch =
 			WebDriver2::Command::Switch-To.new( :$frame )
 				.execute-with: self;
-		@!frames.push: $frame;
+		self.push-frame: $frame;
 		say 'PUSH ' ~ @!frames.gist if $!debug;
 		self.debug: $switch;
 	}
@@ -692,6 +700,9 @@ my class WebDriver2::Internal-Frame
 	}
 	
 	method is-curr-frame( --> Bool:D ) {
+self!WebDriver2::Internal-Element::driver.curr-frame.say;
+self.internal-id.say;
+say so self.stale;
 		self!WebDriver2::Internal-Element::driver.curr-frame ~~
 				self.internal-id
 			and not self.stale
@@ -706,6 +717,7 @@ my class WebDriver2::Internal-Frame
 	}
 	
 	method switch-to( --> WebDriver2::Model::Frame ) {
+say 'SELF SWITCH-TO';
 		my WebDriver2::Driver $driver = self!WebDriver2::Internal-Element::driver;
 		my Str $iid = self.internal-id;
 		if self.debug {
@@ -714,17 +726,21 @@ my class WebDriver2::Internal-Frame
 			$msg.say;
 		}
 
-		$driver!WebDriver2::Driver::switch-to( self.internal-id )
-			if
-				$driver.curr-frame and $iid and $driver.curr-frame ne $iid
+#		$driver!WebDriver2::Driver::switch-to( $iid )
+			if (
+				$driver.curr-frame.defined and $iid and $driver.curr-frame ne $iid
 				or not $driver.curr-frame.defined # and $iid
 #				or not $iid and $driver.curr-frame.defined;
-				;
-		self
+)				{ $driver!WebDriver2::Driver::switch-to: $iid; };
+		self;
+#		$driver;
 	}
 
 	method context( --> WebDriver2::Model::Context:D ) {
+say 'CONTEXT CHECK ', so self.is-curr-frame;
 		self.switch-to unless self.is-curr-frame;
+#		self!WebDriver2::Internal-Element::driver
+#		self;
 		self!WebDriver2::Internal-Element::driver
 	}
 }

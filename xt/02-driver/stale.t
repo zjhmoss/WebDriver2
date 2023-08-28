@@ -10,15 +10,18 @@ use WebDriver2::Test::Config-From-File;
 
 my $html-file = .add: 'test.html' with $*PROGRAM.parent.parent.add: 'content';
 
-class Stale is WebDriver2::Test does WebDriver2::Test::Config-From-File {
-	method new ( Str $browser? is copy, Int :$debug is copy ) {
-		self.set-from-file: $browser, $debug;
-		self.bless:
-				:$browser,
-				:$debug,
-				plan => 7,
-				name => 'stale',
-				description => 'stale handling';
+class Stale does WebDriver2::Test does WebDriver2::Test::Config-From-File {
+	method new ( Str $browser? is copy, Int:D :$debug = 0 ) {
+		self.set-from-file: $browser; #, $debug;
+		my Stale:D $self =
+				self.bless:
+						:$browser,
+						:$debug,
+						plan => 7,
+						name => 'stale',
+						description => 'stale handling';
+		$self.init;
+		$self;
 	}
 	method test {
 		self.driver.navigate: 'file://' ~ $html-file.absolute;
@@ -66,7 +69,7 @@ class Stale is WebDriver2::Test does WebDriver2::Test::Config-From-File {
 
 sub MAIN (
 		Str $browser?,
-		Int :$debug = 0
+		Int:D :$debug = 0
 ) {
 	.execute with Stale.new: $browser, :$debug;
 }

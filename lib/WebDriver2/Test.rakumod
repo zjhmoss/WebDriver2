@@ -3,18 +3,23 @@ use MIME::Base64;
 
 use WebDriver2::Command::Element::Locator;
 use WebDriver2::Test::Locating-Test;
-use WebDriver2::Test::TestR;
 use WebDriver2::Driver::Provider;
+use WebDriver2::Test::Adapter;
+use WebDriver2::Test::Template;
+use WebDriver2::Test::Debugging;
 
-unit class WebDriver2::Test
-		does WebDriver2::Test::TestR
-#		does WebDriver2::Driver::Provider
-		does WebDriver2::Test::Locating-Test;
+unit role WebDriver2::Test
+#		does WebDriver2::Test::TestR
+		does WebDriver2::Test::Adapter
+		does WebDriver2::Test::Template
+		does WebDriver2::Driver::Provider
+		does WebDriver2::Test::Locating-Test
+		does WebDriver2::Test::Debugging;
 
 method pre-test { }
 method test { ... }
 method post-test { }
-method done-testing { done-testing }
+#method done-testing { done-testing }
 
 method init {
 	self.lives-ok: 'session created', { $.driver.session };
@@ -56,7 +61,7 @@ method cleanup {
 
 method close {
 	say "\nclosing in";
-	.say, sleep 1 for ( 1 .. $!close-delay ).reverse;
+	.say, sleep 1 for ( 1 .. $.close-delay ).reverse;
 	
 	$.driver.delete-session;
 }
