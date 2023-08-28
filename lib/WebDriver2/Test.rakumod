@@ -32,7 +32,6 @@ method handle-test-failure ( Str $descr ) {
 }
 
 method handle-error ( Exception $x ) {
-	say 'ERROR; printing frames';
 	.raku.say for $.driver.frames;
 	self.screenshot: $x.WHAT.Str;
 }

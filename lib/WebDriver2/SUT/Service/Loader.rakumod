@@ -57,7 +57,6 @@ method load-elements ( WebDriver2::SUT::Service:D $svc ) {
 #	my WebDriver2::SUT::Tree::URL $url;
 	my Str $svc-fn = .[*- 1] with $svc.name.lc.split: '::';
 	say 'LOADING ', $svc-fn if $!debug;
-say "PREFIX $prefix";
 	for $!def-dir.add("$svc-fn.service").IO.lines -> Str $line {
 		if $line ~~ /^\s*\#page\:\s*\S+/ {
 			$page = $!sut.get: $line.split(/\:/, 2)[1].trim;
@@ -68,10 +67,8 @@ say "PREFIX $prefix";
 		next if $line ~~ /^\s*[\#.*]?\s*$/;
 		die 'no page set' unless $nav and $page;
 		($k, $v) = $line.split(/\:/, 2)>>.trim;
-say "$k : $v";
 		$k = $key-prefix ~ '-' ~ $k if $key-prefix;
 		die "element named $k already set" if %elements{$k}:exists;
-say "$prefix$v";
 		%elements{$k} = $nav.traverse: "$prefix$v";
 	}
 	$svc.elements = %elements;

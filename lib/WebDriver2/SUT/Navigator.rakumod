@@ -57,7 +57,6 @@ class WebDriver2::SUT::Navigator {
 		}
 #		self.traverse if $nav-path.abs;
 		if $nav-path.abs {
-say 'abs path - to root';
 			self.traverse.children>>.name>>.say;
 		}
 		for $nav-path.flat -> Str $part {

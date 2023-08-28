@@ -204,10 +204,6 @@ class WebDriver2::SUT::Tree::Element
 		$v.visit-depth-element: self;
 	}
 	method resolve ( --> WebDriver2::Model::Element:D ) {
-$!name.say;
-$!locator.raku.say;
-#$!parent.gist.say;
-#$!parent.resolve.gist.say;
 		$!parent.resolve.element: $!locator
 	}
 }
@@ -438,7 +434,6 @@ class WebDriver2::SUT::Tree::List-Item
 	}
 	method resolve { $!el }
 	method resolve-all {
-say 'RESOLVE ALL';
 		$!parent.resolve.elements: $!locator
 	}
 	method accept ( WebDriver2::SUT::Tree::Visitor:D $v ) {
@@ -534,15 +529,9 @@ class WebDriver2::SUT::Tree::Frame
 	}
 	method resolve ( --> WebDriver2::Model::Context:D ) {
 		if not $!frame or not $!frame.is-curr-frame or $!frame.stale {
-say 'RESOLVING FRAME';
 			$!frame = ( $!parent.resolve.element: $!locator ).frame;
-say 'SWITCHING TO AFTER RESOLVE';
 			$!frame.switch-to;
-		} else {
-say 'KEEPING FRAME';
 		}
-say 'RETURNING CONTEXT';
-		
 		$!frame.context.element: WebDriver2::Command::Element::Locator::Tag-Name.new: 'body';
 	}
 	method present ( --> WebDriver2::Model::Element ) {

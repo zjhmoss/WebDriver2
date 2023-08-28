@@ -298,8 +298,6 @@ class WebDriver2::Driver does WebDriver2 {
 	
 	method frame( WebDriver2::Model::Element $element --> WebDriver2::Model::Frame ) {
 		if $element.tag-name.lc eq 'frame' | 'iframe' {
-#			self.push-frame: $element.internal-id;
-.say for @!frames;
 			return WebDriver2::Internal-Frame.new: $element, $!debug;
 		}
 		note 'no conversion to frame';
@@ -700,9 +698,6 @@ my class WebDriver2::Internal-Frame
 	}
 	
 	method is-curr-frame( --> Bool:D ) {
-self!WebDriver2::Internal-Element::driver.curr-frame.say;
-self.internal-id.say;
-say so self.stale;
 		self!WebDriver2::Internal-Element::driver.curr-frame ~~
 				self.internal-id
 			and not self.stale
@@ -737,7 +732,6 @@ say 'SELF SWITCH-TO';
 	}
 
 	method context( --> WebDriver2::Model::Context:D ) {
-say 'CONTEXT CHECK ', so self.is-curr-frame;
 		self.switch-to unless self.is-curr-frame;
 #		self!WebDriver2::Internal-Element::driver
 #		self;

@@ -1,7 +1,6 @@
 use JSON::Tiny;
 use WebDriver2::HTTP::Response;
 use WebDriver2;
-#use WebDriver2::Driver::Server;
 
 use WebDriver2::Command::Result;
 use WebDriver2::Command::Execution-Status;
@@ -33,7 +32,6 @@ role WebDriver2::Command[::T] {
 			--> WebDriver2::HTTP::Request
 	) {
 		my Str @new-command = 'session', $driver.session-id, |@command;
-@new-command.raku.say;
 		return self!request: $driver, $method, @new-command;
 	}
 	
