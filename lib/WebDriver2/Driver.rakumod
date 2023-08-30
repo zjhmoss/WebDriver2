@@ -712,7 +712,6 @@ my class WebDriver2::Internal-Frame
 	}
 	
 	method switch-to( --> WebDriver2::Model::Frame ) {
-say 'SELF SWITCH-TO';
 		my WebDriver2::Driver $driver = self!WebDriver2::Internal-Element::driver;
 		my Str $iid = self.internal-id;
 		if self.debug {

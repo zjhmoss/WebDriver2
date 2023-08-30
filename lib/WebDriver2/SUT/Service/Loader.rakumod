@@ -61,7 +61,7 @@ method load-elements ( WebDriver2::SUT::Service:D $svc ) {
 		if $line ~~ /^\s*\#page\:\s*\S+/ {
 			$page = $!sut.get: $line.split(/\:/, 2)[1].trim;
 #			$url = $page.url;
-			$nav = WebDriver2::SUT::Navigator.new: tree => $page, debug => 2;
+			$nav = WebDriver2::SUT::Navigator.new: tree => $page, :$!debug;
 			next;
 		}
 		next if $line ~~ /^\s*[\#.*]?\s*$/;

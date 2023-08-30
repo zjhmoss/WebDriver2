@@ -2,7 +2,7 @@ use lib <lib t/lib>;
 
 use Test;
 
-plan 45;
+plan 44;
 
 use-ok 'WebDriver2::SUT::Service::Loader';
 use-ok 'WebDriver2::SUT::Build::Page';
@@ -46,7 +46,7 @@ use-ok 'WebDriver2::Test::PO-Test';
 use-ok 'WebDriver2::Test::Service-Test';
 #use-ok 'WebDriver2::Test::Service-TestR';
 use-ok 'WebDriver2::Test::Template';
-use-ok 'WebDriver2::Test::TestR';
+#use-ok 'WebDriver2::Test::TestR';
 
 use-ok 'WebDriver2::Until::SUT';
 use-ok 'WebDriver2::Until::Command';

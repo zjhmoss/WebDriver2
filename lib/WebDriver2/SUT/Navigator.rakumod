@@ -57,7 +57,8 @@ class WebDriver2::SUT::Navigator {
 		}
 #		self.traverse if $nav-path.abs;
 		if $nav-path.abs {
-			self.traverse.children>>.name>>.say;
+			my WebDriver2::SUT::Tree::ANode $n = self.traverse;
+			$n.children>>.name>>.say if $!debug > 1;
 		}
 		for $nav-path.flat -> Str $part {
 			if $part eq '..' {
