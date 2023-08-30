@@ -568,7 +568,6 @@ class WebDriver2::SUT::Tree::Page
 		my Str $name = $child.name;
 		die "child with name $name already exists"
 				if %!children{ $name }:exists;
-say 'adding ', $child.name;
 		%!children{ $name } = $child;
 		$child.parent = self;
 		$child.parent-frame = self;

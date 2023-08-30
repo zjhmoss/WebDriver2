@@ -18,15 +18,50 @@ instantiation:
 use Test;
 use WebDriver2::Test;
 
-class MyTest is WebDriver2::Test {
-	method new ( Str $browser, Int $debug ) {
-		...
-		self.bless:
-			:$browser,
-			:$debug,
-			plan => 42,
-			name => 'mytest',
-			description => 'my test';
+my IO::Path $html-file =
+		.add: 'test.html' with $*PROGRAM.parent.parent.add: 'content';
+
+class Local does WebDriver2::Test {
+	has Bool $!screenshot;
+	
+	method new ( Str $browser? is copy, Int:D :$debug = 0 ) {
+		self.set-from-file: $browser; #, $debug;
+		my Local:D $self =
+				self.bless:
+						:$browser,
+						:$debug,
+						plan => 39,
+						name => 'local',
+						description => 'local test';
+		$self.init;
+		$self;
+	}
+	
+	method test {
+		$.driver.navigate: 'file://' ~ $html-file.absolute;
+		
+		is $.driver.title, 'test', 'page title';
+		
+		ok
+				self.element-by-id( 'outer' )
+						~~ self.element-by-tag( 'ul' ),
+				'same element found different ways';
+		
+		my WebDriver2::Command::Element::Locator $by-tag-ul =
+				WebDriver2::Command::Element::Locator::Tag-Name.new: 'ul';
+		my WebDriver2::Model::Element $el = $.driver.element: $by-tag-ul;
+		nok $el ~~ $el.element( $by-tag-ul ), 'different elements';
+		
+		my WebDriver2::Command::Element::Locator $locator =
+				WebDriver2::Command::Element::Locator::Tag-Name.new: 'li';
+		$el = $.driver.element: $locator;
+		my Str $outer-li = $el.text;
+		my Str $inner-li =
+				self.element-by-id( 'inner' ).element( $locator ).text;
+		
+		isnt $inner-li, $outer-li, 'inner li != outer li';
+		
+		# test continues ...
 	}
 }
 ```
@@ -204,7 +239,7 @@ inner: /iframe/outer/inner
 \
 \
 if identical content exists in multiple parts of the SUT ( e.g.,
-widgets ), it can be defined once and included in those parts by
+calendar widgets ), it can be defined once and included in those parts by
 specifying a prefix
 
 `doc-form.page`
@@ -230,18 +265,26 @@ use Test;
 
 use lib <lib t/lib>;
 
+use WebDriver2::Test::Template;
 use WebDriver2::Test::Service-Test;
 use WebDriver2::SUT::Service::Loader;
 use WebDriver2::SUT::Service;
+use WebDriver2::SUT::Tree;
 
 class Login-Service does WebDriver2::SUT::Service {
 	has Str:D $.name = 'doc-login';
 	
 	my IO::Path $html-file =
 			.add: 'doc-login.html'
-			with $*PROGRAM.parent.parent.add: 'content';
+	with $*PROGRAM.parent.parent.add: 'content';
+	
+	my WebDriver2::SUT::Tree::URL $url =
+			WebDriver2::SUT::Tree::URL.new: 'file://' ~ $html-file.Str;
+	
+	submethod BUILD ( WebDriver2::Driver:D :$!driver ) { }
 	
 	method log-in ( Str:D $username, Str:D $password ) {
+		$!driver.navigate: $url.Str;
 		.resolve.send-keys: $username with self.get: 'username';
 		.resolve.send-keys: $password with self.get: 'password';
 		.resolve.click with self.get: 'login-button';
@@ -251,80 +294,186 @@ class Login-Service does WebDriver2::SUT::Service {
 class Main-Service does WebDriver2::SUT::Service {
 	has Str:D $.name = 'doc-main';
 	
+	submethod BUILD ( WebDriver2::Driver:D :$!driver ) { }
+	
+	method question ( --> Str:D ) {
+		.resolve.text with self.get: 'question';
+	}
+	
 	method interesting-text ( --> Str:D ) {
 		my Str @text;
 		@text.push: .resolve.text with self.get: 'heading';
-        @text.push: .resolve.text with self.get: 'pf';
-        @text.push: .resolve.text with self.get: 'pl';
+		@text.push: .resolve.text with self.get: 'pf';
+		@text.push: .resolve.text with self.get: 'pl';
 		@text.join: "\n";
 	}
+
+
 }
 
 class Form-Service does WebDriver2::SUT::Service {
 	has Str:D $.name = 'doc-form';
 	
+	submethod BUILD ( WebDriver2::Driver:D :$!driver, Str:D :$!prefix = '' ) { }
+	
 	method value ( --> Str:D ) {
 		.resolve.value with self.get: 'input';
 	}
+	method first ( &cb ) {
+		for self.get( 'form' ).iterator {
+			return self if &cb( self );
+		}
+		return Form-Service;
+	}
+	method each ( &action ) {
+		for self.get( 'form' ).iterator {
+			&action( self );
+		}
+	}
 }
 
-class Readme-Test is WebDriver2::Test::Service-Test {
+class Frame-Service does WebDriver2::SUT::Service {
+	has Str:D $.name = 'doc-frame';
+	
+	submethod BUILD ( WebDriver2::Driver:D :$!driver ) { }
+	
+	method each-outer ( &cb ) {
+		for self.get( 'outer' ).iterator {
+			&cb( self );
+		}
+	}
+	
+	method each-inner ( &cb ) {
+		for self.get( 'inner' ).iterator {
+			&cb( self );
+		}
+	}
+	
+	method item-text ( --> Str:D ) {
+		.resolve.text with self.get: 'inner';
+	}
+}
+
+class Readme-Test
+		does WebDriver2::Test::Service-Test
+		does WebDriver2::Test::Template
+{
 	has Login-Service $!ls;
 	has Main-Service $!ms;
 	has Form-Service $!fs-main;
 	has Form-Service $!fs-div;
 	has Form-Service $!fs-frame;
+	has Frame-Service $!frs;
 	
-	method new ( Str $browser = 'chrome', Int $debug = 0 ) {
-		callwith
-				:$browser,
-				:$debug,
-				sut-name => 'readme',
-				name => 'readme example',
-				description => 'service / page object example',
-				plan => 10;
+	submethod BUILD (
+			Str   :$!browser,
+			Str:D :$!name,
+			Str:D :$!description,
+			Str:D :$!sut-name,
+			Int   :$!plan,
+			Int   :$!debug = 0
+					 ) { }
+	
+	submethod TWEAK (
+			Str:D :$sut-name,
+			Int   :$debug
+					 ) {
+		$!sut = WebDriver2::SUT::Build.page: { self.driver.top }, $!sut-name, debug => self.debug;
+		$!loader =
+				WebDriver2::SUT::Service::Loader.new:
+						driver => self.driver,
+						:$!browser,
+						:$sut-name,
+						:$debug;
 	}
 	
-	method services ( WebDriver2::SUT::Service::Loader $loader ) {
-		$!ls = Login-Service.new: $loader;
-		$!ms = Main-Service.new: $loader;
-		$!fs-main = Form-Service.new: $loader, '/iframe', 'iframe';
-		$!fs-div = Form-Service.new: $loader, '/iframe/div', 'ifd';
+	method new ( Str $browser is rw, Int $debug = 0 ) {
+		my $self = self.bless:
+				:$browser,
+				:$debug,
+				sut-name => 'doc-site',
+				name => 'readme example',
+				description => 'service / page object example',
+				plan => 26;
+		$self.init;
+		$self.services;
+		$self;
+	}
+	
+	method services {
+		$!loader.load-elements: $!ls = Login-Service.new: :$.driver;
+		$!loader.load-elements: $!ms = Main-Service.new: :$.driver;
+		
+		$!loader.load-elements: $!fs-main = Form-Service.new: :$.driver, prefix => '/';
+		$!loader.load-elements: $!fs-frame = Form-Service.new: :$.driver, prefix => '/iframe';
+		$!loader.load-elements: $!fs-div = Form-Service.new: :$.driver, prefix => '/iframe/div';
+		
+		$!loader.load-elements: $!frs = Frame-Service.new: :$.driver;
 	}
 	
 	method test {
 		$!ls.log-in: 'user', 'pass';
 		
+		self.is: 'sub xpath', 'subelement test', .resolve.text with $!ms.get: 'subelement';
+		
 		self.is:
 				'interesting text',
-				q:to /END/,
+				q:to /END/.trim,
 				simple example
 				text
 				more text
 				END
 				$!ms.interesting-text;
 		
-		
-		
 		my Str:D @results =
-                'Mirzakhani',
-                'Noether',
-                'Oh',
-                'Delta',
-                'Echo',
-                'Foxtrot',
-                'apple',
-                'banana',
-                'cantaloupe',
+				'Mirzakhani',
+				'Noether',
+				'Oh',
+				'Delta',
+				'Echo',
+				'Foxtrot',
+				'apple',
+				'banana',
+				'cantaloupe',
 				;
+		my Int $els = 9;
+		my Bool:D $list-seen = False;
+		$!frs.each-outer: {
+			$list-seen = True;
+			self.is: "correct number of elements left", $els, @results.elems;
+			$!frs.each-inner: {
+				self.is: "correct inner element : @results[0]", @results.shift,
+						.item-text;
+			}
+			$els -= 3;
+		}
+		self.ok: 'outer', $list-seen;
+		self.is: '$els decremented', 0, $els;
+		self.is: '@results empty', 0, @results.elems;
 		
+		@results = 'main-1', 'main-2', 'main-3', 'main-4';
+		
+		$!fs-main.each: { self.is: 'correct form element', @results.shift, .value };
+		self.is: '@results empty', 0, @results.elems;
+		
+		self.is: 'first frame form is head', 'head', $!fs-frame.value;
+		self.is: 'main page form', 'main-1', $!fs-main.first( { True; } ).value;
+		self.is: 'final frame form is foot', 'foot', $!fs-div.value;
 	}
+}
+
+sub MAIN(
+		Str:D $browser is copy = 'chrome',
+		Int :$debug = 0
+) {
+	.execute with Readme-Test.new: $browser, $debug;
 }
 ```
 
 
 
-Extended examples can be seen in the `xt/03-service` subdirectory, which
+Extended examples can be seen in the `xt/02-driver` (direct driver use) 
+and the `xt/03-service` (page definition and service use) subdirectories, which
 use resources from `xt/content` and `xt/def`.
 
 

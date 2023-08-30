@@ -54,11 +54,7 @@ class Form-Service does WebDriver2::SUT::Service {
 	submethod BUILD ( WebDriver2::Driver:D :$!driver, Str:D :$!prefix = '' ) { }
 	
 	method value ( --> Str:D ) {
-#		.raku.say with self.get: 'input';
-#		my $n = self.get: 'form';
-#		.resolve.value with $n.get: 'input';
 		.resolve.value with self.get: 'input';
-#		.resolve.tag-name with self.get: 'form';
 	}
 	method first ( &cb ) {
 		for self.get( 'form' ).iterator {
@@ -68,12 +64,9 @@ class Form-Service does WebDriver2::SUT::Service {
 	}
 	method each ( &action ) {
 		for self.get( 'form' ).iterator {
-say 'FORM SERVICE CALLBACK';
 			&action( self );
 		}
 	}
-	
-	
 }
 
 class Frame-Service does WebDriver2::SUT::Service {
@@ -82,11 +75,7 @@ class Frame-Service does WebDriver2::SUT::Service {
 	submethod BUILD ( WebDriver2::Driver:D :$!driver ) { }
 	
 	method each-outer ( &cb ) {
-say 'PRINTING FRAMES';
-.say for $!driver.frames;
-say 'DONE PRINTING FRAMES';
 		for self.get( 'outer' ).iterator {
-			say 'ITERATOR CALLBACK';
 			&cb( self );
 		}
 	}
@@ -102,13 +91,16 @@ say 'DONE PRINTING FRAMES';
 	}
 }
 
-class Readme-Test does WebDriver2::Test::Service-Test does WebDriver2::Test::Template {
-	has Login-Service $!ls is rw;
-	has Main-Service $!ms is rw;
-	has Form-Service $!fs-main is rw;
-	has Form-Service $!fs-div is rw;
-	has Form-Service $!fs-frame is rw;
-	has Frame-Service $!frs is rw;
+class Readme-Test
+		does WebDriver2::Test::Service-Test
+		does WebDriver2::Test::Template
+{
+	has Login-Service $!ls;
+	has Main-Service $!ms;
+	has Form-Service $!fs-main;
+	has Form-Service $!fs-div;
+	has Form-Service $!fs-frame;
+	has Frame-Service $!frs;
 	
 	submethod BUILD (
 			Str   :$!browser,
@@ -120,11 +112,7 @@ class Readme-Test does WebDriver2::Test::Service-Test does WebDriver2::Test::Tem
 	) { }
 	
 	submethod TWEAK (
-#			Str   :$browser is copy,
-			Str:D :$name,
-			Str:D :$description,
 			Str:D :$sut-name,
-			Int   :$plan,
 			Int   :$debug
 	) {
 		$!sut = WebDriver2::SUT::Build.page: { self.driver.top }, $!sut-name, debug => self.debug;
@@ -137,11 +125,6 @@ class Readme-Test does WebDriver2::Test::Service-Test does WebDriver2::Test::Tem
 	}
 
 	method new ( Str $browser is rw, Int $debug = 0 ) {
-#		callwith
-#				name => 'readme example',
-#				description => 'service / page object example',
-#				sut-name => 'doc-site';
-						
 		my $self = self.bless:
 				:$browser,
 				:$debug,
@@ -149,22 +132,6 @@ class Readme-Test does WebDriver2::Test::Service-Test does WebDriver2::Test::Tem
 				name => 'readme example',
 				description => 'service / page object example',
 				plan => 26;
-		
-#		$self.loader = WebDriver2::SUT::Service::Loader.new:
-#				driver => $self.driver,
-#				:$browser,
-#				sut-name => 'doc-site',
-##				:$!sut,
-#				:$debug
-#				;
-#		$self.services: ( $self.ls = Login-Service.new: driver => $self.driver );
-#		$self.services: ( $self.ms = Main-Service.new: driver => $self.driver );
-#		
-#		$self.services: ( $self.fs-main = Form-Service.new: driver => $self.driver );
-#		$self.services: ( $self.fs-frame = Form-Service.new: driver => $self.driver ), '/iframe';
-#		$self.services: ( $self.fs-div = Form-Service.new: driver => $self.driver ), '/iframe/div';
-#		
-#		$self.services: ( $self.frs = Frame-Service.new: driver=> $self.driver );
 		$self.init;
 		$self.services;
 		$self;
@@ -183,8 +150,6 @@ class Readme-Test does WebDriver2::Test::Service-Test does WebDriver2::Test::Tem
 
 	method test {
 		$!ls.log-in: 'user', 'pass';
-		
-#		$!ms.question.say;
 		
 		self.is: 'sub xpath', 'subelement test', .resolve.text with $!ms.get: 'subelement';
 
