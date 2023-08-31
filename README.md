@@ -10,9 +10,8 @@ Current implementation status is
 ### Using a driver directly
 
 To use a driver directly for all [endpoint commands](#implementation-status), create a
-test class that extends `WebDriver2::Test`.  The test class
-will need to specify the browser and debug level upon
-instantiation:
+test class that implements `WebDriver2::Test`.  The test class
+will need to specify the browser upon instantiation:
 
 ```perl6
 use Test;
@@ -25,7 +24,7 @@ class Local does WebDriver2::Test {
 	has Bool $!screenshot;
 	
 	method new ( Str $browser? is copy, Int:D :$debug = 0 ) {
-		self.set-from-file: $browser; #, $debug;
+		self.set-from-file: $browser;
 		my Local:D $self =
 				self.bless:
 						:$browser,
@@ -493,6 +492,7 @@ characters per entry)
 ## TODO
 
 - [ ] cover all implemented endpoints with unit tests
+- [ ] add POD
 - [ ] implement the rest of the endpoints
 - [ ] page and service object features
 
