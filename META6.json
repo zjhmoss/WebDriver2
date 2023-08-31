@@ -2,10 +2,10 @@
   "raku" : "6.d",
   "name" : "WebDriver2",
   "api"  : "1",
-  "auth" : "github:zjhmoss",
+  "auth" : "zef:zoss",
   "version" : "0.1.0",
   "description" : "WebDriver level 2 bindings",
-  "authors" : [ "zjhmoss" ],
+  "authors" : [ "zoss" ],
   "license" : "Artistic-2.0",
   "provides" : {
     "WebDriver2" : "lib/WebDriver2.rakumod",
