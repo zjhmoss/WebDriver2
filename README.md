@@ -67,6 +67,7 @@ class Local does WebDriver2::Test {
 
 `WebDriver2::Test` (indirectly) does
 `WebDriver2::Test::Template`, which will call
+
 ```
 method init { ... }
 method pre-test { ... }
@@ -76,6 +77,7 @@ method close { ... }
 method done-testing { done-testing }
 method cleanup { ... }
 ```
+
 when its `execute` method is called.
 
 Before starting into the test code, `$.driver.session` needs
@@ -98,13 +100,16 @@ files, and `.service` definitions are needed.
 For example, for
 
 `doc-site.sut`
+
 ```
 #include 'doc-login.page'
 #include 'doc-main.page'
 ```
+
 \
 \
 `doc-login.html`
+
 ```html
 <html>
 	<head><title>start page</title></head>
@@ -117,8 +122,10 @@ For example, for
 	</body>
 </html>
 ```
+
 \
 `doc-login.page`
+
 ```
 page doc-login 'file://relative/path/to/doc-login.html' {
 	elemt username id 'user';
@@ -126,8 +133,10 @@ page doc-login 'file://relative/path/to/doc-login.html' {
 	elemt login-button tag-name 'button';
 }
 ```
+
 \
 `doc-login.service`
+
 ```
 #page: doc-login
 
@@ -135,9 +144,11 @@ username: /username
 password: /password
 login-button: /login-button
 ```
+
 \
 \
 `doc-main.html`
+
 ```html
 <html>
 	<head><title>simple example</title></head>
@@ -154,8 +165,10 @@ login-button: /login-button
 	</body>
 </html>
 ```
+
 \
 `doc-main.page` - with only content we're interested in outlined
+
 ```
 page doc-main 'file://relative/path/to/doc-main.html' {
 	elemt heading tag-name 'h1';
@@ -166,8 +179,10 @@ list of
 	elemt last-para id 'after';
 }
 ```
+
 \
 `doc-main.service`
+
 ```
 #page: doc-main
 
@@ -177,9 +192,11 @@ iframe: /iframe
 form: /form
 pl: /last-para
 ```
+
 \
 \
 `doc-frame.html`
+
 ```html
 <html>
 	<head><title>iframe</title></head>
@@ -212,8 +229,10 @@ pl: /last-para
 	</body>
 </html>
 ```
+
 \
 `doc-frame.page` - again, only content we're interested in is outlined
+
 ```
 frame iframe tag-name 'iframe' {
 #include 'doc-form.page'
@@ -225,8 +244,10 @@ frame iframe tag-name 'iframe' {
 	}
 }
 ```
+
 \
 `doc-frame.service`
+
 ```
 #page: doc-main
 
@@ -235,6 +256,7 @@ iframe: /iframe
 outer: /iframe/outer
 inner: /iframe/outer/inner
 ```
+
 \
 \
 if identical content exists in multiple parts of the SUT ( e.g.,
@@ -242,19 +264,23 @@ calendar widgets ), it can be defined once and included in those parts by
 specifying a prefix
 
 `doc-form.page`
+
 ```
 elgrp form xpath 'form' {
 	elemt input tag-name 'input';
 }
 ```
+
 \
 `doc-form.service`
+
 ```
 #page: doc-main
 
 form: /form
 input: /form/input
 ```
+
 \
 \
 script with supporting code:
@@ -468,8 +494,6 @@ sub MAIN(
 	.execute with Readme-Test.new: $browser, $debug;
 }
 ```
-
-
 
 Extended examples can be seen in the `xt/02-driver` (direct driver use) 
 and the `xt/03-service` (page definition and service use) subdirectories, which
