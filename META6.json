@@ -1,9 +1,9 @@
 {
   "raku" : "6.d",
   "name" : "WebDriver2",
-  "api"  : "2",
+  "api"  : "3",
   "auth" : "zef:zoss",
-  "version" : "0.1.1",
+  "version" : "0.1.2",
   "description" : "WebDriver level 2 bindings",
   "authors" : [ "zoss" ],
   "license" : "Artistic-2.0",
