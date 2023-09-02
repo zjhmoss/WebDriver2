@@ -13,7 +13,7 @@ To use a driver directly for all [endpoint commands](#implementation-status), cr
 test class that implements `WebDriver2::Test`.  The test class
 will need to specify the browser upon instantiation:
 
-```perl6
+```Perl6
 use Test;
 use WebDriver2::Test;
 
@@ -68,7 +68,7 @@ class Local does WebDriver2::Test {
 `WebDriver2::Test` (indirectly) does
 `WebDriver2::Test::Template`, which will call
 
-```
+```Perl6
 method init { ... }
 method pre-test { ... }
 method test { ... }
@@ -284,7 +284,7 @@ input: /form/input
 \
 script with supporting code:
 
-```perl6
+```Perl6
 use Test;
 
 use lib <lib t/lib>;
