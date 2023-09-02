@@ -107,7 +107,6 @@ For example, for
 ```
 
 \
-\
 `doc-login.html`
 
 ```html
