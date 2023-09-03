@@ -2,7 +2,7 @@ frame iframe tag-name 'iframe' {
 #include 'doc-form.page'
 	elgrp outer-lc tag-name 'ul' {
 		list of elgrp outer xpath 'li' {
-			list of elemt inner tag-name 'li';
+			list of elemt inner xpath 'ol/li';
 		}
 	}
 	elgrp div tag-name 'div' {

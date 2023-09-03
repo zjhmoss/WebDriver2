@@ -24,9 +24,9 @@ class Page-Link-From-Service does WebDriver2::SUT::Service {
 	submethod BUILD ( WebDriver2::Driver:D :$!driver ) { }
 	
 	method html-file ( --> IO::Path ) { $html-file }
-
+	
 	method name ( --> Str:D ) { 'page-from' } # lists
-
+	
 	method top-retry {
 		WebDriver2::Until::Command::Stale.new:
 				element => self.get( 'h2' ).resolve,
@@ -41,7 +41,7 @@ class Page-Link-From-Service does WebDriver2::SUT::Service {
 	method page-h2-text {
 		.resolve.text with self.get: 'h2';
 	}
-
+	
 	method page-link {
 		.resolve with self.get: 'a';
 	}
@@ -50,9 +50,9 @@ class Page-Link-From-Service does WebDriver2::SUT::Service {
 class Page-Link-To-Service does WebDriver2::SUT::Service {
 	
 	submethod BUILD ( WebDriver2::Driver:D :$!driver ) { }
-
+	
 	method name ( --> Str:D ) { 'page-to' } # lists
-
+	
 	method top-retry {
 		WebDriver2::Until::Command::Stale.new:
 			element => self.get( 'h2-page' ).resolve,
@@ -60,16 +60,16 @@ class Page-Link-To-Service does WebDriver2::SUT::Service {
 			interval => 1 / 10,
 			:!soft;
 	}
-
+	
 	method inner-h2-text {
 		.resolve.text with self.get: 'h2-inner';
 	}
-
-
+	
+	
 	method item {
 		.resolve with self.get: 'item';
 	}
-
+	
 	method each-repeated ( &action ) {
 		&action( self ) for self.get( 'item' ).iterator;
 	}
@@ -117,7 +117,7 @@ class Frames-Test
 						:$sut-name,
 						:$debug;
 	}
-
+	
 	method new ( Str $browser? is copy, Int:D :$debug = 0 ) {
 		self.set-from-file: $browser; # , $debug;
 		my Frames-Test:D $self =
@@ -132,7 +132,7 @@ class Frames-Test
 		$self.services;
 		$self;
 	}
-
+	
 	method services {
 		$!loader.load-elements: $!from-service = Page-Link-From-Service.new: :$.driver;
 		$!loader.load-elements: $!to-service = Page-Link-To-Service.new: :$.driver;
@@ -141,9 +141,9 @@ class Frames-Test
 	method test {
 		$!from-service.nav;
 		self.is: 'page title', 'iframe test', $.driver.title;
-
+		
 		self.is: 'page h2 test', 'iframe test', $!from-service.page-h2-text;
-
+		
 		my $stale = $!from-service.page-link;
 		my WebDriver2::Until $until-stale =
 				WebDriver2::Until::Command::Stale.new:
@@ -152,9 +152,9 @@ class Frames-Test
 						interval => 1 / 10;
 		$stale.click;
 		$until-stale.retry;
-
+		
 		self.is: 'content available', 'internal frame', $!to-service.inner-h2-text;
-
+		
 		$!to-service.each-repeated: {
 			self.is:
 				'deeply nested list',

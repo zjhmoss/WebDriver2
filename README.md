@@ -14,55 +14,55 @@ test class that implements `WebDriver2::Test`.  The test class
 will need to specify the browser upon instantiation:
 
 ```Perl6
-use Test;
-use WebDriver2::Test;
-
-my IO::Path $html-file =
-		.add: 'test.html' with $*PROGRAM.parent.parent.add: 'content';
-
-class Local does WebDriver2::Test {
-	has Bool $!screenshot;
+	use Test;
+	use WebDriver2::Test;
 	
-	method new ( Str $browser? is copy, Int:D :$debug = 0 ) {
-		self.set-from-file: $browser;
-		my Local:D $self =
-				self.bless:
-						:$browser,
-						:$debug,
-						plan => 39,
-						name => 'local',
-						description => 'local test';
-		$self.init;
-		$self;
-	}
+	my IO::Path $html-file =
+			.add: 'test.html' with $*PROGRAM.parent.parent.add: 'content';
 	
-	method test {
-		$.driver.navigate: 'file://' ~ $html-file.absolute;
+	class Local does WebDriver2::Test {
+		has Bool $!screenshot;
 		
-		is $.driver.title, 'test', 'page title';
+		method new ( Str $browser? is copy, Int:D :$debug = 0 ) {
+			self.set-from-file: $browser;
+			my Local:D $self =
+					self.bless:
+							:$browser,
+							:$debug,
+							plan => 39,
+							name => 'local',
+							description => 'local test';
+			$self.init;
+			$self;
+		}
 		
-		ok
-				self.element-by-id( 'outer' )
-						~~ self.element-by-tag( 'ul' ),
-				'same element found different ways';
-		
-		my WebDriver2::Command::Element::Locator $by-tag-ul =
-				WebDriver2::Command::Element::Locator::Tag-Name.new: 'ul';
-		my WebDriver2::Model::Element $el = $.driver.element: $by-tag-ul;
-		nok $el ~~ $el.element( $by-tag-ul ), 'different elements';
-		
-		my WebDriver2::Command::Element::Locator $locator =
-				WebDriver2::Command::Element::Locator::Tag-Name.new: 'li';
-		$el = $.driver.element: $locator;
-		my Str $outer-li = $el.text;
-		my Str $inner-li =
-				self.element-by-id( 'inner' ).element( $locator ).text;
-		
-		isnt $inner-li, $outer-li, 'inner li != outer li';
-		
-		# test continues ...
+		method test {
+			$.driver.navigate: 'file://' ~ $html-file.absolute;
+			
+			is $.driver.title, 'test', 'page title';
+			
+			ok
+					self.element-by-id( 'outer' )
+							~~ self.element-by-tag( 'ul' ),
+					'same element found different ways';
+			
+			my WebDriver2::Command::Element::Locator $by-tag-ul =
+					WebDriver2::Command::Element::Locator::Tag-Name.new: 'ul';
+			my WebDriver2::Model::Element $el = $.driver.element: $by-tag-ul;
+			nok $el ~~ $el.element( $by-tag-ul ), 'different elements';
+			
+			my WebDriver2::Command::Element::Locator $locator =
+					WebDriver2::Command::Element::Locator::Tag-Name.new: 'li';
+			$el = $.driver.element: $locator;
+			my Str $outer-li = $el.text;
+			my Str $inner-li =
+					self.element-by-id( 'inner' ).element( $locator ).text;
+			
+			isnt $inner-li, $outer-li, 'inner li != outer li';
+			
+			# test continues ...
+		}
 	}
-}
 ```
 
 `WebDriver2::Test` (indirectly) does
