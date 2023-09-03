@@ -68,7 +68,7 @@ will need to specify the browser upon instantiation:
 `WebDriver2::Test` (indirectly) does
 `WebDriver2::Test::Template`, which will call
 
-```Perl6
+~~~Perl6
 method init { ... }
 method pre-test { ... }
 method test { ... }
@@ -76,7 +76,7 @@ method post-test { ... }
 method close { ... }
 method done-testing { done-testing }
 method cleanup { ... }
-```
+~~~
 
 when its `execute` method is called.
 
