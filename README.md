@@ -13,7 +13,6 @@ To use a driver directly for all [endpoint commands](#implementation-status), cr
 test class that implements `WebDriver2::Test`.  The test class
 will need to specify the browser upon instantiation:
 
-```Perl6
 	use Test;
 	use WebDriver2::Test;
 	
@@ -63,20 +62,19 @@ will need to specify the browser upon instantiation:
 			# test continues ...
 		}
 	}
-```
+
+  
 
 `WebDriver2::Test` (indirectly) does
 `WebDriver2::Test::Template`, which will call
 
-~~~Perl6
-method init { ... }
-method pre-test { ... }
-method test { ... }
-method post-test { ... }
-method close { ... }
-method done-testing { done-testing }
-method cleanup { ... }
-~~~
+	method init { ... }
+	method pre-test { ... }
+	method test { ... }
+	method post-test { ... }
+	method close { ... }
+	method done-testing { done-testing }
+	method cleanup { ... }
 
 when its `execute` method is called.
 
@@ -101,398 +99,372 @@ For example, for
 
 `doc-site.sut`
 
-```
-#include 'doc-login.page'
-#include 'doc-main.page'
-```
+	#include 'doc-login.page'
+	#include 'doc-main.page'
 
-\
+  
 `doc-login.html`
 
-```html
-<html>
-	<head><title>start page</title></head>
-	<body>
-		<form action="doc-main.html">
-			<input type="text" id="user" name="user"/>
-			<input type="text" id="pass" name="pass"/>
-			<button name="k" value="v">log in</button>
-		</form>
-	</body>
-</html>
-```
+	<html>
+		<head><title>start page</title></head>
+		<body>
+			<form action="doc-main.html">
+				<input type="text" id="user" name="user"/>
+				<input type="text" id="pass" name="pass"/>
+				<button name="k" value="v">log in</button>
+			</form>
+		</body>
+	</html>
 
-\
+  
 `doc-login.page`
 
-```
-page doc-login 'file://relative/path/to/doc-login.html' {
-	elemt username id 'user';
-	elemt password id 'pass';
-	elemt login-button tag-name 'button';
-}
-```
+	page doc-login 'file://relative/path/to/doc-login.html' {
+		elemt username id 'user';
+		elemt password id 'pass';
+		elemt login-button tag-name 'button';
+	}
 
-\
+  
 `doc-login.service`
 
-```
-#page: doc-login
+	#page: doc-login
+	
+	username: /username
+	password: /password
+	login-button: /login-button
 
-username: /username
-password: /password
-login-button: /login-button
-```
-
-\
-\
+  
+  
 `doc-main.html`
 
-```html
-<html>
-	<head><title>simple example</title></head>
-	<body>
-		<h1>simple example</h1>
-		<p id="before">text</p>
-		<form><input type="text" value="main-1"/></form>
-		<iframe src="doc-frame.html"></iframe>
-		<form><input type="text" value="main-2"/></form>
-		<p>other content</p>
-		<form><input type="text" value="main-3"/></form>
-		<form><input type="text" value="main-4"/></form>
-		<p id="after">more text</p>
-	</body>
-</html>
-```
+	<html>
+		<head><title>simple example</title></head>
+		<body>
+			<h1>simple example</h1>
+			<p id="before">text</p>
+			<form><input type="text" value="main-1"/></form>
+			<iframe src="doc-frame.html"></iframe>
+			<form><input type="text" value="main-2"/></form>
+			<p>other content</p>
+			<form><input type="text" value="main-3"/></form>
+			<form><input type="text" value="main-4"/></form>
+			<p id="after">more text</p>
+		</body>
+	</html>
 
-\
+  
 `doc-main.page` - with only content we're interested in outlined
 
-```
-page doc-main 'file://relative/path/to/doc-main.html' {
-	elemt heading tag-name 'h1';
-	elemt first-para id 'before';
-#include 'doc-frame.page'
-list of
-#include 'doc-form.page'
-	elemt last-para id 'after';
-}
-```
+	page doc-main 'file://relative/path/to/doc-main.html' {
+		elemt heading tag-name 'h1';
+		elemt first-para id 'before';
+	#include 'doc-frame.page'
+	list of
+	#include 'doc-form.page'
+		elemt last-para id 'after';
+	}
 
-\
+  
 `doc-main.service`
 
-```
-#page: doc-main
+	#page: doc-main
+	
+	heading: /heading
+	pf: /first-para
+	iframe: /iframe
+	form: /form
+	pl: /last-para
 
-heading: /heading
-pf: /first-para
-iframe: /iframe
-form: /form
-pl: /last-para
-```
-
-\
-\
+  
+  
 `doc-frame.html`
 
-```html
-<html>
-	<head><title>iframe</title></head>
-	<body>
-		<form><input type="text" value="head"/></form>
-		<ul>
-			<li>
-				<ol>
-					<li>Mirzakhani</li>
-					<li>Noether</li>
-					<li>Oh</li>
-				</ol>
-			</li>
-			<li>
-				<ol>
-					<li>Delta</li>
-					<li>Echo</li>
-					<li>Foxtrot</li>
-				</ol>
-			</li>
-			<li>
-				<ol>
-					<li>apple</li>
-					<li>banana</li>
-					<li>cantaloupe</li>
-				</ol>
-			</li>
-		</ul>
-		<div><form><input type="text" value="foot"/></form></div>
-	</body>
-</html>
-```
+	<html>
+		<head><title>iframe</title></head>
+		<body>
+			<form><input type="text" value="head"/></form>
+			<ul>
+				<li>
+					<ol>
+						<li>Mirzakhani</li>
+						<li>Noether</li>
+						<li>Oh</li>
+					</ol>
+				</li>
+				<li>
+					<ol>
+						<li>Delta</li>
+						<li>Echo</li>
+						<li>Foxtrot</li>
+					</ol>
+				</li>
+				<li>
+					<ol>
+						<li>apple</li>
+						<li>banana</li>
+						<li>cantaloupe</li>
+					</ol>
+				</li>
+			</ul>
+			<div><form><input type="text" value="foot"/></form></div>
+		</body>
+	</html>
 
-\
+  
 `doc-frame.page` - again, only content we're interested in is outlined
 
-```
-frame iframe tag-name 'iframe' {
-#include 'doc-form.page'
-	list of elgrp outer xpath '*/ul/li' {
-		list of elemt inner xpath 'ol/li';
+	frame iframe tag-name 'iframe' {
+	#include 'doc-form.page'
+		list of elgrp outer xpath '*/ul/li' {
+			list of elemt inner xpath 'ol/li';
+		}
+		elgrp div tag-name 'div' {
+	#include 'doc-form.page'
+		}
 	}
-	elgrp div tag-name 'div' {
-#include 'doc-form.page'
-	}
-}
-```
 
-\
+  
 `doc-frame.service`
 
-```
-#page: doc-main
+	#page: doc-main
+	
+	iframe: /iframe
+	
+	outer: /iframe/outer
+	inner: /iframe/outer/inner
 
-iframe: /iframe
-
-outer: /iframe/outer
-inner: /iframe/outer/inner
-```
-
-\
-\
+  
+  
 if identical content exists in multiple parts of the SUT ( e.g.,
 calendar widgets ), it can be defined once and included in those parts by
 specifying a prefix
 
 `doc-form.page`
 
-```
-elgrp form xpath 'form' {
-	elemt input tag-name 'input';
-}
-```
+	elgrp form xpath 'form' {
+		elemt input tag-name 'input';
+	}
 
-\
+  
 `doc-form.service`
 
-```
-#page: doc-main
+	#page: doc-main
+	
+	form: /form
+	input: /form/input
 
-form: /form
-input: /form/input
-```
-
-\
-\
+  
+  
 script with supporting code:
 
-```Perl6
-use Test;
-
-use lib <lib t/lib>;
-
-use WebDriver2::Test::Template;
-use WebDriver2::Test::Service-Test;
-use WebDriver2::SUT::Service::Loader;
-use WebDriver2::SUT::Service;
-use WebDriver2::SUT::Tree;
-
-class Login-Service does WebDriver2::SUT::Service {
-	has Str:D $.name = 'doc-login';
+	use Test;
 	
-	my IO::Path $html-file =
-			.add: 'doc-login.html'
-	with $*PROGRAM.parent.parent.add: 'content';
+	use lib <lib t/lib>;
 	
-	my WebDriver2::SUT::Tree::URL $url =
-			WebDriver2::SUT::Tree::URL.new: 'file://' ~ $html-file.Str;
+	use WebDriver2::Test::Template;
+	use WebDriver2::Test::Service-Test;
+	use WebDriver2::SUT::Service::Loader;
+	use WebDriver2::SUT::Service;
+	use WebDriver2::SUT::Tree;
 	
-	submethod BUILD ( WebDriver2::Driver:D :$!driver ) { }
-	
-	method log-in ( Str:D $username, Str:D $password ) {
-		$!driver.navigate: $url.Str;
-		.resolve.send-keys: $username with self.get: 'username';
-		.resolve.send-keys: $password with self.get: 'password';
-		.resolve.click with self.get: 'login-button';
-	}
-}
-
-class Main-Service does WebDriver2::SUT::Service {
-	has Str:D $.name = 'doc-main';
-	
-	submethod BUILD ( WebDriver2::Driver:D :$!driver ) { }
-	
-	method question ( --> Str:D ) {
-		.resolve.text with self.get: 'question';
-	}
-	
-	method interesting-text ( --> Str:D ) {
-		my Str @text;
-		@text.push: .resolve.text with self.get: 'heading';
-		@text.push: .resolve.text with self.get: 'pf';
-		@text.push: .resolve.text with self.get: 'pl';
-		@text.join: "\n";
-	}
-
-
-}
-
-class Form-Service does WebDriver2::SUT::Service {
-	has Str:D $.name = 'doc-form';
-	
-	submethod BUILD ( WebDriver2::Driver:D :$!driver, Str:D :$!prefix = '' ) { }
-	
-	method value ( --> Str:D ) {
-		.resolve.value with self.get: 'input';
-	}
-	method first ( &cb ) {
-		for self.get( 'form' ).iterator {
-			return self if &cb( self );
-		}
-		return Form-Service;
-	}
-	method each ( &action ) {
-		for self.get( 'form' ).iterator {
-			&action( self );
-		}
-	}
-}
-
-class Frame-Service does WebDriver2::SUT::Service {
-	has Str:D $.name = 'doc-frame';
-	
-	submethod BUILD ( WebDriver2::Driver:D :$!driver ) { }
-	
-	method each-outer ( &cb ) {
-		for self.get( 'outer' ).iterator {
-			&cb( self );
+	class Login-Service does WebDriver2::SUT::Service {
+		has Str:D $.name = 'doc-login';
+		
+		my IO::Path $html-file =
+				.add: 'doc-login.html'
+		with $*PROGRAM.parent.parent.add: 'content';
+		
+		my WebDriver2::SUT::Tree::URL $url =
+				WebDriver2::SUT::Tree::URL.new: 'file://' ~ $html-file.Str;
+		
+		submethod BUILD ( WebDriver2::Driver:D :$!driver ) { }
+		
+		method log-in ( Str:D $username, Str:D $password ) {
+			$!driver.navigate: $url.Str;
+			.resolve.send-keys: $username with self.get: 'username';
+			.resolve.send-keys: $password with self.get: 'password';
+			.resolve.click with self.get: 'login-button';
 		}
 	}
 	
-	method each-inner ( &cb ) {
-		for self.get( 'inner' ).iterator {
-			&cb( self );
+	class Main-Service does WebDriver2::SUT::Service {
+		has Str:D $.name = 'doc-main';
+		
+		submethod BUILD ( WebDriver2::Driver:D :$!driver ) { }
+		
+		method question ( --> Str:D ) {
+			.resolve.text with self.get: 'question';
 		}
+		
+		method interesting-text ( --> Str:D ) {
+			my Str @text;
+			@text.push: .resolve.text with self.get: 'heading';
+			@text.push: .resolve.text with self.get: 'pf';
+			@text.push: .resolve.text with self.get: 'pl';
+			@text.join: "\n";
+		}
+	
+	
 	}
 	
-	method item-text ( --> Str:D ) {
-		.resolve.text with self.get: 'inner';
-	}
-}
-
-class Readme-Test
-		does WebDriver2::Test::Service-Test
-		does WebDriver2::Test::Template
-{
-	has Login-Service $!ls;
-	has Main-Service $!ms;
-	has Form-Service $!fs-main;
-	has Form-Service $!fs-div;
-	has Form-Service $!fs-frame;
-	has Frame-Service $!frs;
-	
-	submethod BUILD (
-			Str   :$!browser,
-			Str:D :$!name,
-			Str:D :$!description,
-			Str:D :$!sut-name,
-			Int   :$!plan,
-			Int   :$!debug = 0
-					 ) { }
-	
-	submethod TWEAK (
-			Str:D :$sut-name,
-			Int   :$debug
-					 ) {
-		$!sut = WebDriver2::SUT::Build.page: { self.driver.top }, $!sut-name, debug => self.debug;
-		$!loader =
-				WebDriver2::SUT::Service::Loader.new:
-						driver => self.driver,
-						:$!browser,
-						:$sut-name,
-						:$debug;
-	}
-	
-	method new ( Str $browser is rw, Int $debug = 0 ) {
-		my $self = self.bless:
-				:$browser,
-				:$debug,
-				sut-name => 'doc-site',
-				name => 'readme example',
-				description => 'service / page object example',
-				plan => 26;
-		$self.init;
-		$self.services;
-		$self;
-	}
-	
-	method services {
-		$!loader.load-elements: $!ls = Login-Service.new: :$.driver;
-		$!loader.load-elements: $!ms = Main-Service.new: :$.driver;
+	class Form-Service does WebDriver2::SUT::Service {
+		has Str:D $.name = 'doc-form';
 		
-		$!loader.load-elements: $!fs-main = Form-Service.new: :$.driver, prefix => '/';
-		$!loader.load-elements: $!fs-frame = Form-Service.new: :$.driver, prefix => '/iframe';
-		$!loader.load-elements: $!fs-div = Form-Service.new: :$.driver, prefix => '/iframe/div';
+		submethod BUILD ( WebDriver2::Driver:D :$!driver, Str:D :$!prefix = '' ) { }
 		
-		$!loader.load-elements: $!frs = Frame-Service.new: :$.driver;
-	}
-	
-	method test {
-		$!ls.log-in: 'user', 'pass';
-		
-		self.is: 'sub xpath', 'subelement test', .resolve.text with $!ms.get: 'subelement';
-		
-		self.is:
-				'interesting text',
-				q:to /END/.trim,
-				simple example
-				text
-				more text
-				END
-				$!ms.interesting-text;
-		
-		my Str:D @results =
-				'Mirzakhani',
-				'Noether',
-				'Oh',
-				'Delta',
-				'Echo',
-				'Foxtrot',
-				'apple',
-				'banana',
-				'cantaloupe',
-				;
-		my Int $els = 9;
-		my Bool:D $list-seen = False;
-		$!frs.each-outer: {
-			$list-seen = True;
-			self.is: "correct number of elements left", $els, @results.elems;
-			$!frs.each-inner: {
-				self.is: "correct inner element : @results[0]", @results.shift,
-						.item-text;
+		method value ( --> Str:D ) {
+			.resolve.value with self.get: 'input';
+		}
+		method first ( &cb ) {
+			for self.get( 'form' ).iterator {
+				return self if &cb( self );
 			}
-			$els -= 3;
+			return Form-Service;
 		}
-		self.ok: 'outer', $list-seen;
-		self.is: '$els decremented', 0, $els;
-		self.is: '@results empty', 0, @results.elems;
-		
-		@results = 'main-1', 'main-2', 'main-3', 'main-4';
-		
-		$!fs-main.each: { self.is: 'correct form element', @results.shift, .value };
-		self.is: '@results empty', 0, @results.elems;
-		
-		self.is: 'first frame form is head', 'head', $!fs-frame.value;
-		self.is: 'main page form', 'main-1', $!fs-main.first( { True; } ).value;
-		self.is: 'final frame form is foot', 'foot', $!fs-div.value;
+		method each ( &action ) {
+			for self.get( 'form' ).iterator {
+				&action( self );
+			}
+		}
 	}
-}
-
-sub MAIN(
-		Str:D $browser is copy = 'chrome',
-		Int :$debug = 0
-) {
-	.execute with Readme-Test.new: $browser, $debug;
-}
-```
+	
+	class Frame-Service does WebDriver2::SUT::Service {
+		has Str:D $.name = 'doc-frame';
+		
+		submethod BUILD ( WebDriver2::Driver:D :$!driver ) { }
+		
+		method each-outer ( &cb ) {
+			for self.get( 'outer' ).iterator {
+				&cb( self );
+			}
+		}
+		
+		method each-inner ( &cb ) {
+			for self.get( 'inner' ).iterator {
+				&cb( self );
+			}
+		}
+		
+		method item-text ( --> Str:D ) {
+			.resolve.text with self.get: 'inner';
+		}
+	}
+	
+	class Readme-Test
+			does WebDriver2::Test::Service-Test
+			does WebDriver2::Test::Template
+	{
+		has Login-Service $!ls;
+		has Main-Service $!ms;
+		has Form-Service $!fs-main;
+		has Form-Service $!fs-div;
+		has Form-Service $!fs-frame;
+		has Frame-Service $!frs;
+		
+		submethod BUILD (
+				Str   :$!browser,
+				Str:D :$!name,
+				Str:D :$!description,
+				Str:D :$!sut-name,
+				Int   :$!plan,
+				Int   :$!debug = 0
+						 ) { }
+		
+		submethod TWEAK (
+				Str:D :$sut-name,
+				Int   :$debug
+						 ) {
+			$!sut = WebDriver2::SUT::Build.page: { self.driver.top }, $!sut-name, debug => self.debug;
+			$!loader =
+					WebDriver2::SUT::Service::Loader.new:
+							driver => self.driver,
+							:$!browser,
+							:$sut-name,
+							:$debug;
+		}
+		
+		method new ( Str $browser is rw, Int $debug = 0 ) {
+			my $self = self.bless:
+					:$browser,
+					:$debug,
+					sut-name => 'doc-site',
+					name => 'readme example',
+					description => 'service / page object example',
+					plan => 26;
+			$self.init;
+			$self.services;
+			$self;
+		}
+		
+		method services {
+			$!loader.load-elements: $!ls = Login-Service.new: :$.driver;
+			$!loader.load-elements: $!ms = Main-Service.new: :$.driver;
+			
+			$!loader.load-elements: $!fs-main = Form-Service.new: :$.driver, prefix => '/';
+			$!loader.load-elements: $!fs-frame = Form-Service.new: :$.driver, prefix => '/iframe';
+			$!loader.load-elements: $!fs-div = Form-Service.new: :$.driver, prefix => '/iframe/div';
+			
+			$!loader.load-elements: $!frs = Frame-Service.new: :$.driver;
+		}
+		
+		method test {
+			$!ls.log-in: 'user', 'pass';
+			
+			self.is: 'sub xpath', 'subelement test', .resolve.text with $!ms.get: 'subelement';
+			
+			self.is:
+					'interesting text',
+					q:to /END/.trim,
+					simple example
+					text
+					more text
+					END
+					$!ms.interesting-text;
+			
+			my Str:D @results =
+					'Mirzakhani',
+					'Noether',
+					'Oh',
+					'Delta',
+					'Echo',
+					'Foxtrot',
+					'apple',
+					'banana',
+					'cantaloupe',
+					;
+			my Int $els = 9;
+			my Bool:D $list-seen = False;
+			$!frs.each-outer: {
+				$list-seen = True;
+				self.is: "correct number of elements left", $els, @results.elems;
+				$!frs.each-inner: {
+					self.is: "correct inner element : @results[0]", @results.shift,
+							.item-text;
+				}
+				$els -= 3;
+			}
+			self.ok: 'outer', $list-seen;
+			self.is: '$els decremented', 0, $els;
+			self.is: '@results empty', 0, @results.elems;
+			
+			@results = 'main-1', 'main-2', 'main-3', 'main-4';
+			
+			$!fs-main.each: { self.is: 'correct form element', @results.shift, .value };
+			self.is: '@results empty', 0, @results.elems;
+			
+			self.is: 'first frame form is head', 'head', $!fs-frame.value;
+			self.is: 'main page form', 'main-1', $!fs-main.first( { True; } ).value;
+			self.is: 'final frame form is foot', 'foot', $!fs-div.value;
+		}
+	}
+	
+	sub MAIN(
+			Str:D $browser is copy = 'chrome',
+			Int :$debug = 0
+	) {
+		.execute with Readme-Test.new: $browser, $debug;
+	}
 
 Extended examples can be seen in the `xt/02-driver` (direct driver use) 
 and the `xt/03-service` (page definition and service use) subdirectories, which
