@@ -2,7 +2,7 @@ use lib <lib t/lib>;
 
 use Test;
 
-plan 47;
+plan 48;
 
 use-ok 'WebDriver2::SUT::Service::Loader';
 use-ok 'WebDriver2::SUT::Build::Page';

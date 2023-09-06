@@ -218,7 +218,8 @@
     "WebDriver2::Until::Command::Throwable" : "lib/WebDriver2/Until/Command.rakumod",
     "WebDriver2::Until::Command::Value-Not-Empty" : "lib/WebDriver2/Until/Command.rakumod",
     "WebDriver2::Until::Command::Value-To-Be" : "lib/WebDriver2/Until/Command.rakumod",
-    "WebDriver2::Until::SUT::Present" : "lib/WebDriver2/Until/SUT.rakumod"
+    "WebDriver2::Until::SUT::Present" : "lib/WebDriver2/Until/SUT.rakumod",
+    "WebDriver2::Until::SUT" : "lib/WebDriver2/Until/SUT.rakumod"
   },
   "depends" : [
     "JSON::Tiny",
