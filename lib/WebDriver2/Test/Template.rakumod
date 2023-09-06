@@ -1,30 +1,65 @@
 use Test;
 
-unit role WebDriver2::Test::Template;
+use MIME::Base64;
+use WebDriver2::Test::Adapter;
+use WebDriver2::Test::Debugging;
+use WebDriver2::Driver::Provider;
+use WebDriver2::Test::Config-From-File;
 
-#has Int $.debug = 0;
-has Int $.plan;
-has Str:D $.name is required;
-has Str:D $.description is required;
+unit role WebDriver2::Test::Template
+		does WebDriver2::Test::Adapter
+		does WebDriver2::Test::Debugging
+		does WebDriver2::Test::Config-From-File;
 
-#submethod BUILD ( Int $!plan, Str:D $!name is required, Str:D $!description is required ) { }
+my constant $PLAN = 2;
+has Int:D $.close-delay is rw = 3;
+has Str:D $.browser is required;
+has WebDriver2::Driver $.driver;
 
-method init { ... }
-method pre-test { ... }
+method plan ( --> Int ) { Int; }
+method name ( --> Str:D ) { ... }
+method description ( --> Str:D ) { ... }
+
+method new ( Str $browser is copy, Int:D :$debug = 0 ) {
+	self.set-from-file: $browser;
+	my $self =
+			self.bless:
+					:$browser,
+					driver => WebDriver2::Driver::Provider.new( :$browser, :$debug ).driver,
+					:$debug;
+	$self;
+}
+
+method !init {
+	self.lives-ok: 'session created', { $.driver.session };
+	$.driver.set-window-rect: 1200, 750, 8, 8
+		if $.browser eq 'chrome' | 'safari';
+}
+method pre-test { }
 method test { ... }
-method post-test { ... }
-method close { ... }
-method done-testing { done-testing }
-method cleanup { ... }
+method post-test { }
+method !close {
+	say "\nclosing in";
+	.say, sleep 1 for ( 1 .. $.close-delay ).reverse;
+	
+	$.driver.delete-session;
+}
+#method !done-testing { done-testing }
+method cleanup { }
 
 method execute {
-	plan $.plan if $.plan;
 	try {
-#		self.init;
-		self.pre-test;
-		self.test;
-		self.post-test;
-		self.close;
+		plan $PLAN;
+		self!init;
+		
+		self.subtest: Pair.new: $.name, {
+			plan $.plan with $.plan;
+			self.pre-test;
+			self.test;
+			self.post-test;
+		};
+		
+		self!close;
 		CATCH {
 			default {
 				.note;
@@ -33,8 +68,30 @@ method execute {
 			}
 		}
 	}
-	self.done-testing unless self.plan;
+	done-testing without $.plan;
 }
 
-method handle-error ( Exception $x ) { ... }
-method handle-test-failure ( Str $descr ) { ... }
+method handle-test-failure ( Str $descr ) {
+	self.screenshot: $descr;
+}
+
+method handle-error ( Exception $x ) {
+	.raku.say for $.driver.frames;
+	self.screenshot: $x.WHAT.Str;
+}
+
+multi method screenshot {
+	$.driver.screenshot;
+}
+
+multi method screenshot ( Str:D $name ) {
+	my $screenshot = self.screenshot;
+	unless $screenshot {
+		warn "no screenshot for $name";
+		return;
+	}
+	my Instant $now = now;
+	my $fn = $name.subst: /<-[a..zA..Z0..9_-]>+/, '-', :g;
+	IO::Path.new( $fn ~ '-' ~ $now.Date ~ '-' ~ $now.to-posix[0] ~ '.png' )
+			.spurt: MIME::Base64.decode: $screenshot;
+}

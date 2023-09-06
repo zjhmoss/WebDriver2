@@ -2,9 +2,7 @@ use Test;
 
 use lib <lib t/lib>;
 
-use WebDriver2;
-use WebDriver2::Test;
-use WebDriver2::Test::Config-From-File;
+use WebDriver2::Test::Template;
 use WebDriver2::Command::Execution-Status;
 use WebDriver2::Command::Element::Locator::ID;
 use WebDriver2::Command::Element::Locator::Tag-Name;
@@ -12,21 +10,27 @@ use WebDriver2::Command::Element::Locator::Tag-Name;
 my IO::Path $html-file =
 		.add: 'test.html' with $*PROGRAM.parent.parent.add: 'content';
 
-class Local does WebDriver2::Test does WebDriver2::Test::Config-From-File {
-	has Bool $!screenshot;
+class Local
+		does WebDriver2::Test::Template
+		does WebDriver2::Test::Config-From-File
+{
 	
-	method new ( Str $browser is copy, Int:D :$debug = 0 ) {
-		self.set-from-file: $browser; #, $debug;
-		my Local:D $self =
-				self.bless:
-						:$browser,
-						:$debug,
-						plan => 4,
-						name => 'none vs stale',
-						description => 'none and stale both handled';
-		$self.init;
-		$self;
-	}
+	has Int:D $.plan = 3;
+	has Str:D $.name = 'none vs stale';
+	has Str:D $.description = 'none and stale both handled';
+	
+#	method new ( Str $browser is copy, Int:D :$debug = 0 ) {
+#		self.set-from-file: $browser; #, $debug;
+#		my Local:D $self =
+#				self.bless:
+#						:$browser,
+#						:$debug,
+#						plan => 4,
+#						name => 'none vs stale',
+#						description => 'none and stale both handled';
+#		$self.init;
+#		$self;
+#	}
 	
 	method test {
 		$.driver.set-window-rect( 1200, 750, 8, 8 ) if $.browser eq 'safari';

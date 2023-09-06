@@ -5,23 +5,28 @@ use lib <lib t/lib>;
 use WebDriver2;
 use WebDriver2::Test::Config-From-File;
 
-use WebDriver2::Test;
+use WebDriver2::Test::Template;
 use WebDriver2::Command::Result;
 use WebDriver2::Command::Execution-Status;
 
-class Browser-Window-Test does WebDriver2::Test does WebDriver2::Test::Config-From-File {
-	method new ( Str $browser? is copy, Int:D :$debug = 0 ) {
-		self.set-from-file: $browser; # , $debug;
-		my Browser-Window-Test:D $self =
-				self.bless:
-						:$browser,
-						:$debug,
-						plan => 11,
-						name => 'status',
-						description => 'status test';
-		$self.init;
-		$self;
-	}
+class Browser-Window-Test does WebDriver2::Test::Template does WebDriver2::Test::Config-From-File {
+	has Int:D $.plan = 10;
+	has Str:D $.name = 'window';
+	has Str:D $.description = 'multi-window test';
+	has IO::Path:D $.test-root = $*CWD.add: 'xt';
+	
+#	method new ( Str $browser? is copy, Int:D :$debug = 0 ) {
+#		self.set-from-file: $browser; # , $debug;
+#		my Browser-Window-Test:D $self =
+#				self.bless:
+#						:$browser,
+#						:$debug,
+#						plan => 10,
+#						name => 'status',
+#						description => 'status test';
+#		$self.init;
+#		$self;
+#	}
 	
 	method test {
 		my Str $original-window = $.driver.original-window;

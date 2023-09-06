@@ -5,24 +5,28 @@ use lib <lib t/lib>;
 use WebDriver2;
 use WebDriver2::Test::Config-From-File;
 
-use WebDriver2::Test;
+use WebDriver2::Test::Template;
 use WebDriver2::Command::Result;
 use WebDriver2::Command::Execution-Status;
 
-class Status-Test does WebDriver2::Test does WebDriver2::Test::Config-From-File {
+class Status-Test does WebDriver2::Test::Template {
+	has Int:D $.plan = 6;
+	has Str:D $.name = 'status';
+	has Str:D $.description = 'status test';
+	has IO::Path:D $.test-root = $*CWD.add: 'xt';
 	
-	method new ( Str $browser? is copy, Int:D :$debug = 0 ) {
-		self.set-from-file: $browser; # , $debug;
-		my Status-Test:D $self =
-				self.bless:
-						:$browser,
-						:$debug,
-						plan => 7,
-						name => 'status',
-						description => 'status test';
-		$self.init;
-		$self;
-	}
+#	method new ( Str $browser? is copy, Int:D :$debug = 0 ) {
+#		self.set-from-file: $browser; # , $debug;
+#		my Status-Test:D $self =
+#				self.bless:
+#						:$browser,
+#						:$debug,
+#						plan => 7,
+#						name => 'status',
+#						description => 'status test';
+#		$self.init;
+#		$self;
+#	}
 	
 	method test {
 		my WebDriver2::Command::Result::Status $status = $.driver.status;

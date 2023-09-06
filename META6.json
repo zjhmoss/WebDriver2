@@ -1,14 +1,17 @@
 {
   "raku" : "6.d",
   "name" : "WebDriver2",
-  "api"  : "5",
+  "api"  : "6",
   "auth" : "zef:zoss",
-  "version" : "0.1.4",
+  "version" : "0.1.5",
   "description" : "WebDriver level 2 bindings",
   "authors" : [ "zoss" ],
   "license" : "Artistic-2.0",
   "provides" : {
     "WebDriver2" : "lib/WebDriver2.rakumod",
+    
+    
+    
     "WebDriver2::Command" : "lib/WebDriver2/Command.rakumod",
     "WebDriver2::Command::Accept-Alert" : "lib/WebDriver2/Command.rakumod",
     "WebDriver2::Command::Active" : "lib/WebDriver2/Command.rakumod",
@@ -52,6 +55,7 @@
     "WebDriver2::Command::URL" : "lib/WebDriver2/Command.rakumod",
     "WebDriver2::Command::Window-Handle" : "lib/WebDriver2/Command.rakumod",
     "WebDriver2::Command::Window-Handles" : "lib/WebDriver2/Command.rakumod",
+    
     "WebDriver2::Command::Element::Locator" : "lib/WebDriver2/Command/Element/Locator.rakumod",
     "WebDriver2::Command::Element::Locator::CSS" : "lib/WebDriver2/Command/Element/Locator/CSS.rakumod",
     "WebDriver2::Command::Element::Locator::ID" : "lib/WebDriver2/Command/Element/Locator/ID.rakumod",
@@ -60,12 +64,14 @@
     "WebDriver2::Command::Element::Locator::Xpath" : "lib/WebDriver2/Command/Element/Locator/Xpath.rakumod",
     "WebDriver2::Command::Execution-Status" : "lib/WebDriver2/Command/Execution-Status.rakumod",
     "WebDriver2::Command::Keys" : "lib/WebDriver2/Command/Keys.rakumod",
+    
     "WebDriver2::Command::Param" : "lib/WebDriver2/Command/Param.rakumod",
     "WebDriver2::Command::Param::Factory" : "lib/WebDriver2/Command/Param/Factory.rakumod",
     "WebDriver2::Command::Param::Factory::Chrome" : "lib/WebDriver2/Command/Param/Factory/Chrome.rakumod",
     "WebDriver2::Command::Param::Factory::Edge" : "lib/WebDriver2/Command/Param/Factory/Edge.rakumod",
     "WebDriver2::Command::Param::Factory::Firefox" : "lib/WebDriver2/Command/Param/Factory/Firefox.rakumod",
     "WebDriver2::Command::Param::Factory::Safari" : "lib/WebDriver2/Command/Param/Factory/Safari.rakumod",
+    
     "WebDriver2::Command::PreResult" : "lib/WebDriver2/Command/Result.rakumod",
     "WebDriver2::Command::Result" : "lib/WebDriver2/Command/Result.rakumod",
     "WebDriver2::Command::Result::Accept-Alert" : "lib/WebDriver2/Command/Result.rakumod",
@@ -112,12 +118,16 @@
     "WebDriver2::Command::Result::URL" : "lib/WebDriver2/Command/Result.rakumod",
     "WebDriver2::Command::Result::Window-Handle" : "lib/WebDriver2/Command/Result.rakumod",
     "WebDriver2::Command::Result::Window-Handles" : "lib/WebDriver2/Command/Result.rakumod",
+    
     "WebDriver2::Command::Result::X" : "lib/WebDriver2/Command/Result.rakumod",
     "WebDriver2::Command::Result::Factory" : "lib/WebDriver2/Command/Result/Factory.rakumod",
     "WebDriver2::Command::Result::Factory::Chrome" : "lib/WebDriver2/Command/Result/Factory/Chrome.rakumod",
     "WebDriver2::Command::Result::Factory::Edge" : "lib/WebDriver2/Command/Result/Factory/Edge.rakumod",
     "WebDriver2::Command::Result::Factory::Firefox" : "lib/WebDriver2/Command/Result/Factory/Firefox.rakumod",
     "WebDriver2::Command::Result::Factory::Safari" : "lib/WebDriver2/Command/Result/Factory/Safari.rakumod",
+    
+    
+    
     "WebDriver2::Constants" : "lib/WebDriver2/Constants.rakumod",
     "WebDriver2::Driver" : "lib/WebDriver2/Driver.rakumod",
     "WebDriver2::Driver::Chrome" : "lib/WebDriver2/Driver/Chrome.rakumod",
@@ -128,6 +138,9 @@
     "WebDriver2::Driver::Server" : "lib/WebDriver2/Driver/Server.rakumod",
     "WebDriver2::Driver-Actions" : "lib/WebDriver2.rakumod",
     "WebDriver2::Element-Actions" : "lib/WebDriver2.rakumod",
+    
+    
+    
     "WebDriver2::HTTP::Cookie" : "lib/WebDriver2/HTTP/Cookie.rakumod",
     "WebDriver2::HTTP::Cookies" : "lib/WebDriver2/HTTP/Cookies.rakumod",
     "WebDriver2::HTTP::Header" : "lib/WebDriver2/HTTP/Header.rakumod",
@@ -140,15 +153,18 @@
     "WebDriver2::HTTP::Request::Common" : "lib/WebDriver2/HTTP/Request/Common.rakumod",
     "WebDriver2::HTTP::UserAgent::Common" : "lib/WebDriver2/HTTP/UserAgent/Common.rakumod",
     "WebDriver2::HTTP::UserAgent::Exception" : "lib/WebDriver2/HTTP/UserAgent/Exception.rakumod",
+    
+    
+    
     "WebDriver2::Model::Context" : "lib/WebDriver2.rakumod",
     "WebDriver2::Model::Element" : "lib/WebDriver2.rakumod",
     "WebDriver2::Model::Frame" : "lib/WebDriver2.rakumod",
+    
     "WebDriver2::SUT::Build" : "lib/WebDriver2/SUT/Build.rakumod",
     "WebDriver2::SUT::Build::Page" : "lib/WebDriver2/SUT/Build/Page.rakumod",
     "WebDriver2::SUT::Navigator" : "lib/WebDriver2/SUT/Navigator.rakumod",
     "WebDriver2::SUT::Navigator::Path" : "lib/WebDriver2/SUT/Navigator.rakumod",
     "WebDriver2::SUT::Provider" : "lib/WebDriver2/SUT/Provider.rakumod",
-    "WebDriver2::SUT::ProviderR" : "lib/WebDriver2/SUT/ProviderR.rakumod",
     "WebDriver2::SUT::Service" : "lib/WebDriver2/SUT/Service.rakumod",
     "WebDriver2::SUT::Tree" : "lib/WebDriver2/SUT/Tree.rakumod",
     "WebDriver2::SUT::Tree::Subject" : "lib/WebDriver2/SUT/Tree.rakumod",
@@ -173,12 +189,20 @@
     "WebDriver2::SUT::Tree::Visitable" : "lib/WebDriver2/SUT/Tree.rakumod",
     "WebDriver2::SUT::Tree::Visitor" : "lib/WebDriver2/SUT/Tree.rakumod",
     "WebDriver2::SUT::Service::Loader" : "lib/WebDriver2/SUT/Service/Loader.rakumod",
+    
+    
+    
     "WebDriver2::Test" : "lib/WebDriver2/Test.rakumod",
+    "WebDriver2::Test::Adapter" : "lib/WebDriver2/Test/Adapter.rakumod",
     "WebDriver2::Test::Config-From-File" : "lib/WebDriver2/Test/Config-From-File.rakumod",
+    "WebDriver2::Test::Debugging" : "lib/WebDriver2/Test/Debugging.rakumod",
     "WebDriver2::Test::Locating-Test" : "lib/WebDriver2/Test/Locating-Test.rakumod",
     "WebDriver2::Test::PO-Test" : "lib/WebDriver2/Test/PO-Test.rakumod",
     "WebDriver2::Test::Service-Test" : "lib/WebDriver2/Test/Service-Test.rakumod",
     "WebDriver2::Test::Template" : "lib/WebDriver2/Test/Template.rakumod",
+    
+    
+    
     "WebDriver2::Until" : "lib/WebDriver2/Until.rakumod",
     "WebDriver2::Until::No-Throw" : "lib/WebDriver2/Until.rakumod",
     "WebDriver2::Until::Throwable" : "lib/WebDriver2/Until.rakumod",

@@ -6,31 +6,33 @@ use lib <lib t/lib>;
 use WebDriver2;
 use WebDriver2::Command::Element::Locator::ID;
 use WebDriver2::Command::Element::Locator::Tag-Name;
-
-use WebDriver2::Test;
-use WebDriver2::Test::Config-From-File;
+use WebDriver2::Test::Template;
 
 my IO::Path $html-file =
 		.add: 'test.html' with $*PROGRAM.parent.parent.add: 'content';
 
-class Local does WebDriver2::Test does WebDriver2::Test::Config-From-File {
+class Local does WebDriver2::Test::Template {
 	has Bool $!screenshot;
+	
+	has Int:D $.plan = 38;
+	has Str:D $.name = 'local';
+	has Str:D $.description = 'local test';
 
-	method new ( Str $browser? is copy, Int:D :$debug = 0 ) {
-		self.set-from-file: $browser; #, $debug;
-		my Local:D $self =
-				self.bless:
-						:$browser,
-						:$debug,
-						plan => 39,
-						name => 'local',
-						description => 'local test';
-		$self.init;
-		$self;
-	}
+#	method new ( Str $browser? is copy, Int:D :$debug = 0 ) {
+#		self.set-from-file: $browser; #, $debug;
+#		my Local:D $self =
+#				self.bless:
+#						:$browser,
+#						:$debug,
+#						plan => 39,
+#						name => 'local',
+#						description => 'local test';
+#		$self.init;
+#		$self;
+#	}
 
 	method test {
-		$.driver.set-window-rect( 1200, 750, 8, 8 ) if $.browser eq 'safari';
+#		$.driver.set-window-rect( 1200, 750, 8, 8 ) if $.browser eq 'safari';
 		$.driver.navigate: 'file://' ~ $html-file.absolute;
 
 		is $.driver.title, 'test', 'page title';

@@ -16,9 +16,9 @@ unit role WebDriver2::Test
 		does WebDriver2::Test::Locating-Test
 		does WebDriver2::Test::Debugging;
 
-method pre-test { }
-method test { ... }
-method post-test { }
+#method pre-test { }
+#method test { ... }
+#method post-test { }
 #method done-testing { done-testing }
 
 method init {

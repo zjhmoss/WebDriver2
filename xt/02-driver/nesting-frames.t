@@ -2,9 +2,7 @@ use Test;
 
 use lib <lib t/lib>;
 
-use WebDriver2;
-use WebDriver2::Test;
-use WebDriver2::Test::Config-From-File;
+use WebDriver2::Test::Template;
 
 use WebDriver2::Command::Element::Locator;
 use WebDriver2::Command::Element::Locator::ID;
@@ -12,22 +10,22 @@ use WebDriver2::Command::Element::Locator::Tag-Name;
 
 my $file = .add: 'lists.html' with $*PROGRAM.parent.parent.add: 'content';
 
-class Test-Nav-To-Frame
-		does WebDriver2::Test
-		does WebDriver2::Test::Config-From-File
-{
-	method new ( Str $browser? is copy, Int:D :$debug = 0 ) {
-		self.set-from-file: $browser; #, $debug;
-		my Test-Nav-To-Frame:D $self=
-				self.bless:
-						:$browser,
-						:$debug,
-						plan => 4,
-						name => 'nesting frames',
-						description => 'nesting frames tests';
-		$self.init;
-		$self;
-	}
+class Test-Nav-To-Frame does WebDriver2::Test::Template {
+	has Int:D $.plan = 3;
+	has Str:D $.name = 'nesting frames';
+	has Str:D $.description = 'nesting frames test';
+#	method new ( Str $browser? is copy, Int:D :$debug = 0 ) {
+#		self.set-from-file: $browser; #, $debug;
+#		my Test-Nav-To-Frame:D $self=
+#				self.bless:
+#						:$browser,
+#						:$debug,
+#						plan => 4,
+#						name => 'nesting frames',
+#						description => 'nesting frames tests';
+#		$self.init;
+#		$self;
+#	}
 	method test {
 		$.driver.navigate: 'file://' ~ $file.absolute;
 

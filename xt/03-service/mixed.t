@@ -68,58 +68,60 @@ class Mixed does WebDriver2::SUT::Service {
 
 }
 
-class Mixed-Test
-		does WebDriver2::Test::Service-Test
-		does WebDriver2::Test::Config-From-File
-{
+class Mixed-Test does WebDriver2::Test::Service-Test {
+	has Str:D $.sut-name = 'mixed';
+	has Int:D $.plan = 22;
+	has Str:D $.name = 'mixed';
+	has Str:D $.description = 'tests for various feature levels';
+	has IO::Path:D $.test-root = $*CWD.add: 'xt';
 	
 	has Mixed $!mixed;
 	
-	submethod BUILD (
-			Str   :$!browser,
-			Str:D :$!name,
-			Str:D :$!description,
-			Str:D :$!sut-name,
-			Int   :$!plan,
-			Int   :$!debug = 0
-	) { }
-	
-	submethod TWEAK (
-#			Str   :$browser is copy,
-			Str:D :$name,
-			Str:D :$description,
-			Str:D :$sut-name,
-			Int   :$plan,
-			Int   :$debug
-	) {
-		$!sut = WebDriver2::SUT::Build.page: { self.driver.top }, $!sut-name, debug => self.debug;
-		$!loader =
-				WebDriver2::SUT::Service::Loader.new:
-						driver => self.driver,
-						:$!browser,
-						:$sut-name,
-						:$debug;
-	}
+#	submethod BUILD (
+#			Str   :$!browser,
+#			Str:D :$!name,
+#			Str:D :$!description,
+#			Str:D :$!sut-name,
+#			Int   :$!plan,
+#			Int   :$!debug = 0
+#	) { }
+#	
+#	submethod TWEAK (
+##			Str   :$browser is copy,
+#			Str:D :$name,
+#			Str:D :$description,
+#			Str:D :$sut-name,
+#			Int   :$plan,
+#			Int   :$debug
+#	) {
+#		$!sut = WebDriver2::SUT::Build.page: { self.driver.top }, $!sut-name, debug => self.debug;
+#		$!loader =
+#				WebDriver2::SUT::Service::Loader.new:
+#						driver => self.driver,
+#						:$!browser,
+#						:$sut-name,
+#						:$debug;
+#	}
 	
 	
 	method services {
-		$!loader.load-elements: $!mixed = Mixed.new: :$.driver;
+		$.loader.load-elements: $!mixed = Mixed.new: :$.driver;
 	}
 
-	method new ( Str $browser? is copy, Int :$debug is copy ) {
-		self.set-from-file: $browser; # , $debug;
-		my Mixed-Test:D $self =
-				callwith
-						:$browser,
-						:$debug,
-						sut-name => 'mixed',
-						name => 'mixed',
-						description => 'tests for various feature levels',
-						plan => 23;
-		$self.init;
-		$self.services;
-		$self;
-	}
+#	method new ( Str $browser? is copy, Int :$debug is copy ) {
+#		self.set-from-file: $browser; # , $debug;
+#		my Mixed-Test:D $self =
+#				callwith
+#						:$browser,
+#						:$debug,
+#						sut-name => 'mixed',
+#						name => 'mixed',
+#						description => 'tests for various feature levels',
+#						plan => 23;
+#		$self.init;
+#		$self.services;
+#		$self;
+#	}
 	
 	method test {
 #		$!mixed = $.service-loader.load: Mixed;

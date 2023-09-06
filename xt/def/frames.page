@@ -1,4 +1,4 @@
-page frames 'file://t/content/lists.html' {
+page frames 'file://xt/content/lists.html' {
 	elemt h2 tag-name 'h2';
 	elgrp basic id 'basic' {
 	    list of elemt basic-item tag-name 'li';

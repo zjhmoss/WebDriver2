@@ -17,14 +17,11 @@ use WebDriver2::Until::Command;
 
 
 class Root-Content does WebDriver2::SUT::Service {
+	has Str:D $.name = 'example';
 	my IO::Path $html-file =
-			.add: 'example.html' with $*PROGRAM.parent.parent.add: 'content';
+			$*CWD.add: <xt content example.html>;
 	
 	submethod BUILD ( WebDriver2::Driver:D :$!driver ) { }
-	
-	method name (--> Str:D) {
-		'example';
-	}
 
 	method heading ( --> Str:D ) {
 		.resolve.text with self.get: 'the-h2';
@@ -62,12 +59,9 @@ class Root-Content does WebDriver2::SUT::Service {
 
 
 class Original-Frame does WebDriver2::SUT::Service {
+	has Str:D $.name = 'example-original-frame';
 	
 	submethod BUILD ( WebDriver2::Driver:D :$!driver ) { }
-	
-	method name (--> Str:D) {
-			'example-original-frame'
-	}
 
 	method heading ( --> Str:D ) {
 		.resolve.text with self.get: 'orig-h2';
@@ -85,12 +79,9 @@ class Original-Frame does WebDriver2::SUT::Service {
 }
 
 class Replacement-Frame does WebDriver2::SUT::Service {
+	has Str:D $.name = 'example-replacement-frame';
 	
 	submethod BUILD ( WebDriver2::Driver:D :$!driver ) { }
-	
-	method name (--> Str:D) {
-			'example-replacement-frame'
-	}
 
 	method heading ( --> Str:D ) {
 		.resolve.text with self.get: 'rep-h2';
@@ -116,12 +107,9 @@ class Replacement-Frame does WebDriver2::SUT::Service {
 }
 
 class Nested-Frame does WebDriver2::SUT::Service {
+	has Str:D $.name = 'example-nested-frame';
 	
 	submethod BUILD ( WebDriver2::Driver:D :$!driver ) { }
-	
-	method name ( --> Str:D ) {
-		'example-nested-frame'
-	}
 
 	method heading ( --> Str:D ) {
 		.resolve.text with self.get: 'nested-h2';
@@ -138,61 +126,64 @@ class Nested-Frame does WebDriver2::SUT::Service {
 	}
 }
 
-class Example-Test
-	does WebDriver2::Test::Service-Test
-	does WebDriver2::Test::Config-From-File
-{
+class Example-Test does WebDriver2::Test::Service-Test {
+	has Str:D $.sut-name = 'example';
+	has Int:D $.plan = 18;
+	has Str:D $.name = 'example test name';
+	has Str:D $.description = 'example test description';
+	has IO::Path:D $.test-root = $*CWD.add: 'xt';
+	
 	has Root-Content $!mls;
 	has Original-Frame $!of;
 	has Replacement-Frame $!rf;
 	has Nested-Frame $!nf;
 	
-	submethod BUILD (
-			Str   :$!browser,
-			Str:D :$!name,
-			Str:D :$!description,
-			Str:D :$!sut-name,
-			Int   :$!plan,
-			Int   :$!debug = 0
-	) { }
-	
-	submethod TWEAK (
-#			Str   :$browser is copy,
-			Str:D :$name,
-			Str:D :$description,
-			Str:D :$sut-name,
-			Int   :$plan,
-			Int   :$debug
-	) {
-		$!sut = WebDriver2::SUT::Build.page: { self.driver.top }, $!sut-name, debug => self.debug;
-		$!loader =
-				WebDriver2::SUT::Service::Loader.new:
-						driver => self.driver,
-						:$!browser,
-						:$sut-name,
-						:$debug;
-	}
+#	submethod BUILD (
+#			Str   :$!browser,
+#			Str:D :$!name,
+#			Str:D :$!description,
+#			Str:D :$!sut-name,
+#			Int   :$!plan,
+#			Int   :$!debug = 0
+#	) { }
+#	
+#	submethod TWEAK (
+##			Str   :$browser is copy,
+#			Str:D :$name,
+#			Str:D :$description,
+#			Str:D :$sut-name,
+#			Int   :$plan,
+#			Int   :$debug
+#	) {
+#		$!sut = WebDriver2::SUT::Build.page: { self.driver.top }, $!sut-name, debug => self.debug;
+#		$!loader =
+#				WebDriver2::SUT::Service::Loader.new:
+#						driver => self.driver,
+#						:$!browser,
+#						:$sut-name,
+#						:$debug;
+#	}
 
-	method new ( Str $browser? is copy, Int:D :$debug = 0 ) {
-			self.set-from-file: $browser; # , $debug;
-			my Example-Test:D $self =
-					callwith
-							:$browser,
-							:$debug,
-							sut-name => 'example',
-							name => 'example test name',
-							description => 'example test description',
-							plan => 19;
-		$self.init;
-		$self.services;
-		$self;
-	}
+#	method new ( Str $browser? is copy, Int:D :$debug = 0 ) {
+#			self.set-from-file: $browser; # , $debug;
+#			my Example-Test:D $self =
+#					callwith
+#							:$browser,
+#							:$debug,
+#							sut-name => 'example',
+#							name => 'example test name',
+#							description => 'example test description',
+#							plan => 19;
+#		$self.init;
+#		$self.services;
+#		$self;
+#	}
 
 	method services {
-		$!loader.load-elements: $!mls = Root-Content.new: :$.driver;
-		$!loader.load-elements: $!of = Original-Frame.new: :$.driver;
-		$!loader.load-elements: $!rf = Replacement-Frame.new: :$.driver;
-		$!loader.load-elements: $!nf = Nested-Frame.new: :$.driver;
+		$.loader.load-elements: $!mls = Root-Content.new: :$.driver;
+		$.loader.load-elements: $!of = Original-Frame.new: :$.driver;
+		$.loader.load-elements: $!rf = Replacement-Frame.new: :$.driver;
+		$.loader.load-elements: $!nf = Nested-Frame.new: :$.driver;
 	}
 
 	method test {

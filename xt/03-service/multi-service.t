@@ -50,58 +50,60 @@ class Multi-Form does WebDriver2::SUT::Service {
 	}
 }
 
-class Multi-Service-Test
-		does WebDriver2::Test::Service-Test
-		does WebDriver2::Test::Config-From-File
-{
+class Multi-Service-Test does WebDriver2::Test::Service-Test {
+	has Str:D $.sut-name = 'multi-service';
+	has Int:D $.plan = 4;
+	has Str:D $.name = 'multi-service';
+	has Str:D $.description = 'tests resolve and frames';
+	has IO::Path:D $.test-root = $*CWD.add: 'xt';
 	
 	has Multi-Outer $!outer-service;
 	has Multi-Form $!form-service;
 	
-	submethod BUILD (
-			Str   :$!browser,
-			Str:D :$!name,
-			Str:D :$!description,
-			Str:D :$!sut-name,
-			Int   :$!plan,
-			Int   :$!debug = 0
-	) { }
-	
-	submethod TWEAK (
-			#			Str   :$browser is copy,
-			Str:D :$name,
-			Str:D :$description,
-			Str:D :$sut-name,
-			Int   :$plan,
-			Int   :$debug
-	) {
-		$!sut = WebDriver2::SUT::Build.page: { self.driver.top }, $!sut-name, debug => self.debug;
-		$!loader =
-				WebDriver2::SUT::Service::Loader.new:
-						driver => self.driver,
-						:$!browser,
-						:$sut-name,
-						:$debug;
-	}
+#	submethod BUILD (
+#			Str   :$!browser,
+#			Str:D :$!name,
+#			Str:D :$!description,
+#			Str:D :$!sut-name,
+#			Int   :$!plan,
+#			Int   :$!debug = 0
+#	) { }
+#	
+#	submethod TWEAK (
+#			#			Str   :$browser is copy,
+#			Str:D :$name,
+#			Str:D :$description,
+#			Str:D :$sut-name,
+#			Int   :$plan,
+#			Int   :$debug
+#	) {
+#		$!sut = WebDriver2::SUT::Build.page: { self.driver.top }, $!sut-name, debug => self.debug;
+#		$!loader =
+#				WebDriver2::SUT::Service::Loader.new:
+#						driver => self.driver,
+#						:$!browser,
+#						:$sut-name,
+#						:$debug;
+#	}
 
-	method new ( Str $browser? is copy, Int:D :$debug = 0 ) {
-		self.set-from-file: $browser; # , $debug;
-		my Multi-Service-Test:D $self =
-				callwith
-						:$browser,
-						:$debug,
-						sut-name => 'multi-service',
-						name => 'multi-service',
-						description => 'tests resolve and frames',
-						plan => 5;
-		$self.init;
-		$self.services;
-		$self;
-	}
+#	method new ( Str $browser? is copy, Int:D :$debug = 0 ) {
+#		self.set-from-file: $browser; # , $debug;
+#		my Multi-Service-Test:D $self =
+#				callwith
+#						:$browser,
+#						:$debug,
+#						sut-name => 'multi-service',
+#						name => 'multi-service',
+#						description => 'tests resolve and frames',
+#						plan => 5;
+#		$self.init;
+#		$self.services;
+#		$self;
+#	}
 	
 	method services {
-		$!loader.load-elements: $!outer-service = Multi-Outer.new: :$.driver;
-		$!loader.load-elements: $!form-service = Multi-Form.new: :$.driver;
+		$.loader.load-elements: $!outer-service = Multi-Outer.new: :$.driver;
+		$.loader.load-elements: $!form-service = Multi-Form.new: :$.driver;
 	}
 	
 	method test {

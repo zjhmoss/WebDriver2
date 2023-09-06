@@ -1,4 +1,4 @@
-page doc-main 'file://relative/path/to/doc-main.html' {
+page doc-main 'file://xt/content/doc-main.html' {
 	elgrp div tag-name 'div' {
 		elemt p xpath 'p';
 	}

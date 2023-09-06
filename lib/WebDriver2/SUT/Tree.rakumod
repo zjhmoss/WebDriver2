@@ -626,7 +626,7 @@ class WebDriver2::SUT::Tree::SUT {
 		$page.accept: WebDriver2::SUT::Tree::Frame-Visitor.new;
 		$page.accept: WebDriver2::SUT::Tree::Fragile-Visitor.new;
 	}
-	method get ( Str:D $id --> WebDriver2::SUT::Tree::APage:D ) {
+	method get ( WebDriver2::SUT::Tree::SUT:D: Str:D $id --> WebDriver2::SUT::Tree::APage:D ) {
 		die "no page with id $id" unless %!page{ $id }:exists;
 		%!page{ $id }
 	}

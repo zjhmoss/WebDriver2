@@ -11,7 +11,7 @@ method page (
 		Callable:D $page-resolver,
 		Str:D $sut-name,
 		Bool :$check,
-		Int :$debug = 0
+		Int:D :$debug = 0
 ) {
 	my IO::Path $page = .IO with $def-dir.add: "$sut-name.sut";
 	my Str $contents = pre-process $page;

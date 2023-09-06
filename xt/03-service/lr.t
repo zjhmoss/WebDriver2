@@ -95,60 +95,62 @@ class R does WebDriver2::SUT::Service {
     }
 }
 
-class LR
-        does WebDriver2::Test::Service-Test
-        does WebDriver2::Test::Config-From-File
-{
+class LR does WebDriver2::Test::Service-Test {
+    has Str:D $.sut-name = 'lr';
+    has Int:D $.plan = 3;
+    has Str:D $.name = 'lr';
+    has Str:D $.description = 'lr service and frames test';
+    has IO::Path:D $.test-root = $*CWD.add: 'xt';
 
     has ML $!mls;
     has L $!ls;
     has R $!rs;
 
-    submethod BUILD (
-            Str   :$!browser,
-            Str:D :$!name,
-            Str:D :$!description,
-            Str:D :$!sut-name,
-            Int   :$!plan,
-            Int   :$!debug = 0
-    ) { }
+#    submethod BUILD (
+#            Str   :$!browser,
+#            Str:D :$!name,
+#            Str:D :$!description,
+#            Str:D :$!sut-name,
+#            Int   :$!plan,
+#            Int   :$!debug = 0
+#    ) { }
+#
+#    submethod TWEAK (
+##			Str   :$browser is copy,
+#            Str:D :$name,
+#            Str:D :$description,
+#            Str:D :$sut-name,
+#            Int   :$plan,
+#            Int   :$debug
+#    ) {
+#        $!sut = WebDriver2::SUT::Build.page: { self.driver.top }, $!sut-name, debug => self.debug;
+#        $!loader =
+#                WebDriver2::SUT::Service::Loader.new:
+#                        driver => self.driver,
+#                        :$!browser,
+#                        :$sut-name,
+#                        :$debug;
+#    }
 
-    submethod TWEAK (
-#			Str   :$browser is copy,
-            Str:D :$name,
-            Str:D :$description,
-            Str:D :$sut-name,
-            Int   :$plan,
-            Int   :$debug
-    ) {
-        $!sut = WebDriver2::SUT::Build.page: { self.driver.top }, $!sut-name, debug => self.debug;
-        $!loader =
-                WebDriver2::SUT::Service::Loader.new:
-                        driver => self.driver,
-                        :$!browser,
-                        :$sut-name,
-                        :$debug;
-    }
-
-    method new ( Str $browser? is copy, Int :$debug is copy ) {
-        self.set-from-file: $browser; # , $debug;
-        my LR:D $self =
-                callwith
-                        :$browser,
-                        :$debug,
-                        sut-name => 'lr',
-                        name => 'lr',
-                        description => 'lr service and frames test',
-                        plan => 4;
-        $self.init;
-        $self.services;
-        $self;
-    }
+#    method new ( Str $browser? is copy, Int :$debug is copy ) {
+#        self.set-from-file: $browser; # , $debug;
+#        my LR:D $self =
+#                callwith
+#                        :$browser,
+#                        :$debug,
+#                        sut-name => 'lr',
+#                        name => 'lr',
+#                        description => 'lr service and frames test',
+#                        plan => 4;
+#        $self.init;
+#        $self.services;
+#        $self;
+#    }
 
     method services {
-        $!loader.load-elements: $!mls = ML.new: :$.driver;
-        $!loader.load-elements: $!ls = L.new: :$.driver;
-        $!loader.load-elements: $!rs = R.new: :$.driver;
+        $.loader.load-elements: $!mls = ML.new: :$.driver;
+        $.loader.load-elements: $!ls = L.new: :$.driver;
+        $.loader.load-elements: $!rs = R.new: :$.driver;
     }
 
     method test {

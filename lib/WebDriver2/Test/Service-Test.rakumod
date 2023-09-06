@@ -8,22 +8,28 @@ use WebDriver2::Test::PO-Test;
 use WebDriver2::SUT::Service;
 use WebDriver2::SUT::Service::Loader;
 
-unit role WebDriver2::Test::Service-Test
-		does WebDriver2::Test::PO-Test
-		does WebDriver2::Test::Config-From-File
-#		does WebDriver2::Test::Adapter
-		does WebDriver2::Test::Debugging
-		does WebDriver2::Driver::Provider;
+unit role WebDriver2::Test::Service-Test does WebDriver2::Test::PO-Test;
 
 has WebDriver2::SUT::Service::Loader $!loader;
 
 method loader ( --> WebDriver2::SUT::Service::Loader:D ) {
 	$!loader ||= WebDriver2::SUT::Service::Loader.new:
-			:$.driver,
+#			:$.driver,
 			:$.sut,
 			:$.debug,
-			:$.def-dir;
+			test-root => self.test-root;
 }
+
+method new ( Str $browser is copy, Int:D :$debug = 0 ) {
+	self.set-from-file: $browser;
+	my WebDriver2 $driver = .driver with WebDriver2::Driver::Provider.new: :$browser, :$debug;
+	my $self = self.bless: :$browser, :$driver, :$debug;
+	$self.sut = WebDriver2::SUT::Build.page: { $driver.top }, $self.sut-name, :$debug;
+	$self.services;
+	$self;
+}
+
+method services { ... }
 
 #method new (
 ##		Str   :$!browser,
@@ -44,7 +50,7 @@ method loader ( --> WebDriver2::SUT::Service::Loader:D ) {
 #				debug => self.debug;
 #}
 
-method sut-name ( --> Str:D ) { !!! }
+#method sut-name ( --> Str:D ) { !!! }
 
 #method services ( WebDriver2::SUT::Service $service, Str:D $prefix = '', Str:D $key-prefix = '' ) {
 ##	return if $!loader;
@@ -58,15 +64,15 @@ method sut-name ( --> Str:D ) { !!! }
 #	if $.browser eq 'chrome' | 'safari';
 #}
 
-method pre-test { }
-method test { ... }
-method post-test { }
-method close {
-	say "\nclosing in";
-	.say, sleep 1 for ( 1 .. $.close-delay ).reverse;
-	
-	$.driver.delete-session;
-}
+#method pre-test { }
+#method test { ... }
+#method post-test { }
+#method close {
+#	say "\nclosing in";
+#	.say, sleep 1 for ( 1 .. $.close-delay ).reverse;
+#	
+#	$.driver.delete-session;
+#}
 #multi method screenshot {
 #	$.driver.screenshot;
 #}
@@ -82,14 +88,14 @@ method close {
 #	IO::Path.new( $fn ~ '-' ~ $now.Date ~ '-' ~ $now.to-posix[0] ~ '.png' )
 #			.spurt: MIME::Base64.decode: $screenshot;
 #}
-method handle-test-failure ( Str $descr ) {
-	self.screenshot: $descr;
-}
-
-method handle-error ( Exception $x ) {
-	$x.message.Str.note;
-	self.screenshot: $x.message.Str;
-}
-
-#method done-testing { done-testing; }
-method cleanup { self.close; }
+#method handle-test-failure ( Str $descr ) {
+#	self.screenshot: $descr;
+#}
+#
+#method handle-error ( Exception $x ) {
+#	$x.message.Str.note;
+#	self.screenshot: $x.message.Str;
+#}
+#
+##method done-testing { done-testing; }
+#method cleanup { self.close; }
