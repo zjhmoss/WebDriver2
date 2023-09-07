@@ -1,5 +1,4 @@
 use Test;
-use MIME::Base64;
 
 use lib <lib t/lib>;
 
@@ -7,9 +6,12 @@ use WebDriver2;
 use WebDriver2::Command::Element::Locator::ID;
 use WebDriver2::Command::Element::Locator::Tag-Name;
 use WebDriver2::Test::Template;
+use WebDriver2::Test::Locating-Test;
+use WebDriver2::SUT::Tree;
 
-my IO::Path $html-file =
-		.add: 'test.html' with $*PROGRAM.parent.parent.add: 'content';
+# can be file path or web address
+my WebDriver2::SUT::Tree::URL:D $page =
+		WebDriver2::SUT::Tree::URL.new: 'file://xt/content/test.html';
 
 class Local does WebDriver2::Test::Template {
 	has Bool $!screenshot;
@@ -17,29 +19,18 @@ class Local does WebDriver2::Test::Template {
 	has Int:D $.plan = 38;
 	has Str:D $.name = 'local';
 	has Str:D $.description = 'local test';
-
-#	method new ( Str $browser? is copy, Int:D :$debug = 0 ) {
-#		self.set-from-file: $browser; #, $debug;
-#		my Local:D $self =
-#				self.bless:
-#						:$browser,
-#						:$debug,
-#						plan => 39,
-#						name => 'local',
-#						description => 'local test';
-#		$self.init;
-#		$self;
-#	}
-
+	
+	# WebDriver2::Test::Template provides method new, which
+	#   sets the browser / loads from file if not passed
+	#   and instantiates the corresponding driver
+	
 	method test {
-#		$.driver.set-window-rect( 1200, 750, 8, 8 ) if $.browser eq 'safari';
-		$.driver.navigate: 'file://' ~ $html-file.absolute;
+		$.driver.navigate: $page.Str;
 
 		is $.driver.title, 'test', 'page title';
 
 		ok
-			self.element-by-id( 'outer' )
-			~~ self.element-by-tag( 'ul' ),
+			self.element-by-id( 'outer' ) ~~ self.element-by-tag( 'ul' ),
 			'same element found different ways';
 
 		my WebDriver2::Command::Element::Locator $by-tag-ul =
