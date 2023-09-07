@@ -10,39 +10,35 @@ Current implementation status is
 ### Using a driver directly
 
 To use a driver directly for all [endpoint commands](#implementation-status), create a
-test class that implements `WebDriver2::Test`.  The test class
+test class that does `WebDriver2::Test::Template`.  The test class
 will need to specify the browser upon instantiation:
 
 	use Test;
-	use WebDriver2::Test;
+	use WebDriver2::Test::Template;
+	use WebDriver2::SUT::Tree;
 	
-	my IO::Path $html-file =
-			.add: 'test.html' with $*PROGRAM.parent.parent.add: 'content';
+	# can be file path or web address
+	my WebDriver2::SUT::Tree::URL:D $page =
+			WebDriver2::SUT::Tree::URL.new: 'file://xt/content/test.html';
 	
-	class Local does WebDriver2::Test {
+	class Local does WebDriver2::Test::Template {
 		has Bool $!screenshot;
 		
-		method new ( Str $browser? is copy, Int:D :$debug = 0 ) {
-			self.set-from-file: $browser;
-			my Local:D $self =
-					self.bless:
-							:$browser,
-							:$debug,
-							plan => 39,
-							name => 'local',
-							description => 'local test';
-			$self.init;
-			$self;
-		}
+		has Int:D $.plan = 38;
+		has Str:D $.name = 'local';
+		has Str:D $.description = 'local test';
+
+		# WebDriver2::Test::Template provides method new, which
+		#   sets the browser / loads from file if not passed
+		#   and instantiates the corresponding driver
 		
 		method test {
-			$.driver.navigate: 'file://' ~ $html-file.absolute;
+			$.driver.navigate: $page.Str;
 			
 			is $.driver.title, 'test', 'page title';
 			
 			ok
-					self.element-by-id( 'outer' )
-							~~ self.element-by-tag( 'ul' ),
+					self.element-by-id( 'outer' ) ~~ self.element-by-tag( 'ul' ),
 					'same element found different ways';
 			
 			my WebDriver2::Command::Element::Locator $by-tag-ul =
@@ -271,9 +267,7 @@ script with supporting code:
 	class Login-Service does WebDriver2::SUT::Service {
 		has Str:D $.name = 'doc-login';
 		
-		my IO::Path $html-file =
-				.add: 'doc-login.html'
-		with $*PROGRAM.parent.parent.add: 'content';
+		my IO::Path $html-file = $*CWD.add: <xt content doc-login.html>;
 		
 		my WebDriver2::SUT::Tree::URL $url =
 				WebDriver2::SUT::Tree::URL.new: 'file://' ~ $html-file.Str;

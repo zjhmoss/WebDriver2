@@ -22,12 +22,10 @@ method description ( --> Str:D ) { ... }
 
 method new ( Str $browser is copy, Int:D :$debug = 0 ) {
 	self.set-from-file: $browser;
-	my $self =
-			self.bless:
-					:$browser,
-					driver => WebDriver2::Driver::Provider.new( :$browser, :$debug ).driver,
-					:$debug;
-	$self;
+	self.bless:
+			:$browser,
+			driver => WebDriver2::Driver::Provider.new( :$browser, :$debug ).driver,
+			:$debug;
 }
 
 method !init {
