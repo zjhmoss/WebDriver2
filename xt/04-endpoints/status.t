@@ -15,19 +15,6 @@ class Status-Test does WebDriver2::Test::Template {
 	has Str:D $.description = 'status test';
 	has IO::Path:D $.test-root = $*CWD.add: 'xt';
 	
-#	method new ( Str $browser? is copy, Int:D :$debug = 0 ) {
-#		self.set-from-file: $browser; # , $debug;
-#		my Status-Test:D $self =
-#				self.bless:
-#						:$browser,
-#						:$debug,
-#						plan => 7,
-#						name => 'status',
-#						description => 'status test';
-#		$self.init;
-#		$self;
-#	}
-	
 	method test {
 		my WebDriver2::Command::Result::Status $status = $.driver.status;
 		self.ok: 'version defined: ' ~ $status.version, $status.version.defined;

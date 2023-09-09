@@ -12,7 +12,6 @@ class Login-Service does WebDriver2::SUT::Service {
 	has Str:D $.name = 'doc-login';
 	
 	my IO::Path $html-file = $*CWD.add: <xt content doc-login.html>;
-#	with $*PROGRAM.parent.parent.add: 'content';
 	
 	my WebDriver2::SUT::Tree::URL $url =
 			WebDriver2::SUT::Tree::URL.new: 'file://' ~ $html-file.Str;
@@ -101,32 +100,6 @@ class Readme-Test does WebDriver2::Test::Service-Test {
 	has Form-Service $!fs-div;
 	has Form-Service $!fs-frame;
 	has Frame-Service $!frs;
-	
-	#	submethod BUILD (
-	#			Str   :$!browser,
-	#			Str:D :$!name,
-	#			Str:D :$!description,
-	#			Str:D :$!sut-name,
-	#			Int   :$!plan,
-	#			Int   :$!debug = 0
-	#	) { }
-	
-	#	submethod TWEAK (
-	##			Str:D :$sut-name,
-	##			Int   :$debug
-	#	) {
-	##		$!sut = WebDriver2::SUT::Build.page: { self.driver.top }, $!sut-name, debug => self.debug;
-	#		$!loader =
-	#				WebDriver2::SUT::Service::Loader.new:
-	#						driver => self.driver,
-	#						:$!browser,
-	#						:$sut-name,
-	#						:$debug;
-	#	}
-	
-#	method new ( Str $browser is copy, Int :$debug = 0 ) {
-##		
-#	}
 	
 	method services {
 		$.loader.load-elements: $!ls = Login-Service.new: :$.driver;

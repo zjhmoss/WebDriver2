@@ -58,11 +58,17 @@ will need to specify the browser upon instantiation:
 			# test continues ...
 		}
 	}
+	
+	sub MAIN (
+		Str $browser?,
+		Int:D :$debug = 0
+	) {
+		.execute with Local.new: $browser, :$debug;
+	}
 
-  
 
-`WebDriver2::Test` (indirectly) does
-`WebDriver2::Test::Template`, which will call
+
+`WebDriver2::Test::Template` calls
 
 	method init { ... }
 	method pre-test { ... }
@@ -77,8 +83,8 @@ when its `execute` method is called.
 Before starting into the test code, `$.driver.session` needs
 to be called, along with `$.driver.delete-session` after
 test code has completed.  These two calls are made
-automatically during `init` and `close` when extending the
-provided `WebDriver2::Test`.
+automatically during `init` and `close` when doing the
+provided role `WebDriver2::Test::Template`.
 
 ### Defining a site's pages and the services they provide
 

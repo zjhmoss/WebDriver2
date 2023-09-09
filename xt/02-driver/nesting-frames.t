@@ -14,18 +14,7 @@ class Test-Nav-To-Frame does WebDriver2::Test::Template {
 	has Int:D $.plan = 3;
 	has Str:D $.name = 'nesting frames';
 	has Str:D $.description = 'nesting frames test';
-#	method new ( Str $browser? is copy, Int:D :$debug = 0 ) {
-#		self.set-from-file: $browser; #, $debug;
-#		my Test-Nav-To-Frame:D $self=
-#				self.bless:
-#						:$browser,
-#						:$debug,
-#						plan => 4,
-#						name => 'nesting frames',
-#						description => 'nesting frames tests';
-#		$self.init;
-#		$self;
-#	}
+	
 	method test {
 		$.driver.navigate: 'file://' ~ $file.absolute;
 
@@ -45,16 +34,6 @@ class Test-Nav-To-Frame does WebDriver2::Test::Template {
 
 		$el = self.element-by-tag: 'h2';
 		self.is: 'inner frame h2', 'internal frame', $el.text;
-
-#		$frame0.switch-to;
-#
-#		$el = self.element-by-tag: 'h2';
-#		self.is: 'frame h2', 'list frame test', $el.text;
-#
-#		self.top;
-#
-#		$el = self.element-by-tag: 'h2';
-#		self.is: 'page h2', 'test', $el.text;
 	}
 
 	method element-by-id( Str $id ) {

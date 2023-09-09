@@ -117,50 +117,9 @@ class Frames-Test does WebDriver2::Test::Service-Test {
 	has Frames-Test-Service $!service;
 	has Str @!expected = <hey hi bye oye hola adios 喂 你好 再見>;
 	
-#	submethod BUILD (
-#			Str   :$!browser,
-#			Str:D :$!name,
-#			Str:D :$!description,
-#			Str:D :$!sut-name,
-#			Int   :$!plan,
-#			Int   :$!debug = 0
-#) { }
-#	
-#	submethod TWEAK (
-##			Str   :$browser is copy,
-#			Str:D :$name,
-#			Str:D :$description,
-#			Str:D :$sut-name,
-#			Int   :$plan,
-#			Int   :$debug
-# ) {
-#		$!sut = WebDriver2::SUT::Build.page: { self.driver.top }, $!sut-name, debug => self.debug;
-#		$!loader =
-#				WebDriver2::SUT::Service::Loader.new:
-#						driver => self.driver,
-#						:$!browser,
-#						:$sut-name,
-#						:$debug;
-#	}
-
 	method services {
 		$.loader.load-elements: $!service = Frames-Test-Service.new: :$.driver, :$.sut;
 	}
-
-#	method new ( Str $browser? is copy, Int:D :$debug = 0 ) {
-#		self.set-from-file: $browser; # , $debug;
-#		my Frames-Test:D $self=
-#				callwith
-#						:$browser,
-#						:$debug,
-#						sut-name => 'frames',
-#						name => 'frames',
-#						description => 'tests nesting frames',
-#						plan => 36;
-#		$self.init;
-#		$self.services;
-#		$self;
-#	}
 	
 	method test {
 		$!service.nav;

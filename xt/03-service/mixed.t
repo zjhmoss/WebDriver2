@@ -77,33 +77,6 @@ class Mixed-Test does WebDriver2::Test::Service-Test {
 	
 	has Mixed $!mixed;
 	
-#	submethod BUILD (
-#			Str   :$!browser,
-#			Str:D :$!name,
-#			Str:D :$!description,
-#			Str:D :$!sut-name,
-#			Int   :$!plan,
-#			Int   :$!debug = 0
-#	) { }
-#	
-#	submethod TWEAK (
-##			Str   :$browser is copy,
-#			Str:D :$name,
-#			Str:D :$description,
-#			Str:D :$sut-name,
-#			Int   :$plan,
-#			Int   :$debug
-#	) {
-#		$!sut = WebDriver2::SUT::Build.page: { self.driver.top }, $!sut-name, debug => self.debug;
-#		$!loader =
-#				WebDriver2::SUT::Service::Loader.new:
-#						driver => self.driver,
-#						:$!browser,
-#						:$sut-name,
-#						:$debug;
-#	}
-	
-	
 	method services {
 		$.loader.load-elements: $!mixed = Mixed.new: :$.driver;
 	}

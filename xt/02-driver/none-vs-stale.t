@@ -19,19 +19,6 @@ class Local
 	has Str:D $.name = 'none vs stale';
 	has Str:D $.description = 'none and stale both handled';
 	
-#	method new ( Str $browser is copy, Int:D :$debug = 0 ) {
-#		self.set-from-file: $browser; #, $debug;
-#		my Local:D $self =
-#				self.bless:
-#						:$browser,
-#						:$debug,
-#						plan => 4,
-#						name => 'none vs stale',
-#						description => 'none and stale both handled';
-#		$self.init;
-#		$self;
-#	}
-	
 	method test {
 		$.driver.set-window-rect( 1200, 750, 8, 8 ) if $.browser eq 'safari';
 		$.driver.navigate: 'file://' ~ $html-file.absolute;

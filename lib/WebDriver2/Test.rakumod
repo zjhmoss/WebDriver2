@@ -9,17 +9,11 @@ use WebDriver2::Test::Template;
 use WebDriver2::Test::Debugging;
 
 unit role WebDriver2::Test
-#		does WebDriver2::Test::TestR
 		does WebDriver2::Test::Adapter
 		does WebDriver2::Test::Template
 		does WebDriver2::Driver::Provider
 		does WebDriver2::Test::Locating-Test
 		does WebDriver2::Test::Debugging;
-
-#method pre-test { }
-#method test { ... }
-#method post-test { }
-#method done-testing { done-testing }
 
 method init {
 	self.lives-ok: 'session created', { $.driver.session };

@@ -28,37 +28,9 @@ method param-factory( --> WebDriver2::Command::Param::Factory ) {
 
 method factory( --> WebDriver2::Command::Result::Factory ) {
 	$.result // WebDriver2::Command::Result::Factory::Safari.new
-#	$.result // WebDriver2::Command::Result::Factory.new
 }
 
 method displayed ( WebDriver2::Model::Element:D $element --> Bool ) {
 	say 'DISPLAYED OVERRIDDEN';
 	return Bool;
 }
-
-#multi method switch-to( WebDriver2::Model::Frame:D $frame ) {
-##	$frame.switch-to
-#	say 'SWITCH TO FRAME BY ID';
-#	say self.execute-script: 'return self.name';
-#	return;
-#}
-#
-#multi method switch-to( Int:D $frame ) {
-##	warn "JUMPING TO FRAME $frame" if $!debug;
-##	self!switch-to: $frame
-#	say 'SWITCH TO FRAME BY INT';
-#	say self.execute-script: 'return self.name';
-#	return;
-#}
-#
-#method switch-to-parent {
-##	my WebDriver2::Command::Result::Switch-To-Parent $switch =
-##			WebDriver2::Command::Switch-To-Parent.new
-##			.execute-with: self;
-##	@!frames.pop;
-##	say 'POP ' ~ @!frames if $!debug;
-##	self.debug: $switch;
-#	say 'SWITCH TO PARENT';
-#	say self.execute-script: 'return self.name';
-#	return;
-#}

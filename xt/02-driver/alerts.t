@@ -13,18 +13,7 @@ class Alerts does WebDriver2::Test::Template {
 	has Str:D $.name = 'alerts';
 	has Str:D $.description = 'js alerts';
 	
-#	method new ( Str $browser? is copy, Int:D :$debug = 0 ) {
-#		self.set-from-file: $browser;
-#		my Alerts:D $self =
-#				self.bless:
-#						:$browser,
-#						:$debug,
-#						plan => 9,
-#						name => 'alerts',
-#						description => 'js alerts';
-#		$self.init;
-#		$self;
-#	}
+	
 	
 	method test {
 		$.driver.navigate: 'file://' ~ $html-file.absolute;

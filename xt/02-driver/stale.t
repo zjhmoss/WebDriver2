@@ -19,18 +19,6 @@ class Stale
 	has Str:D $.name = 'stale';
 	has Str:D $.description = 'stale handling';
 	
-#	method new ( Str $browser? is copy, Int:D :$debug = 0 ) {
-#		self.set-from-file: $browser; #, $debug;
-#		my Stale:D $self =
-#				self.bless:
-#						:$browser,
-#						:$debug,
-#						plan => 7,
-#						name => 'stale',
-#						description => 'stale handling';
-#		$self.init;
-#		$self;
-#	}
 	method test {
 		self.driver.navigate: 'file://' ~ $html-file.absolute;
 		is self.driver.title, 'test', 'page title';
