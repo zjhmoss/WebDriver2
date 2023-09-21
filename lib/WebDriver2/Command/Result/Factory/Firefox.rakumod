@@ -59,24 +59,24 @@ method execution-status( WebDriver2::HTTP::Response $response --> WebDriver2::Co
 			when 'stale element reference' {
 #				say '404 ERROR ', .raku;
 				WebDriver2::Command::Result::X.new( execution-status =>
-				WebDriver2::Command::Execution-Status.new(
-						|self.status-args(
-								$response,
-								WebDriver2::Command::Execution-Status::Type::Stale
+						WebDriver2::Command::Execution-Status.new(
+								|self.status-args(
+										$response,
+										WebDriver2::Command::Execution-Status::Type::Stale
 								)
 						)
-						).throw;
+				).throw;
 			}
-#			when 'stale element reference' {
-#				WebDriver2::Command::Result::X.new( status =>
-#						WebDriver2::Command::Execution-Status.new(
-#								|self.status-args(
-#										$response,
-#										WebDriver2::Command::Execution-Status::Type::Stale
-#								)
-#						)
-#				).throw;
-#			}
+			when 'invalid session id' {
+				WebDriver2::Command::Result::X.new( execution-status =>
+						WebDriver2::Command::Execution-Status.new(
+								|self.status-args(
+										$response,
+										WebDriver2::Command::Execution-Status::Type::Session
+								)
+						)
+				).throw;
+			}
 			when 'no such element' {
 				WebDriver2::Command::Result::X.new( execution-status =>
 						WebDriver2::Command::Execution-Status.new(
@@ -151,7 +151,6 @@ method basic( WebDriver2::HTTP::Response $response ) {
 }
 
 method single-value( WebDriver2::HTTP::Response $response ) {
-#	my $data = from-json( $response.content );
 	my $data = from-json $response.content;
 	my WebDriver2::Command::Execution-Status $execution-status = self.execution-status( $response );
 #	my WebDriver2::Command::Execution-Status $execution-status = self.execution-status( $data, $response.code );

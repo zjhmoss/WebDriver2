@@ -7,9 +7,9 @@
 #use WebDriver2::Command::Result;
 #use WebDriver2::Command::Result::Factory;
 
-use WebDriver2::Command::Result::Factory::Chrome;
+use WebDriver2::Command::Result::Factory::Chromium;
 
-unit class WebDriver2::Command::Result::Factory::Edge is WebDriver2::Command::Result::Factory::Chrome;
+unit class WebDriver2::Command::Result::Factory::Edge is WebDriver2::Command::Result::Factory::Chromium;
 
 #unit class WebDriver2::Command::Result::Factory::Edge does WebDriver2::Command::Result::Factory;
 #

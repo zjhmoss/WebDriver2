@@ -556,10 +556,10 @@ welcome.
 		<td><code>$driver.navigate ( Str $url )</code></td>
 	</tr>
 	<tr><td>get current url</td>
-		<td align="center" class="not-started">&nbsp;</td>
-		<td align="center" class="not-started">&nbsp;</td>
-		<td align="center" class="not-started">&nbsp;</td>
-		<td align="center" class="not-started">&nbsp;</td>
+		<td align="center" class="complete">X</td>
+		<td align="center" class="complete">X</td>
+		<td align="center" class="complete">X</td>
+		<td align="center" class="complete">X</td>
 		<td><code>$driver.url</code></td>
 	</tr>
 	<tr><td>back</td>
@@ -577,11 +577,11 @@ welcome.
 		<td><code></code></td>
 	</tr>
 	<tr><td>refresh</td>
-		<td align="center" class="not-started">&nbsp;</td>
-		<td align="center" class="not-started">&nbsp;</td>
-		<td align="center" class="not-started">&nbsp;</td>
-		<td align="center" class="not-started">&nbsp;</td>
-		<td><code></code></td>
+		<td align="center" class="complete">X</td>
+		<td align="center" class="complete">X</td>
+		<td align="center" class="complete">X</td>
+		<td align="center" class="complete">X</td>
+		<td><code>$driver.refresh</code></td>
 	</tr>
 	<tr><td>get title</td>
 		<td align="center" class="complete">X</td>
@@ -623,7 +623,7 @@ welcome.
 		<td align="center" class="not-started">&nbsp;</td>
 		<td align="center" class="not-started">&nbsp;</td>
 		<td align="center" class="not-started">&nbsp;</td>
-		<td><code>$driver.new-window</code></td>
+		<td><code></code></td>
 	</tr>
 	<tr><td>switch to frame</td>
 		<td align="center" class="complete">X</td>

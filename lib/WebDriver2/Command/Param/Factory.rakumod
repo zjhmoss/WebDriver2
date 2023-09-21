@@ -16,6 +16,7 @@ method current-url { { } }
 method navigate( Str $url ) {
 	{ :$url }
 }
+method title { { } }
 method refresh() { { } }
 method maximize-window { { } }
 method set-window-rect( Int $width, Int $height, Int $x, Int $y ) {

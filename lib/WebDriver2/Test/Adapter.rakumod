@@ -50,6 +50,18 @@ method lives-ok ( Str:D $descr, &cb ) {
 	$result;
 }
 
+method dies-ok ( Str:D $descr, &cb ) {
+	my Bool $result = dies-ok &cb, $descr;
+	self.handle-test-failure: $descr unless $result;
+	$result;
+}
+
+method throws-like ( Str:D $reason, $ex-type, $code, *%matcher ) {
+	my Bool $result = 0 == throws-like $code, $ex-type, $reason, |%matcher;
+	self.handle-test-failure: $reason unless $result;
+	$result;
+}
+
 method flunk ( Str:D $descr ) {
 	self.handle-test-failure: $descr;
 	flunk $descr;

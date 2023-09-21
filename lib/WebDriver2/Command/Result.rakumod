@@ -87,7 +87,7 @@ class WebDriver2::Command::Result::Title is WebDriver2::Command::Result::Single-
 class WebDriver2::Command::Result::URL is WebDriver2::Command::Result::Single-Value { }
 class WebDriver2::Command::Result::X is Exception {
 	has WebDriver2::Command::Execution-Status $.execution-status;
-	method message( --> Str ) {
-		$!execution-status.Str
+	method message( WebDriver2::Command::Result::X:D: --> Str ) {
+		~ $!execution-status
 	}
 }

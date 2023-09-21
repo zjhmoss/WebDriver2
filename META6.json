@@ -1,9 +1,9 @@
 {
   "raku" : "6.d",
   "name" : "WebDriver2",
-  "api"  : "9",
+  "api"  : "10",
   "auth" : "zef:zoss",
-  "version" : "0.1.8",
+  "version" : "0.1.9",
   "description" : "WebDriver level 2 bindings",
   "authors" : [ "zoss" ],
   "license" : "Artistic-2.0",
@@ -233,7 +233,7 @@
     "IO::Socket::SSL"
   ],
   "build-depends" : [ ],
-  "test-depends" : [ ],
+  "test-depends" : [ "PostCocoon::Url" ],
   "resources" : [ ],
   "tags": [
     "WebDriver", "browser", "automation"
