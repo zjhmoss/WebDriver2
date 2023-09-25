@@ -179,10 +179,6 @@ method single-value( WebDriver2::HTTP::Response $response ) {
 	)
 }
 
-#method url ( WebDriver2::HTTP::Response $response --> WebDriver2::Command::Result::URL ) {
-#	WebDriver2::Command::Result::URL.new( |self!single-value( $response ) )
-#}
-#
 method status( WebDriver2::HTTP::Response $response --> WebDriver2::Command::Result::Status ) {
 	my $data = from-json( $response.content );
 	return WebDriver2::Command::Result::Status.new:
@@ -371,76 +367,3 @@ method active( WebDriver2::HTTP::Response $response --> WebDriver2::Command::Res
 			value => $el
 	)
 }
-#
-#method tag-name( WebDriver2::HTTP::Response $response --> WebDriver2::Command::Result::Tag-Name ) {
-#	my $data = from-json( $response.content );
-#	my WebDriver2::Command::Execution-Status $status = self.execution-status( $response );
-#	WebDriver2::Command::Result::Tag-Name.new(
-#			str => $response.content,
-#			:$status,
-#			value => self!value( $data<value> ).lc
-#	)
-#}
-#
-#method switch-to( WebDriver2::HTTP::Response $response --> WebDriver2::Command::Result::Switch-To ) {
-#	# FIXME : status 8 for no such frame
-#	WebDriver2::Command::Result::Switch-To.new( |self!basic( $response ) );
-#}
-#
-#method switch-to-parent(
-#		WebDriver2::HTTP::Response $response
-#		--> WebDriver2::Command::Result::Switch-To-Parent
-#) {
-#	WebDriver2::Command::Result::Switch-To-Parent.new( |self!basic( $response ) )
-#}
-#
-#method property( WebDriver2::HTTP::Response $response --> WebDriver2::Command::Result::Property ) {
-#	WebDriver2::Command::Result::Property.new( |self!single-value( $response ) )
-#}
-#
-#method attribute( WebDriver2::HTTP::Response $response --> WebDriver2::Command::Result::Attribute ) {
-#	WebDriver2::Command::Result::Attribute.new( |self!single-value( $response ) )
-#}
-#
-#method text( WebDriver2::HTTP::Response $response --> WebDriver2::Command::Result::Text ) {
-#	WebDriver2::Command::Result::Text.new( |self!single-value( $response ) )
-#}
-#
-#method enabled( WebDriver2::HTTP::Response $response --> WebDriver2::Command::Result::Enabled ) {
-#	WebDriver2::Command::Result::Enabled.new( |self!single-value( $response ) )
-#}
-#
-#method displayed( WebDriver2::HTTP::Response $response --> WebDriver2::Command::Result::Displayed ) {
-#	WebDriver2::Command::Result::Displayed.new( |self!single-value( $response ) )
-#}
-#
-#method selected( WebDriver2::HTTP::Response $response --> WebDriver2::Command::Result::Selected ) {
-#	WebDriver2::Command::Result::Selected.new( |self!single-value( $response ) )
-#}
-#
-#method css-value( WebDriver2::HTTP::Response $response --> WebDriver2::Command::Result::CSS-Value ) {
-#	WebDriver2::Command::Result::CSS-Value.new( |self!single-value( $response ) )
-#}
-#
-#method send-keys( WebDriver2::HTTP::Response $response --> WebDriver2::Command::Result::Send-Keys ) {
-#	WebDriver2::Command::Result::Send-Keys.new( |self!basic( $response ) )
-#}
-#
-#method timeouts( WebDriver2::HTTP::Response $response --> WebDriver2::Command::Result::Timeouts ) {
-#	WebDriver2::Command::Result::Timeouts.new( |self!basic( $response ) )
-#}
-#
-#method clear( WebDriver2::HTTP::Response $response --> WebDriver2::Command::Result::Clear ) {
-#	WebDriver2::Command::Result::Clear.new( |self!basic( $response ) )
-#}
-#
-#method click( WebDriver2::HTTP::Response $response --> WebDriver2::Command::Result::Click ) {
-#	WebDriver2::Command::Result::Click.new( |self!basic( $response ) )
-#}
-#
-#method delete-session(
-#		WebDriver2::HTTP::Response $response
-#		--> WebDriver2::Command::Result::Delete-Session
-#) {
-#	WebDriver2::Command::Result::Delete-Session.new( |self!basic( $response ) )
-#}
