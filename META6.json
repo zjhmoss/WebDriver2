@@ -125,6 +125,7 @@
     
     "WebDriver2::Command::Result::X" : "lib/WebDriver2/Command/Result.rakumod",
     "WebDriver2::Command::Result::Factory" : "lib/WebDriver2/Command/Result/Factory.rakumod",
+    "WebDriver2::Command::Result::Factory::Chromium" : "lib/WebDriver2/Command/Result/Factory/Chromium.rakumod",
     "WebDriver2::Command::Result::Factory::Chrome" : "lib/WebDriver2/Command/Result/Factory/Chrome.rakumod",
     "WebDriver2::Command::Result::Factory::Edge" : "lib/WebDriver2/Command/Result/Factory/Edge.rakumod",
     "WebDriver2::Command::Result::Factory::Firefox" : "lib/WebDriver2/Command/Result/Factory/Firefox.rakumod",

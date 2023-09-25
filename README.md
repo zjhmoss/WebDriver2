@@ -563,18 +563,18 @@ welcome.
 		<td><code>$driver.url</code></td>
 	</tr>
 	<tr><td>back</td>
-		<td align="center" class="not-started">&nbsp;</td>
-		<td align="center" class="not-started">&nbsp;</td>
-		<td align="center" class="not-started">&nbsp;</td>
-		<td align="center" class="not-started">&nbsp;</td>
-		<td><code></code></td>
+		<td align="center" class="complete">X</td>
+		<td align="center" class="complete">X</td>
+		<td align="center" class="complete">X</td>
+		<td align="center" class="complete">X</td>
+		<td><code>$driver.back</code></td>
 	</tr>
 	<tr><td>forward</td>
-		<td align="center" class="not-started">&nbsp;</td>
-		<td align="center" class="not-started">&nbsp;</td>
-		<td align="center" class="not-started">&nbsp;</td>
-		<td align="center" class="not-started">&nbsp;</td>
-		<td><code></code></td>
+		<td align="center" class="complete">X</td>
+		<td align="center" class="complete">X</td>
+		<td align="center" class="complete">X</td>
+		<td align="center" class="complete">X</td>
+		<td><code>$driver.forward</code></td>
 	</tr>
 	<tr><td>refresh</td>
 		<td align="center" class="complete">X</td>
