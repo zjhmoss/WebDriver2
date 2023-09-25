@@ -69,6 +69,14 @@ method navigate( WebDriver2::HTTP::Response $response --> WebDriver2::Command::R
 	WebDriver2::Command::Result::Navigate.new( |self.basic( $response ) )
 }
 
+method back ( WebDriver2::HTTP::Response $response --> WebDriver2::Command::Result::Back ) {
+	WebDriver2::Command::Result::Back.new( |self.basic( $response ) )
+}
+
+method forward ( WebDriver2::HTTP::Response $response --> WebDriver2::Command::Result::Forward ) {
+	WebDriver2::Command::Result::Forward.new( |self.basic( $response ) )
+}
+
 method refresh( WebDriver2::HTTP::Response $response --> WebDriver2::Command::Result::Refresh ) {
 	WebDriver2::Command::Result::Refresh.new( |self.basic( $response ) )
 }

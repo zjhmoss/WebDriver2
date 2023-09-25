@@ -118,6 +118,20 @@ class WebDriver2::Driver does WebDriver2 {
 		self.debug: $navigate;
 	}
 	
+	method back {
+		my WebDriver2::Command::Result::Back $back =
+				WebDriver2::Command::Back.new
+				.execute-with: self;
+		self.debug: $back;
+	}
+	
+	method forward {
+		my WebDriver2::Command::Result::Forward $forward =
+				WebDriver2::Command::Forward.new
+				.execute-with: self;
+		self.debug: $forward;
+	}
+	
 	method refresh {
 		my WebDriver2::Command::Result::Refresh $refresh =
 			WebDriver2::Command::Refresh.new

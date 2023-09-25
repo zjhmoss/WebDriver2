@@ -1,16 +1,26 @@
 <html>
 	<head>
 		<title>iframe test</title>
+		<script src="jquery-3.6.4.js"></script>
 		<script>
 			async function nav() {
 				await new Promise ( r => setTimeout ( r, 3000 ) );
 				window.location.href = 'page-to.html';
 				preventDefault();
 			}
+			function add() {
+				if ( $( "h2" ).siblings( "#added" ).length ) {
+					alert ( "already added" );
+					return;
+				}
+				var added = $( "<p>added</p>" );
+				added.attr ( "id", "added" );
+				$( "#outer" ).after ( added );
+			}
 		</script>
 	</head>
 	<body>
-		<h2>iframe test</h2>
+		<h2 onclick="add();">iframe test</h2>
 		<ul id="outer">
 			<li id="li1">uno</li>
 			<li id="li2">due</li>

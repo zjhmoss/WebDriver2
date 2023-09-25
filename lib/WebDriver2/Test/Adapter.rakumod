@@ -26,6 +26,12 @@ method is ( Str:D $descr, $exp, $got ) {
 	$result;
 }
 
+method isnt ( Str:D $descr, $exp, $got ) {
+	my Bool $result = isnt $got, $exp, $descr;
+	self.handle-test-failure: $descr unless $result;
+	$result;
+}
+
 method is-deeply ( Str:D $descr, $exp, $got ) {
 	my Bool $result = is-deeply $got, $exp, $descr;
 	self.handle-test-failure: $descr unless $result;
@@ -60,6 +66,10 @@ method throws-like ( Str:D $reason, $ex-type, $code, *%matcher ) {
 	my Bool $result = 0 == throws-like $code, $ex-type, $reason, |%matcher;
 	self.handle-test-failure: $reason unless $result;
 	$result;
+}
+
+method diag ( Str:D $msg ) {
+	diag $msg;
 }
 
 method flunk ( Str:D $descr ) {

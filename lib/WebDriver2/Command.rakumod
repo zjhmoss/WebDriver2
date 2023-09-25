@@ -151,6 +151,19 @@ class WebDriver2::Command::Attribute does WebDriver2::Command[WebDriver2::Comman
 	}
 }
 
+class WebDriver2::Command::Back does WebDriver2::Command[WebDriver2::Command::Result::Back] {
+	method execute-with(
+			WebDriver2 $driver,
+			--> WebDriver2::Command::Result::Back
+	) {
+		$driver.result.back:
+				self.post-session-request:
+						$driver,
+						$driver.param.back,
+						'back';
+	}
+}
+
 class WebDriver2::Command::Clear does WebDriver2::Command[WebDriver2::Command::Result::Clear] {
 	has Str $!element;
 	
@@ -373,6 +386,19 @@ class WebDriver2::Command::Execute-Script does WebDriver2::Command[WebDriver2::C
 						'sync'
 				)
 		)
+	}
+}
+
+class WebDriver2::Command::Forward does WebDriver2::Command[WebDriver2::Command::Result::Forward] {
+	method execute-with(
+			WebDriver2 $driver,
+			--> WebDriver2::Command::Result::Forward
+	) {
+		$driver.result.forward:
+				self.post-session-request:
+						$driver,
+						$driver.param.forward,
+						'forward';
 	}
 }
 

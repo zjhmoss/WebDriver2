@@ -33,6 +33,7 @@ class WebDriver2::Command::Result::Accept-Alert does WebDriver2::Command::Result
 class WebDriver2::Command::Result::Active is WebDriver2::Command::Result::Single-Value { }
 class WebDriver2::Command::Result::Alert-Text is WebDriver2::Command::Result::Single-Value { }
 class WebDriver2::Command::Result::Attribute is WebDriver2::Command::Result::Single-Value { }
+class WebDriver2::Command::Result::Back is WebDriver2::Command::Result { }
 class WebDriver2::Command::Result::Clear does WebDriver2::Command::Result { }
 class WebDriver2::Command::Result::Click does WebDriver2::Command::Result { }
 class WebDriver2::Command::Result::CSS-Value is WebDriver2::Command::Result::Single-Value { }
@@ -51,6 +52,7 @@ class WebDriver2::Command::Result::Element-Rect does WebDriver2::Command::Result
 }
 class WebDriver2::Command::Result::Enabled is WebDriver2::Command::Result::Bool-Value { }
 class WebDriver2::Command::Result::Execute-Script is WebDriver2::Command::Result::Single-Value { }
+class WebDriver2::Command::Result::Forward is WebDriver2::Command::Result { }
 class WebDriver2::Command::Result::Maximize-Window does WebDriver2::Command::Result { }
 class WebDriver2::Command::Result::Navigate does WebDriver2::Command::Result { }
 class WebDriver2::Command::Result::Property does WebDriver2::Command::Result {
