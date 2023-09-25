@@ -51,6 +51,12 @@ class Session-Test does WebDriver2::Test::Config-From-File does WebDriver2::Test
 					WebDriver2::Command::Result::X:D,
 					{ $.driver.title },
 					message => rx:m :s/.*error\"\s*\:\s*\"invalid session id.*/;
+		} elsif $.browser eq 'safari' {
+			self.throws-like:
+					'no title after session deletion',
+					WebDriver2::Command::Result::X:D,
+					{ $.driver.title },
+					message => *.contains: 'invalid session id';
 		} else {
 			self.throws-like:
 					'no title after session deletion',

@@ -128,7 +128,7 @@ class Frames-Test does WebDriver2::Test::Service-Test {
 				'mainline content parent frame is page and context is body element',
 #				$!service.page,
 				'body',
-				$!service.page-h2.parent-frame.resolve.tag-name;
+				$!service.page-h2.parent-frame.resolve.tag-name.lc;
 		self.is:
 				'page match',
 				$!service.page.raku,
