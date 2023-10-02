@@ -35,7 +35,7 @@ class Nav-Test
 				WebDriver2::Until::Title-Is.new:
 						:$.driver,
 						title => 'simple example';
-		.click with self.element-by-tag-name: 'button';
+		.click with self.element-by-tag: 'button';
 		$title.retry;
 		self.is:
 				'browser follows link',

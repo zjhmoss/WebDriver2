@@ -12,6 +12,6 @@ method element-by-id ( Str:D $id ) {
 	self.locate-element: WebDriver2::Command::Element::Locator::ID.new: $id;
 }
 
-method element-by-tag-name ( Str:D $tag ) {
+method element-by-tag ( Str:D $tag ) {
 	self.locate-element: WebDriver2::Command::Element::Locator::Tag-Name.new: $tag;
 }

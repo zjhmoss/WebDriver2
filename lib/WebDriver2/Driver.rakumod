@@ -500,9 +500,15 @@ class WebDriver2::Driver does WebDriver2 {
 		my WebDriver2::Command::Result::Switch-To-Parent $switch =
 			WebDriver2::Command::Switch-To-Parent.new
 				.execute-with: self;
-		@!frames.pop;
-		say 'POP ' ~ @!frames if $!debug;
-		self.debug: $switch;
+		if @!frames {
+			@!frames.pop;
+			say 'POP ' ~ @!frames if $!debug;
+			self.debug: $switch;
+			return self;
+		} else {
+			warn 'no parent frame' if $!debug;
+			return WebDriver2::Model::Frame;
+		}
 	}
 	
 	method top {

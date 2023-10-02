@@ -40,7 +40,7 @@ class Nav-Test
 				WebDriver2::Until::Title-Is.new:
 						:$.driver,
 						title => 'to page';
-		.click with self.element-by-tag-name: 'a';
+		.click with self.element-by-tag: 'a';
 		
 		# DESTINATION PAGE TESTS
 		$title.retry;
