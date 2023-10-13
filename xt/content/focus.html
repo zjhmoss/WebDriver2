@@ -1,17 +1,36 @@
 <html>
-	<head><title>active element test page</title>
+	<head><title>element state / interaction test page</title>
 		<script src="jquery-3.6.4.js"></script>
 		<script>
 			$( document ).ready( function() {
 				$( "#two" ).focus();
 			} );
 		</script>
+		<style>
+			label > input { color: #333333; }
+		</style>
 	</head>
 	<body>
+		<h2 id="heading">element state / interaction</h2>
 		<form>
 			<input id="one" type="text"/>
 			<input id="two" type="text"/>
 			<input id="three" type="checkbox"/>
+			
+			<select>
+				<option value="one">first</option>
+				<option value="two">second</option>
+				<option value="three" selected>third</option>
+			</select>
+			
+			<label><input id="rad1" type="radio" name="radio-group" value="rad1 val"/>rad label 1</label>
+			<label><input id="rad2" type="radio" name="radio-group" value="rad2 val"/>rad label 2</label>
+			<label><input id="rad3" type="radio" name="radio-group" value="rad2 val"/>rad label 3</label>
+			
+			<input id="no-text" type="text" disabled/>
+			<input id="no-check" type="checkbox" disabled/>
+			
+			<input id="attr-prop" type="text" value="start" style="font-style: italic"/>
 		</form>
 	</body>
 </html>
