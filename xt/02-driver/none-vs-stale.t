@@ -7,9 +7,6 @@ use WebDriver2::Command::Execution-Status;
 use WebDriver2::Command::Element::Locator::ID;
 use WebDriver2::Command::Element::Locator::Tag-Name;
 
-my IO::Path $html-file =
-		.add: 'test.html' with $*CWD.add: 'content';
-
 class Local
 		does WebDriver2::Test::Template
 		does WebDriver2::Test::Config-From-File
@@ -20,6 +17,8 @@ class Local
 	has Str:D $.description = 'none and stale both handled';
 	
 	method test {
+		my IO::Path:D $html-file = $!test-root.add: <content test.html>;
+#				.add: 'test.html' with $*CWD.add: 'content';
 		$.driver.set-window-rect( 1200, 750, 8, 8 ) if $.browser eq 'safari';
 		$.driver.navigate: 'file://' ~ $html-file.absolute;
 		

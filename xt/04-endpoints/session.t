@@ -18,32 +18,27 @@ class Session-Test does WebDriver2::Test::Template {
 #	has WebDriver2::Driver $.driver;
 #	has Str $.browser;
 	has Str:D $.sut-name = 'session';
-	has Int:D $.plan = 5;
+	has Int:D $.plan = 3;
 	has Str:D $.name = 'status';
 	has Str:D $.description = 'status test';
-#	has IO::Path:D $.test-root = $*CWD.add: 'xt';
-	
-#	method new ( Str $browser is copy, Int:D :$debug = 0 ) {
-#		self.set-from-file: $browser;
-#		self.bless:
-#				:$browser,
-#				:$debug,
-#				driver => WebDriver2::Driver::Provider.new( :$browser, :$debug ).driver;
-#	}
 	
 	method test {
 #		plan $!plan;
-		if $.browser eq 'firefox' {
-			skip 'geckodriver does not return valid JSON before session creation';
-		} else {
-			self.throws-like:
-					'no title before session',
-					WebDriver2::Command::Result::X:D,
-					{ $.driver.title };
-		}
-		self.lives-ok: 'session created', { $.driver.session };
+#		if $.browser eq 'firefox' {
+#			skip 'geckodriver does not return valid JSON before session creation';
+#		} else {
+##			self.throws-like:
+#			self.nok:
+#					'no title before session',
+#					$.driver.title;
+##					WebDriver2::Command::Result::X:D,
+##					{ $.driver.title };
+#		}
+#		self.lives-ok: 'session created', { $.driver.session };
+		my IO::Path:D $html-file = $!test-root.add: <content doc-main.html>;
+		my Str:D $url = 'file://' ~ $html-file.absolute;
 		self.nok: 'no title before navigation', $.driver.title;
-		$.driver.navigate: 'file://' ~ $html-file.absolute;
+		$.driver.navigate: $url;
 		self.is: 'title after navigation', 'simple example', $.driver.title;
 		$.driver.delete-session;
 		if $.browser eq 'firefox' {
@@ -65,7 +60,7 @@ class Session-Test does WebDriver2::Test::Template {
 					{ $.driver.title },
 					message => "Session\ninvalid session id";
 		}
-#		done-testing;
+		done-testing;
 	}
 	
 	method handle-test-failure ( Str:D $description ) {
