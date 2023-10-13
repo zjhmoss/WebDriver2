@@ -591,10 +591,10 @@ welcome.
 		<td><code>$driver.title</code></td>
 	</tr>
 	<tr><td>get window handle</td>
-		<td align="center" class="not-started">&nbsp;</td>
-		<td align="center" class="not-started">&nbsp;</td>
-		<td align="center" class="not-started">&nbsp;</td>
-		<td align="center" class="not-started">&nbsp;</td>
+		<td align="center" class="complete">X</td>
+		<td align="center" class="complete">X</td>
+		<td align="center" class="complete">X</td>
+		<td align="center" class="complete">X</td>
 		<td><code>$driver.window-handle</code></td>
 	</tr>
 	<tr><td>close window</td>
@@ -605,10 +605,10 @@ welcome.
 		<td><code>$driver.close-window</code></td>
 	</tr>
 	<tr><td>switch to window</td>
-		<td align="center" class="not-started">&nbsp;</td>
-		<td align="center" class="not-started">&nbsp;</td>
-		<td align="center" class="not-started">&nbsp;</td>
-		<td align="center" class="not-started">&nbsp;</td>
+		<td align="center" class="complete">X</td>
+		<td align="center" class="complete">X</td>
+		<td align="center" class="complete">X</td>
+		<td align="center" class="complete">X</td>
 		<td><code>$driver.switch-to-window ( $handle )</code></td>
 	</tr>
 	<tr><td>get window handles</td>
