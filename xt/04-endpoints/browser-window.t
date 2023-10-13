@@ -13,20 +13,6 @@ class Browser-Window-Test does WebDriver2::Test::Template does WebDriver2::Test:
 	has Int:D $.plan = 10;
 	has Str:D $.name = 'window';
 	has Str:D $.description = 'multi-window test';
-	has IO::Path:D $.test-root = $*CWD.add: 'xt';
-	
-#	method new ( Str $browser? is copy, Int:D :$debug = 0 ) {
-#		self.set-from-file: $browser; # , $debug;
-#		my Browser-Window-Test:D $self =
-#				self.bless:
-#						:$browser,
-#						:$debug,
-#						plan => 10,
-#						name => 'status',
-#						description => 'status test';
-#		$self.init;
-#		$self;
-#	}
 	
 	method test {
 		my Str $original-window = $.driver.original-window;
@@ -56,5 +42,5 @@ sub MAIN(
 		Str $browser?,
 		Int:D :$debug = 0
 ) {
-	.execute with Browser-Window-Test.new: $browser, :$debug;
+	.execute with Browser-Window-Test.new: $browser, :$debug, test-root => 'xt'.IO;
 }

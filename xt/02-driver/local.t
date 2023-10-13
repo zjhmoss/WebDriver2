@@ -189,5 +189,5 @@ sub MAIN(
 		Str $browser?,
 		Int:D :$debug = 0
 ) {
-	.execute with Local.new: $browser, :$debug;
+	.execute with Local.new: $browser, :$debug, test-root => 't'.IO;
 }

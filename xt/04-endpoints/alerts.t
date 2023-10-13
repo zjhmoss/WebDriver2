@@ -71,6 +71,6 @@ sub MAIN(
 		Str $browser?,
 		Int:D :$debug = 0
 ) {
-	.execute with Alerts.new: $browser, :$debug;
+	.execute with Alerts.new: $browser, :$debug, test-root => 'xt'.IO;
 }
 

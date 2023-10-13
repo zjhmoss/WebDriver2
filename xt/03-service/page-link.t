@@ -89,7 +89,6 @@ class Frames-Test does WebDriver2::Test::Service-Test {
 	has Int:D $.plan = 6;
 	has Str:D $.name = 'page-to';
 	has Str:D $.description = 'tests nesting frames';
-	has IO::Path:D $.test-root = $*CWD.add: 'xt';
 	
 	has Page-Link-From-Service $!from-service;
 	has Page-Link-To-Service $!to-service;
@@ -131,5 +130,5 @@ sub MAIN(
 		Str $browser?,
 		Int:D :$debug = 0
 ) {
-	.execute with Frames-Test.new: $browser, :$debug;
+	.execute with Frames-Test.new: $browser, :$debug, test-root => 'xt'.IO;
 }

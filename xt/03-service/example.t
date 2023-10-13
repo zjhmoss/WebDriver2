@@ -125,7 +125,6 @@ class Example-Test does WebDriver2::Test::Service-Test {
 	has Int:D $.plan = 18;
 	has Str:D $.name = 'example test name';
 	has Str:D $.description = 'example test description';
-	has IO::Path:D $.test-root = $*CWD.add: 'xt';
 	
 	has Root-Content $!mls;
 	has Original-Frame $!of;
@@ -188,5 +187,5 @@ sub MAIN(
 	Str $browser?,
 	Int:D :$debug = 0
 ) {
-	.execute with Example-Test.new: $browser, :$debug;
+	.execute with Example-Test.new: $browser, :$debug, test-root => 'xt'.IO;
 }

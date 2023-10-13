@@ -12,20 +12,22 @@ unit role WebDriver2::Test::Template
 		does WebDriver2::Test::Config-From-File;
 
 my constant $PLAN = 2;
+has IO::Path:D $.test-root is required;
 has Int:D $.close-delay is rw = 3;
-has Str:D $.browser is required;
-has WebDriver2::Driver $.driver;
+has Str $.browser;
+has WebDriver2::Driver:D $.driver is required;
 
 method plan ( --> Int ) { Int; }
 method name ( --> Str:D ) { ... }
 method description ( --> Str:D ) { ... }
 
-method new ( Str $browser is copy, Int:D :$debug = 0 ) {
-	self.set-from-file: $browser;
+multi method new ( WebDriver2::Test::Template:U: Str $browser is copy, IO::Path:D :$test-root, Int:D :$debug is copy = 0 ) {
+	self.set-from-file: $browser, :$test-root, :$debug;
 	self.bless:
 			:$browser,
-			driver => WebDriver2::Driver::Provider.new( :$browser, :$debug ).driver,
-			:$debug;
+			:$test-root,
+			:$debug,
+			driver => WebDriver2::Driver::Provider.new( :$browser, :$debug ).driver;
 }
 
 method !init {

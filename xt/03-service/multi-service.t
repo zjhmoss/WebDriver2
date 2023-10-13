@@ -55,7 +55,6 @@ class Multi-Service-Test does WebDriver2::Test::Service-Test {
 	has Int:D $.plan = 4;
 	has Str:D $.name = 'multi-service';
 	has Str:D $.description = 'tests resolve and frames';
-	has IO::Path:D $.test-root = $*CWD.add: 'xt';
 	
 	has Multi-Outer $!outer-service;
 	has Multi-Form $!form-service;
@@ -167,5 +166,5 @@ sub MAIN(
 		Str $browser?,
 		Int:D :$debug = 0
 ) {
-	.execute with Multi-Service-Test.new: $browser, :$debug;
+	.execute with Multi-Service-Test.new: $browser, :$debug, test-root => 'xt'.IO;
 }

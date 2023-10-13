@@ -100,7 +100,6 @@ class LR does WebDriver2::Test::Service-Test {
     has Int:D $.plan = 3;
     has Str:D $.name = 'lr';
     has Str:D $.description = 'lr service and frames test';
-    has IO::Path:D $.test-root = $*CWD.add: 'xt';
 
     has ML $!mls;
     has L $!ls;
@@ -129,6 +128,6 @@ sub MAIN(
         Str $browser?,
         Int:D :$debug = 0
 ) {
-    .execute with LR.new: $browser, :$debug;
+    .execute with LR.new: $browser, :$debug, test-root => 'xt'.IO;
 }
 

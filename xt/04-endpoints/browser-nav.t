@@ -110,5 +110,5 @@ sub MAIN(
 		Str $browser?,
 		Int:D :$debug = 0
 		 ) {
-	.execute with Nav-Test.new: $browser, :$debug;
+	.execute with Nav-Test.new: $browser, :$debug, test-root => 'xt'.IO;
 }

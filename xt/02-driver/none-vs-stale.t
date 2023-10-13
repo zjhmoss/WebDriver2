@@ -8,13 +8,13 @@ use WebDriver2::Command::Element::Locator::ID;
 use WebDriver2::Command::Element::Locator::Tag-Name;
 
 my IO::Path $html-file =
-		.add: 'test.html' with $*PROGRAM.parent.parent.add: 'content';
+		.add: 'test.html' with $*CWD.add: 'content';
 
 class Local
 		does WebDriver2::Test::Template
 		does WebDriver2::Test::Config-From-File
 {
-	
+	has Str:D $.sut-name = 'test';
 	has Int:D $.plan = 3;
 	has Str:D $.name = 'none vs stale';
 	has Str:D $.description = 'none and stale both handled';
@@ -57,5 +57,5 @@ sub MAIN(
 		Str $browser?,
 		Int:D :$debug = 0
 ) {
-	.execute with Local.new: $browser, :$debug;
+	.execute with Local.new: $browser, :$debug, test-root => 'xt'.IO;
 }

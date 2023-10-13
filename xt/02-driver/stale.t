@@ -8,13 +8,13 @@ use WebDriver2::Until::Command;
 use WebDriver2::Test::Template;
 use WebDriver2::Test::Locating-Test;
 
-my $html-file = .add: 'test.html' with $*PROGRAM.parent.parent.add: 'content';
+my $html-file = .add: 'test.html' with $*CWD.add: <xt content>;
 
 class Stale
 		does WebDriver2::Test::Template
 		does WebDriver2::Test::Locating-Test
 {
-	
+	has Str:D $.sut-name = 'stale';
 	has Int:D $.plan = 6;
 	has Str:D $.name = 'stale';
 	has Str:D $.description = 'stale handling';
@@ -67,5 +67,5 @@ sub MAIN (
 		Str $browser?,
 		Int:D :$debug = 0
 ) {
-	.execute with Stale.new: $browser, :$debug;
+	.execute with Stale.new: $browser, :$debug, test-root => 'xt'.IO;
 }

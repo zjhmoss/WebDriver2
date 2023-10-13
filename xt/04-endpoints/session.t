@@ -3,7 +3,7 @@ use Test;
 use lib <lib t/lib>;
 
 use WebDriver2;
-use WebDriver2::Test::Config-From-File;
+use WebDriver2::Test::Template;
 use WebDriver2::Driver::Provider;
 
 use WebDriver2::Test::Adapter;
@@ -12,26 +12,27 @@ use WebDriver2::Test::Debugging;
 use WebDriver2::Command::Result;
 use WebDriver2::Command::Execution-Status;
 
-my IO::Path $html-file = .add: 'doc-main.html' with $*PROGRAM.parent.parent.add: 'content';
+my IO::Path $html-file = .add: 'doc-main.html' with 'content'.IO;
 
-class Session-Test does WebDriver2::Test::Config-From-File does WebDriver2::Test::Adapter {
-	has WebDriver2::Driver $.driver;
-	has Str $.browser;
+class Session-Test does WebDriver2::Test::Template {
+#	has WebDriver2::Driver $.driver;
+#	has Str $.browser;
+	has Str:D $.sut-name = 'session';
 	has Int:D $.plan = 5;
 	has Str:D $.name = 'status';
 	has Str:D $.description = 'status test';
-	has IO::Path:D $.test-root = $*CWD.add: 'xt';
+#	has IO::Path:D $.test-root = $*CWD.add: 'xt';
 	
-	method new ( Str $browser is copy, Int:D :$debug = 0 ) {
-		self.set-from-file: $browser;
-		self.bless:
-				:$browser,
-				driver => WebDriver2::Driver::Provider.new( :$browser, :$debug ).driver,
-				:$debug;
-	}
+#	method new ( Str $browser is copy, Int:D :$debug = 0 ) {
+#		self.set-from-file: $browser;
+#		self.bless:
+#				:$browser,
+#				:$debug,
+#				driver => WebDriver2::Driver::Provider.new( :$browser, :$debug ).driver;
+#	}
 	
-	method execute {
-		plan $!plan;
+	method test {
+#		plan $!plan;
 		if $.browser eq 'firefox' {
 			skip 'geckodriver does not return valid JSON before session creation';
 		} else {
@@ -64,7 +65,7 @@ class Session-Test does WebDriver2::Test::Config-From-File does WebDriver2::Test
 					{ $.driver.title },
 					message => "Session\ninvalid session id";
 		}
-		done-testing;
+#		done-testing;
 	}
 	
 	method handle-test-failure ( Str:D $description ) {
@@ -76,5 +77,5 @@ sub MAIN(
 		Str $browser?,
 		Int:D :$debug = 0
 ) {
-	.execute with Session-Test.new: $browser, :$debug;
+	.execute with Session-Test.new: $browser, :$debug, test-root => 'xt'.IO;
 }

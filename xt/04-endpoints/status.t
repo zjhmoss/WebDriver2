@@ -13,7 +13,6 @@ class Status-Test does WebDriver2::Test::Template {
 	has Int:D $.plan = 6;
 	has Str:D $.name = 'status';
 	has Str:D $.description = 'status test';
-	has IO::Path:D $.test-root = $*CWD.add: 'xt';
 	
 	method test {
 		my WebDriver2::Command::Result::Status $status = $.driver.status;
@@ -35,5 +34,5 @@ sub MAIN(
 		Str $browser?,
 		Int:D :$debug = 0
 ) {
-	.execute with Status-Test.new: $browser, :$debug;
+	.execute with Status-Test.new: $browser, :$debug, test-root => 'xt'.IO;
 }

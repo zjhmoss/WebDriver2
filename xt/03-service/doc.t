@@ -2,9 +2,9 @@ use Test;
 
 use lib <lib t/lib>;
 
-use WebDriver2::Test::Template;
+#use WebDriver2::Test::Template;
 use WebDriver2::Test::Service-Test;
-use WebDriver2::SUT::Service::Loader;
+#use WebDriver2::SUT::Service::Loader;
 use WebDriver2::SUT::Service;
 use WebDriver2::SUT::Tree;
 
@@ -93,7 +93,7 @@ class Readme-Test does WebDriver2::Test::Service-Test {
 	has Int:D $.plan = 26;
 	has Str:D $.name = 'readme example';
 	has Str:D $.description = 'service / page object test example';
-	has IO::Path:D $.test-root = $*CWD.add: 'xt';
+#	has IO::Path:D $.test-root = $*CWD.add: 'xt';
 	has Login-Service $!ls;
 	has Main-Service $!ms;
 	has Form-Service $!fs-main;
@@ -174,5 +174,5 @@ sub MAIN (
 		Str $browser? is copy,
 		Int :$debug = 0
 ) {
-	.execute with Readme-Test.new: $browser, :$debug;
+	.execute with Readme-Test.new: $browser, test-root => 'xt'.IO, :$debug;
 }
