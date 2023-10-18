@@ -19,8 +19,8 @@ class Session-Test does WebDriver2::Test::Template {
 #	has Str $.browser;
 	has Str:D $.sut-name = 'session';
 	has Int:D $.plan = 3;
-	has Str:D $.name = 'status';
-	has Str:D $.description = 'status test';
+	has Str:D $.name = 'session';
+	has Str:D $.description = 'session test';
 	
 	method test {
 #		plan $!plan;
@@ -60,6 +60,7 @@ class Session-Test does WebDriver2::Test::Template {
 					{ $.driver.title },
 					message => "Session\ninvalid session id";
 		}
+		$.driver.session;
 		done-testing;
 	}
 	
