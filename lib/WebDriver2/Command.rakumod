@@ -18,6 +18,7 @@ role WebDriver2::Command[::T] {
 		my $host = $driver.server.host;
 		my $port = $driver.server.port;
 		my Str $url = "http://$host:$port/" ~ @command.join( '/' );
+say "$method $url" if $driver.debug > 2;
 		given $method {
 			when 'GET' { return WebDriver2::HTTP::Request.new( :GET( $url ) ); }
 			when 'POST' { return WebDriver2::HTTP::Request.new( :POST( $url ) ); }
@@ -58,6 +59,7 @@ role WebDriver2::Command[::T] {
 			--> WebDriver2::HTTP::Response
 	) {
 		my WebDriver2::HTTP::Request $req = self!request( $driver, 'POST', @command );
+say to-json $data if $driver.debug > 2;
 		$req.add-content( to-json( $data ) );
 		return $driver.ua.request( $req );
 	}
@@ -70,6 +72,7 @@ role WebDriver2::Command[::T] {
 	) {
 		my WebDriver2::HTTP::Request $req =
 				self!session-request: $driver, 'POST', @command;
+say to-json $data if $driver.debug > 2;
 		$req.add-content: to-json $data;
 		return $driver.ua.request: $req;
 	}

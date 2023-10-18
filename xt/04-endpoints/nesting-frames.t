@@ -29,7 +29,11 @@ class Test-Nav-To-Frame
 		self.frame1-content;
 		
 		$.driver.switch-to-parent;
-		self.frame0-content;
+		if $.browser eq 'safari' {
+			skip 'safaridriver switch to parent frame bug', 2;
+		} else {
+			self.frame0-content;
+		}
 		
 		$.driver.switch-to-parent;
 		self.page-content;
@@ -94,7 +98,7 @@ class Test-Nav-To-Frame
 		self.is:
 				'label text',
 				'text input:',
-				.text
+				.text.trim
 				with self.element-by-tag: 'label';
 	}
 	

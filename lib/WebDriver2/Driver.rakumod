@@ -49,6 +49,10 @@ class WebDriver2::Driver does WebDriver2 {
 
 	method start { }
 
+	multi method debug {
+		$!debug;
+	}
+
 	multi method debug( WebDriver2::Command::PreResult $result, *@data ) {
 		say $result.Str if $!debug >= 1;
 		if $!debug { .say for @data };

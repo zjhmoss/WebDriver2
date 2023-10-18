@@ -9,6 +9,7 @@ method session {
 		capabilities => { alwaysMatch => {
 #			:nativeEvents,
 #			:javascriptEnabled,
+#			'safari:diagnose' => True,
 			pageLoadStrategy => 'normal',
 			timeouts =>
 				{ script => 30_000, pageLoad => 300_000, implicit => 10_000 }

@@ -1,4 +1,3 @@
-use WebDriver2::HTTP::Response;
 use JSON::Tiny;
 
 #use WebDriver2;

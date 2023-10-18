@@ -60,7 +60,12 @@ class Focus-Test
 		$el = self.element-by-id: 'no-text';
 		self.is: 'starts empty', '', $el.value;
 		self.nok: 'is disabled', $el.enabled;
-		self.dies-ok: 'does not accept text', { $el.send-keys: 'ignored' };
+		if $.browser eq 'safari' {
+			$el.send-keys: 'safari';
+			skip 'safari ignores interaction with disabled elements', 1;
+		} else {
+			self.dies-ok: 'does not accept text', { $el.send-keys: 'ignored' };
+		}
 		self.is: 'text still empty', '', $el.value;
 		
 		$el = self.element-by-id: 'no-check';
@@ -92,9 +97,9 @@ class Focus-Test
 		
 		# tag-name
 		$el = self.element-by-id: 'heading';
-		self.is: 'locate by id; correct tag name', 'h2', $el.tag-name;
+		self.is: 'locate by id; correct tag name', 'h2', $el.tag-name.lc;
 		$el = self.element-by-tag: 'h2';
-		self.is: 'locate by tag; correct tag name', 'h2', $el.tag-name;
+		self.is: 'locate by tag; correct tag name', 'h2', $el.tag-name.lc;
 		
 		# text
 		self.is: 'correct text retrieved', 'element state / interaction', $el.text;
