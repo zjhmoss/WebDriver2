@@ -1,7 +1,7 @@
 use WebDriver2::HTTP::UserAgent;
 use WebDriver2::HTTP::Message;
 use WebDriver2::HTTP::Request;
-use JSON::Tiny;
+use JSON::Fast;
 use URI::Encode;
 use WebDriver2::Driver::Server;
 use WebDriver2;
