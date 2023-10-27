@@ -28,4 +28,6 @@ jobs:
         with:
           raku-version: ${{ matrix.raku-version }}
       - name: Run tests and Install
+        env:
+          ZEF_EXTRACT_TIMEOUT: 0
         run: zef install . --debug
