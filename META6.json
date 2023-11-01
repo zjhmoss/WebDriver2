@@ -227,7 +227,7 @@
     "WebDriver2::Until::SUT" : "lib/WebDriver2/Until/SUT.rakumod"
   },
   "depends" : [
-    "JSON::Tiny",
+    "JSON::Fast",
     "URI::Encode",
     "HTTP::Status",
     "File::Temp",

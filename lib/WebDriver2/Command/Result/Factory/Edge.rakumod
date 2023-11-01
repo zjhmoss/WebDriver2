@@ -1,5 +1,5 @@
 #use WebDriver2::HTTP::Response;
-#use JSON::Tiny;
+#use JSON::Fast;
 #
 #use WebDriver2;
 #use WebDriver2::Constants;

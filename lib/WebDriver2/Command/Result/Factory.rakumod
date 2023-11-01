@@ -1,4 +1,4 @@
-use JSON::Tiny;
+use JSON::Fast;
 
 use WebDriver2::HTTP::Response;
 

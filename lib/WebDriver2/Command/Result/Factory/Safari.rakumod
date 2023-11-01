@@ -1,5 +1,5 @@
 use WebDriver2::HTTP::Response;
-use JSON::Tiny;
+use JSON::Fast;
 
 use WebDriver2::Command::Execution-Status;
 use WebDriver2::Command::Result;
